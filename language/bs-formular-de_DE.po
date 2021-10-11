@@ -1,0 +1,127 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: BS-Formular\n"
+"POT-Creation-Date: 2021-10-02 00:36+0200\n"
+"PO-Revision-Date: 2021-10-02 00:38+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.0\n"
+"X-Poedit-Basepath: ../inc\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: admin-pages\n"
+"X-Poedit-SearchPath-1: optionen/metabox/classic\n"
+
+#: admin-pages/bs-formulare.php:17 admin-pages/bs-formulare.php:21
+#: admin-pages/bs-formulare.php:34
+msgid "Forms"
+msgstr "Formulare"
+
+#: admin-pages/bs-formulare.php:22 admin-pages/bs-formulare.php:27
+msgid "Overview"
+msgstr "Übersicht"
+
+#: admin-pages/bs-formulare.php:37 admin-pages/bs-formulare.php:43
+msgid "Create | Edit"
+msgstr "Erstellen | Bearbeiten"
+
+#: admin-pages/bs-formulare.php:46 admin-pages/bs-formulare.php:52
+#: admin-pages/bs-formulare.php:79
+msgid "Inbox"
+msgstr "Posteingang"
+
+#: admin-pages/bs-formulare.php:55 admin-pages/bs-formulare.php:60
+msgid "E-Mail Settings"
+msgstr ""
+
+#: admin-pages/bs-formulare.php:63
+msgid "Examples"
+msgstr "Beispiele"
+
+#: admin-pages/bs-formulare.php:68
+msgid "Help"
+msgstr "Hilfe"
+
+#: admin-pages/bs-formulare.php:87 admin-pages/bs-formulare.php:96
+msgid "Name"
+msgstr "Bezeichnung"
+
+#: admin-pages/bs-formulare.php:88 admin-pages/bs-formulare.php:97
+msgid "Shortcode"
+msgstr ""
+
+#: admin-pages/bs-formulare.php:89 admin-pages/bs-formulare.php:98
+msgid "Created"
+msgstr "Erstellt"
+
+#: admin-pages/bs-formulare.php:135
+msgid "SMTP Settings"
+msgstr ""
+
+#: admin-pages/bs-formulare.php:146
+msgid "Name oder Firma des Absenders:"
+msgstr ""
+
+#: admin-pages/bs-formulare.php:162
+msgid "Absender E-Mail:"
+msgstr ""
+
+#: admin-pages/bs-formulare.php:176
+msgid "SMTP Host:"
+msgstr ""
+
+#: admin-pages/bs-formulare.php:189
+msgid "SMTP Port:"
+msgstr ""
+
+#: admin-pages/bs-formulare.php:199
+msgid "SMTP Secure:"
+msgstr ""
+
+#: admin-pages/bs-formulare.php:211
+msgid "Benutzername:"
+msgstr ""
+
+#: admin-pages/bs-formulare.php:221
+msgid "Passwort:"
+msgstr ""
+
+#: admin-pages/bs-formulare.php:236
+msgid "SMTP Authentifizierung:"
+msgstr ""
+
+#: admin-pages/bs-formulare.php:265
+msgid "Hilfe"
+msgstr ""
+
+#: admin-pages/bs-formulare.php:473
+msgid "BS-Formular"
+msgstr ""
+
+#: optionen/metabox/classic/bs-formular-widget.php:23
+#: optionen/metabox/classic/bs-formular-widget.php:81
+msgid "BS Forms"
+msgstr ""
+
+#: optionen/metabox/classic/bs-formular-widget.php:84
+msgid "Social Media"
+msgstr ""
+
+#: optionen/metabox/classic/bs-formular-widget.php:91
+msgid "Title"
+msgstr "Titel"
+
+#: optionen/metabox/classic/bs-formular-widget.php:100
+msgid "Select form"
+msgstr "Formular auswählen"
+
+#: optionen/metabox/classic/bs-formular-widget.php:103
+msgid "select"
+msgstr "auswählen"
+
+#~ msgid "BS Formular"
+#~ msgstr "BS Formular"

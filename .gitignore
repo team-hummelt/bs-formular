@@ -1,0 +1,6 @@
+.idea
+.github
+.vscode
+
+/inc/gutenberg/plugin-data/src/
+/inc/gutenberg/plugin-data/node_modules/
