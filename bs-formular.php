@@ -75,8 +75,8 @@ register_deactivation_hook( __FILE__, 'deactivate_bs_formular' );
 
 if(get_option('bs_formular_product_install_authorize')) {
 	delete_transient('show_lizenz_info');
-	require 'inc/register-bs-formular.php';
-	include_once 'inc/optionen/optionen-init.php';
+    require 'inc/register-bs-formular.php';
+    require 'inc/optionen/optionen-init.php';
 	require 'inc/enqueue.php';
 	require 'inc/update-checker/autoload.php';
 	$bsFormularUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
