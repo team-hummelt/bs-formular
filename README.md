@@ -23,6 +23,10 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Formular ganz einfach mit BS-Formulare erstellen.
 
 == Changelog ==
+= 1.0.3 =
+* Fixed Password vergessen error.
+
+== Changelog ==
 = 1.0.2 =
 * Gutenberg Block Widget hinzugefügt.
 
