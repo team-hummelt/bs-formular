@@ -60,18 +60,13 @@ final class RegisterBsFormularPlugin {
 		add_action( 'enqueue_block_editor_assets', array( $this, 'bs_formular_plugin_editor_block_scripts' ) );
 		add_action( 'enqueue_block_assets', array( $this, 'bs_formular_plugin_public_scripts' ) );
 
-
-
 		// TODO Load Textdomain
 		add_action( 'init', array($this, 'load_bs_formular_textdomain'));
 
 		//TODO REGISTER ADMIN MAPS PAGE
 		add_action( 'admin_menu', array( $this, 'register_bs_formular_menu' ) );
 
-		//TODO REGISTER WP-MAIL SMTP
-		  add_action('phpmailer_init', array($this, 'bs_formular_mailer_phpmailer_configure'));
-		  add_filter('wp_mail_content_type',array($this, 'bs_formular_mail_content_type'));
-		  add_action('wp_mail_failed',array($this, 'bs_formular_log_mailer_errors', 10, 1));
+
 
 		//TODO PUBLIC SITES TRIGGER
 		add_action( 'template_redirect', array( $this, 'bs_formular_public_one_trigger_check' ) );
@@ -83,6 +78,12 @@ final class RegisterBsFormularPlugin {
 		add_action( 'wp_ajax_BsFormularHandle', array( $this, 'prefix_ajax_BsFormularHandle' ) );
 		add_action( 'wp_ajax_nopriv_BsFormularNoAdmin', array( $this, 'prefix_ajax_BsFormularNoAdmin' ) );
 		add_action( 'wp_ajax_BsFormularNoAdmin', array( $this, 'prefix_ajax_BsFormularNoAdmin' ) );
+
+
+        //TODO REGISTER WP-MAIL SMTP
+        add_action('phpmailer_init', array($this, 'bs_formular_mailer_phpmailer_configure'));
+        add_filter('wp_mail_content_type',array($this, 'bs_formular_mail_content_type'));
+        add_action('wp_mail_failed',array($this, 'bs_formular_log_mailer_errors', 10, 1));
 	}
 
 
@@ -164,15 +165,17 @@ final class RegisterBsFormularPlugin {
 	 * =====================================================
 	 */
 	public function bs_formular_mailer_phpmailer_configure($phpmailer) {
-		$phpmailer->isSMTP();
-		$phpmailer->Host = get_option('bs_form_smtp_host');
-		$phpmailer->SMTPAuth = (bool) get_option('bs_form_smtp_auth_check');
-		$phpmailer->Port = get_option('bs_form_smtp_port');
-		$phpmailer->Username = get_option('bs_form_email_benutzer');
-		$phpmailer->Password = get_option('bs_form_email_passwort');
-		$phpmailer->SMTPSecure = get_option('bs_form_smtp_secure');
-		$phpmailer->SMTPDebug = 0;
-		$phpmailer->CharSet = "utf-8";
+	    if(get_option('bs_form_smtp_host')){
+            $phpmailer->isSMTP();
+            $phpmailer->Host = get_option('bs_form_smtp_host');
+            $phpmailer->SMTPAuth = (bool) get_option('bs_form_smtp_auth_check');
+            $phpmailer->Port = get_option('bs_form_smtp_port');
+            $phpmailer->Username = get_option('bs_form_email_benutzer');
+            $phpmailer->Password = get_option('bs_form_email_passwort');
+            $phpmailer->SMTPSecure = get_option('bs_form_smtp_secure');
+            $phpmailer->SMTPDebug = 0;
+            $phpmailer->CharSet = "utf-8";
+        }
 	}
 
 	public function bs_formular_mail_content_type():string
