@@ -56,7 +56,7 @@ final class RegisterBsFormularPlugin {
 		// TODO Create Database
 		add_action( 'init', array( $this, 'boostrap_formular_create_db' ) );
 
-		add_action( 'init', array( $this, 'bootstrap_formular_removes_api_endpoints_for_not_logged_in' ) );
+		//add_action( 'init', array( $this, 'bootstrap_formular_removes_api_endpoints_for_not_logged_in' ) );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'bs_formular_plugin_editor_block_scripts' ) );
 		add_action( 'enqueue_block_assets', array( $this, 'bs_formular_plugin_public_scripts' ) );
 
