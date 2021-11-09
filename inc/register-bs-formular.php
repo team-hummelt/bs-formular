@@ -78,6 +78,9 @@ final class RegisterBsFormularPlugin {
 		add_action( 'wp_ajax_BsFormularHandle', array( $this, 'prefix_ajax_BsFormularHandle' ) );
 		add_action( 'wp_ajax_nopriv_BsFormularNoAdmin', array( $this, 'prefix_ajax_BsFormularNoAdmin' ) );
 		add_action( 'wp_ajax_BsFormularNoAdmin', array( $this, 'prefix_ajax_BsFormularNoAdmin' ) );
+        //TODO AJAX FILE-UPLOAD
+        add_action( 'wp_ajax_nopriv_BsFormularFileUploadNoAdmin', array( $this, 'prefix_ajax_BsFormularFileUploadNoAdmin' ) );
+        add_action( 'wp_ajax_BsFormularFileUploadNoAdmin', array( $this, 'prefix_ajax_BsFormularFileUploadNoAdmin' ) );
 
 
         //TODO REGISTER WP-MAIL SMTP
@@ -122,7 +125,7 @@ final class RegisterBsFormularPlugin {
 		wp_enqueue_script( 'bs-formular-ajax-script' );
 		wp_localize_script( 'bs-formular-ajax-script', 'bs_form_ajax_obj', array(
 			'ajax_url' => admin_url( 'admin-ajax.php' ),
-			'nonce'    => $title_nonce
+			'nonce'    => $title_nonce,
 		) );
 	}
 
@@ -137,8 +140,11 @@ final class RegisterBsFormularPlugin {
 		wp_enqueue_script( 'bs-formular-public-ajax-script' );
 		wp_localize_script( 'bs-formular-public-ajax-script', 'bs_form_ajax_obj', array(
 			'ajax_url' => admin_url( 'admin-ajax.php' ),
-			'nonce'    => $title_nonce
-		) );
+			'nonce'    => $title_nonce,
+            'file_size' =>  get_option('file_max_size') * 1024 * 1024,
+            'max_files' =>  get_option('upload_max_files'),
+            'assets_url' => BS_FORMULAR_PLUGIN_ASSETS_URL
+		));
 	}
 
 	public function prefix_ajax_BsFormularHandle():void {
@@ -158,6 +164,17 @@ final class RegisterBsFormularPlugin {
 		require 'bs-form-ajax/bs-form-public-ajax.php';
 		wp_send_json( $responseJson );
 	}
+
+    /*===============================================
+    TODO AJAX PUBLIC UPLOAD HANDLE
+    =================================================
+    */
+    public function prefix_ajax_BsFormularFileUploadNoAdmin(): void {
+        $responseJson = null;
+        check_ajax_referer( 'bs_form_public_handle' );
+        require 'bs-form-ajax/bs-form-public-upload-files.php';
+        wp_send_json( $responseJson );
+    }
 
 	/**
 	 * =====================================================

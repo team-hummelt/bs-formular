@@ -150,8 +150,7 @@ defined( 'ABSPATH' ) or die();
                                                    name="email_abs_name"
                                                    id="emailABSInput">
                                             <div id="helpEmailABSInput" class="form-text">Wenn der Eintrag leer bleibt,
-                                                wird
-                                                der Seitentitel verwendet.
+                                                wird der Seitentitel verwendet.
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-12"></div>
@@ -248,6 +247,55 @@ defined( 'ABSPATH' ) or die();
                                             aktiv</label>
                                     </div>
                                     <hr>
+                                    <h5 class="card-title">
+                                        <i class="font-blue fa fa-gears"></i>&nbsp;<?= __( 'File Upload Settings', 'bs-formular' ) ?>
+                                    </h5>
+                                    <hr>
+
+                                    <div class="row">
+                                        <div class="col-lg-6 col-12 mb-3">
+                                            <label for="uploadMimeTypesInput" class="form-label">
+                                                <?= __( 'File-Upload MimeTypes', 'bs-formular' ) ?> <span
+                                                        class="text-danger">*</span></label>
+                                            <input type="text" class="form-control"
+                                                   value="<?= get_option( 'upload_mime_types' ) ? get_option( 'upload_mime_types' ) : 'pdf' ?>"
+                                                   name="mime_type"
+                                                   id="uploadMimeTypesInput" autocomplete="cc-number">
+                                            <div id="uploadMimeTypesHelp" class="form-text">MimeTypes mit Komma oder Semikolon trennen.<br> (z.B. pdf, jpg, png)
+                                          </div>
+                                        </div>
+                                        <div class="col-lg-6 col-12 mb-3">
+                                            <label for="maxSizeInput" class="form-label">
+                                                <?= __( 'maximale File Größe (MB):', 'bs-formular' ) ?> <span
+                                                        class="text-danger">*</span></label>
+                                            <input type="number" min="1" max="10" class="form-control"
+                                                   value="<?= get_option( 'file_max_size' ) ? get_option( 'file_max_size' ) : '2' ?>"
+                                                   name="file_max_size"
+                                                   id="maxSizeInput" autocomplete="cc-number">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-6 col-12 mb-3">
+                                            <label for="uploadMaxFilesInput" class="form-label">
+                                                <?= __( 'Max. Files pro E-Mail', 'bs-formular' ) ?> <span
+                                                        class="text-danger">*</span></label>
+                                            <input type="number" min="1" max="10" class="form-control"
+                                                   value="<?= get_option( 'upload_max_files' ) ? get_option( 'upload_max_files' ) : '5' ?>"
+                                                   name="upload_max_files"
+                                                   id="uploadMaxFilesInput" autocomplete="cc-number">
+                                        </div>
+                                        <div class="col-lg-6 col-12 mb-3"></div>
+                                    </div>
+
+                                    <div class="form-check form-switch">
+                                        <input onclick="this.blur()" name="multi_upload" class="form-check-input"
+                                               type="checkbox"
+                                               id="multiUploadAktiv" <?= ! get_option( 'multi_upload' ) ?: 'checked' ?>>
+                                        <label class="form-check-label" for="multiUploadAktiv">Multiple Uploads aktiv</label>
+                                    </div>
+                                    <hr>
+
                                 </form>
                                 <button id="load-smtp-check" class="btn btn-blue btn-sm" type="button">
                                     <i class="fa fa-gears"></i>&nbsp;

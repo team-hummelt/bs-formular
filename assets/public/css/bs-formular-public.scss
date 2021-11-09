@@ -1,6 +1,194 @@
 @import "../../admin/css/font-awesome";
+
+$blue: #618eeb;
 body .bs-formular-wrapper {
- i.fa {
-   font-family: FontAwesome, serif!important;
- }
+  i.fa {
+    font-family: FontAwesome, serif !important;
+  }
+
+  .font-blue {
+    color: $blue;
+  }
+
+  .bs-form-alert {
+    padding-right: 1.5rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    display: block;
+
+    &:hover:after {
+      transform: scale(1.3);
+    }
+
+    &:after {
+      font-family: FontAwesome, serif;
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.2rem;
+      height: 1.2rem;
+      content: '\f00d';
+      cursor: pointer;
+      right: 1rem;
+      top: .3rem;
+      font-weight: normal;
+      font-size: 1.2rem;
+      transition: all 350ms;
+      -webkit-transition: all 350ms;
+    }
+  }
+
+  ul.file-feedback-wrapper {
+    //padding: 1rem 0 0 0 ;
+    padding: 0;
+    margin-bottom: 0;
+
+    li.li-file-error, .li-file-error-size {
+      display: block;
+      position: relative;
+      padding-left: 1.2rem;
+      font-size: 14px;
+      &:before {
+        left: 0;
+        position: absolute;
+        font-family: FontAwesome, serif;
+        content: '\f06a';
+        color: var(--bs-red);
+      }
+
+      &:first-child {
+        padding-top: 1rem;
+      }
+    }
+
+    li.li-add-file {
+      display: block;
+      position: relative;
+      padding-left: 1.2rem;
+      font-size: 14px;
+
+      &:before {
+        content: '\f1da';
+        position: absolute;
+        left: 0;
+
+        font-family: FontAwesome, serif;
+      }
+
+      &:first-child {
+        padding-top: 1rem;
+      }
+    }
+
+    li.li-add-file.spin {
+      &:before {
+        -webkit-animation: bs-form-spin 2s infinite linear;
+        animation: bs-form-spin 2s infinite linear;
+        color: teal;
+      }
+    }
+
+    @-webkit-keyframes bs-form-spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg)
+      }
+      100% {
+        -webkit-transform: rotate(-359deg);
+        transform: rotate(-359deg)
+      }
+    }
+    @keyframes bs-form-spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg)
+      }
+      100% {
+        -webkit-transform: rotate(-359deg);
+        transform: rotate(-359deg)
+      }
+    }
+
+    li.li-file-max-error {
+      display: block;
+      position: relative;
+      padding-left: 1.2rem;
+      font-size: 14px;
+
+      &:before {
+        left: 0;
+        position: absolute;
+        font-family: FontAwesome, serif;
+        content: '\f00d';
+        color: var(--bs-red);
+      }
+
+      &:first-child {
+        padding-top: 1rem;
+      }
+    }
+
+    li.li-success-file {
+      display: block;
+      position: relative;
+      padding-left: 1.2rem;
+      font-size: 14px;
+
+      &:before {
+        content: '\f00c';
+        position: absolute;
+        color: green;
+        left: 0;
+        font-family: FontAwesome, serif;
+      }
+
+      &:first-child {
+        padding-top: 1rem;
+      }
+    }
+
+    .fileError {
+      transition: opacity 1s;
+      opacity: 1;
+    }
+
+    .removed {
+      opacity: 0;
+      -webkit-animation: fadOutOpacity 4s ease-in-out;
+      -moz-animation: fadOutOpacity 4s ease-in-out;
+      animation: fadOutOpacity 4s ease-in-out;
+    }
+    @keyframes fadOutOpacity {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
+
+    @-moz-keyframes fadOutOpacity {
+      from {
+        opacity:1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
+
+    @-webkit-keyframes fadOutOpacity {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
+
+
+  }
+
+
 }
+

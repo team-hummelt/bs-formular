@@ -17,3 +17,5 @@ require 'metabox/classic/bs-formular-widget.php';
 require 'Mailer/smtp-test.php';
 //TODO GET PAGE META DATA
 add_filter('bs_form_get_smtp_test', 'bs_formular_load_smtp_test');
+//TODO FILE UPLOADER
+require 'filter/bs-email-upload-handle.php';
