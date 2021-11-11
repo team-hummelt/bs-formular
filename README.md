@@ -7,7 +7,7 @@ Contributors: jwiecker
 Tags: bootstrap, formular
 Requires at least: 5.8
 Tested up to: 5.8
-Stable tag: 1.0.2
+Stable tag: 1.0.5
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -21,6 +21,17 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 Formular ganz einfach mit BS-Formulare erstellen.
+
+== Changelog ==
+= 1.0.5 =
+* File-Upload mit FilePond hinzugefügt.
+* FilePond Filter hinzugefügt.
+* File Upload-Optionen hinzugefügt.
+* E-Mail Select hinzugefügt.
+* Datenschutz Checkbox angepasst.
+* Datenschutz-Link angepasst.
+* Hilfe Seite aktualisiert.
+* SMTP Check vor dem Senden der E-Mail hinzugefügt (verhindert Server Error 500).
 
 == Changelog ==
 = 1.0.4 =

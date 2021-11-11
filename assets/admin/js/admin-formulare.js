@@ -422,14 +422,20 @@ jQuery(document).ready(function ($) {
                       <button type="button" data-type="radio-inline"
                               class="btn-form-element btn btn-blue-outline btn-sm mb-1">radio-inline
                       </button>
+                       <button type="button" data-type="email-send-select"
+                        class="btn-form-element btn btn-blue-outline btn-sm mb-1">E-Mail Select
+                      </button>
+                      <button type="button" data-type="file"
+                        class="btn-form-element btn btn-blue-outline btn-sm mb-1">File Upload
+                      </button>
+                       <button type="button" data-type="dataprotection"
+                              class="btn-form-element btn btn-blue-outline btn-sm mb-1">Datenschutz prüfen
+                      </button>
                       <button type="button" data-type="button"
                               class="btn-form-element btn btn-blue-outline btn-sm mb-1">button
                       </button>
-                      <button type="button" data-type="dataprotection"
-                              class="btn-form-element btn btn-blue-outline btn-sm mb-1">Datenschutz
-                          prüfen
-                      </button>
-                  </div>
+                   </div>
+                  
                   <textarea name="formular" rows="25" cols="50" id="InputText"
                             class="large-text code mb-3" required>${data && data.user_layout ? data.user_layout : ''}</textarea>
                    <hr>

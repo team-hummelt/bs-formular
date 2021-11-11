@@ -94,8 +94,8 @@ if ( ! class_exists( 'BsFormularShortCode' ) ) {
                   <input class="terms" type="checkbox" name="terms">
                   '.$formStart.'';
             $record['bottom'] = $formEnd . '
-			<div id="error'.$randomId.'" class="alert alert-danger mt-3 d-none" role="alert"></div>
-			<div id="success'.$randomId.'" class="alert alert-success mt-3 d-none" role="alert"></div>
+			<div id="error'.$randomId.'" class="bs-form-alert alert alert-danger mt-3 d-none" role="alert"></div>
+			<div id="success'.$randomId.'" class="bs-form-alert alert alert-success mt-3 d-none" role="alert"></div>
 			</form></div>';
             return (object) $record;
         }

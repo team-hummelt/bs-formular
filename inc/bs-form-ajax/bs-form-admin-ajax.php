@@ -60,7 +60,12 @@ switch ($method) {
             $return .= '[type=' . $type . '] your-dataprotection-url] ' . "\r\n\r\n";
         }
 
-        if ($type === 'select' || $type === 'radio-default' || $type === 'radio-inline') {
+        if ($type === 'email-send-select') {
+            $return = '[label] ' . $type . '-Label' . "\r\n";
+            $return .= '[type=' . $type . '] #Email-Adresse# your-' . $type . '-1, #Email-Adresse# your-' . $type . '-2, #Email-Adresse#  your-' . $type . '-3]' . "\r\n\r\n";
+        }
+
+        if ($type === 'select' || $type === 'radio-default' || $type === 'radio-inline' || $type === 'url-select') {
             $return = '[label] ' . $type . '-Label' . "\r\n";
             $return .= '[type=' . $type . ']  your-' . $type . '-1, your-' . $type . '-2,  your-' . $type . '-3]' . "\r\n\r\n";
         }
@@ -173,6 +178,13 @@ switch ($method) {
                 $return_arr[] = $url;
             }
 
+            if ($selType == 'file') {
+                $file = apply_filters('create_formular_fields',$class_aktiv, $type[$i], $label[$i], $val[$i], $selType, $input_class, $label_class);
+                $search = $matches[$i][0];
+                $formular = apply_filters('string_replace_limit', $search, '###' . $file->inputId . '###', $formular, $limit = 1);
+                $return_arr[] = $file;
+            }
+
             if ($selType == 'number') {
                 $number = apply_filters('create_formular_fields',$class_aktiv, $type[$i], $label[$i], $val[$i], $selType, $input_class, $label_class);
                 $search = $matches[$i][0];
@@ -195,11 +207,21 @@ switch ($method) {
             }
 
             if ($selType == 'select') {
-                $arr = preg_replace("/\s+/", "", $val[$i]);
-                $SelArr = explode(',', $arr);
+                $arr = preg_replace("/\s+/", " ", $val[$i]);
+                $SelArr = explode(', ', $arr);
                 $select = apply_filters('create_formular_fields',$class_aktiv, $type[$i], $label[$i], $SelArr, $selType, $input_class, $label_class);
                 $formular = apply_filters('string_replace_limit', $matches[$i][0], '###' . $select->inputId . '###', $formular, $limit = 1);
                 $return_arr[] = $select;
+            }
+
+            if ($selType == 'email-send-select') {
+                $arr = trim(preg_replace("/\s+/", " ", $val[$i]));
+                $EmailSelArr = explode(', ', $arr);
+
+                $email_send_select = apply_filters('create_formular_fields',$class_aktiv, $type[$i], $label[$i], $EmailSelArr, $selType, $input_class, $label_class);
+
+                $formular = apply_filters('string_replace_limit', $matches[$i][0], '###' . $email_send_select->inputId . '###', $formular, $limit = 1);
+                $return_arr[] = $email_send_select;
             }
 
             if ($selType == 'checkbox') {
@@ -209,8 +231,8 @@ switch ($method) {
             }
 
             if ($selType == 'radio-inline' || $selType == 'radio-default') {
-                $arr = preg_replace("/\s+/", "", $val[$i]);
-                $RadioArr = explode(',', $arr);
+                $arr = preg_replace("/\s+/", " ", $val[$i]);
+                $RadioArr = explode(', ', $arr);
                 $radio = apply_filters('create_formular_fields',$class_aktiv, $type[$i], $label[$i], $RadioArr, $selType, $input_class, $label_class);
                 $formular = apply_filters('string_replace_limit', $matches[$i][0], '###' . $radio->inputId . '###', $formular, $limit = 1);
                 $return_arr[] = $radio;
@@ -360,7 +382,7 @@ switch ($method) {
 
         $in_arr = [];
         foreach ($inputs as $tmp) {
-            if ($tmp->type == 'button' || $tmp->type == 'dataprotection') {
+            if ($tmp->type == 'button' || $tmp->type == 'dataprotection' || $tmp->type == 'email-send-select') {
                 continue;
             }
             if ($tmp->type == 'select' || $tmp->type == 'radio') {
@@ -536,7 +558,14 @@ switch ($method) {
 		filter_var($data['smtp_auth_check'], FILTER_SANITIZE_STRING) ? $smtp_auth_check = 1 : $smtp_auth_check = 0;
 		filter_var($data['email_aktiv'], FILTER_SANITIZE_STRING) ? $email_aktiv = 1 : $email_aktiv = 0;
 
-		if(!$email_passwort){
+        filter_var($data['multi_upload'], FILTER_SANITIZE_STRING) ? $multi_upload = 1 : $multi_upload = 0;
+        $file_max_size = filter_var($data['file_max_size'], FILTER_SANITIZE_NUMBER_INT);
+        $mime_type = filter_var($data['mime_type'], FILTER_SANITIZE_STRING);
+        $upload_max_files = filter_var($data['upload_max_files'], FILTER_SANITIZE_NUMBER_INT);
+
+        $file_max_all_size = filter_var($data['file_max_all_size'], FILTER_SANITIZE_NUMBER_INT);
+
+		if(!$email_passwort) {
 			$email_passwort = get_option('bs_form_email_passwort');
 		}
 
@@ -574,6 +603,13 @@ switch ($method) {
 			return $responseJson;
 		}
 
+        $file_max_size ? update_option('file_max_size', $file_max_size) : update_option('file_max_size', 3);
+        $mime_type ? update_option('upload_mime_types', $mime_type) : update_option('upload_mime_types', 'pdf');
+        $file_max_all_size ? update_option('file_max_all_size', $file_max_all_size) : update_option('file_max_all_size', 6);
+
+
+        update_option('multi_upload', $multi_upload);
+        update_option('upload_max_files', $upload_max_files);
 		update_option('email_empfang_aktiv', $email_aktiv);
 		update_option('email_abs_name', $email_abs_name);
 		update_option('bs_abs_email', $email_adresse);
@@ -673,6 +709,12 @@ switch ($method) {
 		break;
 
     case'formular_data_table':
+
+        if(SET_EMAIL_DEFAULT_MELDUNGEN){
+           $defMessage = apply_filters('bs_form_default_settings','');
+           apply_filters('bs_update_default_settings','form_meldungen', $defMessage->meldungen);
+        }
+
         $tableData = new stdClass();
         $query = '';
         $columns = array(

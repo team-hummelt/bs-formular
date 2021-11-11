@@ -10,14 +10,14 @@
  * Plugin Name:       BS-Formular - Boostrap Formular Plugin
  * Plugin URI:        https://www.hummelt-werbeagentur.de/leistungen/
  * Description:       Bootstrap Formulare mit verschiedenen Ausgabeoptionen.
- * Version:           1.0.4
+ * Version:           1.0.5
  * Author:            Jens Wiecker
  * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Requires PHP:      8.0
  * Requires at least: 5.8
  * Tested up to:      5.7
- * Stable tag:        1.0.4
+ * Stable tag:        1.0.5
  */
 
 defined( 'ABSPATH' ) or die();
@@ -26,7 +26,7 @@ defined( 'ABSPATH' ) or die();
 const BS_FORMULAR_PLUGIN_DB_VERSION = '1.0.1';
 const BS_FORMULAR_MIN_PHP_VERSION = '8.0';
 const BS_FORMULAR_MIN_WP_VERSION = '5.7';
-
+const SET_EMAIL_DEFAULT_MELDUNGEN = true;
 const BS_FORMULAR_QUERY_VAR = 'get-bs-form-email';
 const BS_FORMULAR_QUERY_URI = 1206711901102021;
 //Settings ID
@@ -42,12 +42,18 @@ define('BS_FORMULAR_SLUG_PATH', plugin_basename(__FILE__));
 define('BS_FORMULAR_PLUGIN_URL', plugins_url('bs-formular'));
 //PLUGIN INC DIR
 const BS_FORMULAR_INC = BS_FORMULAR_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'inc' . DIRECTORY_SEPARATOR;
+//PLUGIN ASSETS URL
+define('BS_FORMULAR_PLUGIN_ASSETS_URL', plugins_url('bs-formular') . '/assets/public/');
 
 //PLUGIN GUTENBERG DATA PATH
 const BS_FORMULAR_GUTENBERG_DATA = BS_FORMULAR_INC  . 'gutenberg' . DIRECTORY_SEPARATOR . 'plugin-data' . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR;
 //PLUGIN GUTENBERG DATA URL
 define('BS_FORMULAR_GUTENBERG_URL', plugins_url('bs-formular').'/inc/gutenberg/plugin-data/build/');
 
+//File UPLOAD DIR
+$upload_dir = wp_get_upload_dir();
+define("BS_FILE_UPLOAD_DIR", $upload_dir['basedir'] . DIRECTORY_SEPARATOR . 'bs-formular-files' . DIRECTORY_SEPARATOR);
+define("BS_FILE_UPLOAD_URL", $upload_dir['baseurl'] .'/bs-formular-files/');
 
 /**
  * REGISTER PLUGIN

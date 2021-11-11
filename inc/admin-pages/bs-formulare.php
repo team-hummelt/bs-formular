@@ -150,8 +150,7 @@ defined( 'ABSPATH' ) or die();
                                                    name="email_abs_name"
                                                    id="emailABSInput">
                                             <div id="helpEmailABSInput" class="form-text">Wenn der Eintrag leer bleibt,
-                                                wird
-                                                der Seitentitel verwendet.
+                                                wird der Seitentitel verwendet.
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-12"></div>
@@ -248,6 +247,64 @@ defined( 'ABSPATH' ) or die();
                                             aktiv</label>
                                     </div>
                                     <hr>
+                                    <h5 class="card-title">
+                                        <i class="font-blue fa fa-gears"></i>&nbsp;<?= __( 'File Upload Settings', 'bs-formular' ) ?>
+                                    </h5>
+                                    <hr>
+
+                                    <div class="row">
+                                        <div class="col-lg-6 col-12 mb-3">
+                                            <label for="maxSizeInput" class="form-label">
+                                                <?= __( 'maximale File Größe (MB):', 'bs-formular' ) ?> <span
+                                                        class="text-danger">*</span></label>
+                                            <input type="number" min="1" max="10" class="form-control"
+                                                   value="<?= get_option( 'file_max_size' ) ? get_option( 'file_max_size' ) : '2' ?>"
+                                                   name="file_max_size"
+                                                   id="maxSizeInput" autocomplete="cc-number">
+                                        </div>
+
+                                        <div class="col-lg-6 col-12 mb-3">
+                                            <label for="maxSizeAllInput" class="form-label">
+                                                <?= __( 'maximale gesamt Upload-Größe (MB:)', 'bs-formular' ) ?> <span
+                                                        class="text-danger">*</span></label>
+                                            <input type="number" min="1" max="50" class="form-control"
+                                                   value="<?= get_option( 'file_max_all_size' ) ? get_option( 'file_max_all_size' ) : '6' ?>"
+                                                   name="file_max_all_size"
+                                                   id="maxSizeAllInput" autocomplete="cc-number">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-6 col-12 mb-3">
+                                            <label for="uploadMaxFilesInput" class="form-label">
+                                                <?= __( 'Max. Files pro E-Mail', 'bs-formular' ) ?> <span
+                                                        class="text-danger">*</span></label>
+                                            <input type="number" min="1" max="10" class="form-control"
+                                                   value="<?= get_option( 'upload_max_files' ) ? get_option( 'upload_max_files' ) : '5' ?>"
+                                                   name="upload_max_files"
+                                                   id="uploadMaxFilesInput" autocomplete="cc-number">
+                                        </div>
+                                        <div class="col-lg-6 col-12 mb-3">
+                                            <label for="uploadMimeTypesInput" class="form-label">
+                                                <?= __( 'File-Upload MimeTypes', 'bs-formular' ) ?> <span
+                                                        class="text-danger">*</span></label>
+                                            <input type="text" class="form-control"
+                                                   value="<?= get_option( 'upload_mime_types' ) ? get_option( 'upload_mime_types' ) : 'pdf' ?>"
+                                                   name="mime_type"
+                                                   id="uploadMimeTypesInput" autocomplete="cc-number">
+                                            <div id="uploadMimeTypesHelp" class="form-text">MimeTypes mit Komma oder Semikolon trennen.<br> (z.B. pdf, jpg, png)
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-check form-switch">
+                                        <input onclick="this.blur()" name="multi_upload" class="form-check-input"
+                                               type="checkbox"
+                                               id="multiUploadAktiv" <?= ! get_option( 'multi_upload' ) ?: 'checked' ?>>
+                                        <label class="form-check-label" for="multiUploadAktiv">Multiple Uploads aktiv</label>
+                                    </div>
+                                    <hr>
+
                                 </form>
                                 <button id="load-smtp-check" class="btn btn-blue btn-sm" type="button">
                                     <i class="fa fa-gears"></i>&nbsp;
@@ -317,7 +374,7 @@ defined( 'ABSPATH' ) or die();
             </span>
                                 <hr>
                                 <h5>Ausgabe im Frontend</h5>
-                                <div class="col-12 col-lg-4 pt-3">
+                                <div class="col-12 col-xl-6 pt-3">
                                     <!----------->
                                     <div class="mb-3"><label class="form-label mb-1"
                                                              for="a94e76fb3e71">Vorname </label><input type="text"
@@ -403,11 +460,11 @@ defined( 'ABSPATH' ) or die();
                                 <hr>
 
                                 <pre>
-[label] Ich akzeptiere die <b class="text-danger"> # </b> Datenschutzerklärung
+[label] Ich akzeptiere die <b class="text-danger"> #</b> Datenschutzerklärung <b class="text-danger">#</b> und so weiter
 [type=dataprotection] <span class="text-primary"> https://start.hu-ku.com/theme-update</span>]
                                 </pre>
                                 <p>
-                                    <span class="d-block small"> Hinter der Raute <b class="text-danger">#</b> wird der Linktext eingefügt.</span>
+                                    <span class="d-block small"> Zwischen den Rauten <b class="text-danger">#</b> wird der Linktext eingefügt.</span>
                                     <span class="d-block small">Bei <i>dataprotection</i> wird die URL z.B. zur Datenschutzerklärung eingefügt.</span>
                                 </p>
                                 <h6>Ausgabe des Beispiels</h6>
@@ -419,16 +476,54 @@ defined( 'ABSPATH' ) or die();
                                                                            type="checkbox" id="1532472007ae"
                                                                            required=""><label class="form-check-label"
                                                                                               for="1532472007ae">Ich
-                                            akzeptiere die <a
-                                                    href="https://start.hu-ku.com/theme-update/">
-                                                Datenschutzbestimmungen</a><span class="text-danger"> *</span> </label>
+                                            akzeptiere die <a href="https://start.hu-ku.com/theme-update/">
+                                                Datenschutzbestimmungen</a> und so weiter<span class="text-danger"> *</span> </label>
                                         <div class="invalid-feedback">Sie müssen die Bedingungen akzeptieren, bevor Sie
                                             Ihre Nachricht senden.
                                         </div>
                                     </div>
                                 </div>
+                                </div>
+                                    <hr>
+                                    <h5>E-Mail Select</h5>
+                                    <div class="form-text">Mit E-Mail Select wird das gesendete Formular an eine ausgewählte E-Mail Adresse gesendet.</div>
+                                    <hr>
+                                    <h6 class="border-bottom pb-2 mb-3">Grundlegender Aufbau</h6>
+
+                                    <pre>
+[label] email-send-select-Label
+[type=email-send-select] <b class="text-danger">#</b>Email-Adresse<b class="text-danger">#</b> your-email-send-select-1, <b class="text-danger">#</b>Email-Adresse<b class="text-danger">#</b> your-email-send-select-2, <b class="text-danger">#</b>Email-Adresse<b class="text-danger">#</b>  your-email-send-select-3]
+                                    </pre>
+                                <p>
+                                    <span class="d-block small"> Zwischen den Rauten <b class="text-danger">#</b> wird die E-Mail Adresse eingefügt. An diese Adresse wird bei Auswahl das Formular gesendet.</span>
+                                    <span class="d-block small">Hinter der E-Mail Adresse wird die Bezeichnung für das Options-Feld angegeben. </span>
+                                    <span class="d-block small">Alle anderen Optionen wie z.B. Pflichtfeld, sind Identisch mit den anderen Formularfeldern.</span>
+                                </p>
+                                <h6>Ausgabe des Beispiels</h6>
+                                  <hr>
+                                <div class="mb-3"><label class="form-label mb-1" for="9144742e9e47">E-Mail senden an <span class="text-danger"> *</span></label><select onchange="this.blur()" name="9144742e9e47" class="form-control email-send-select form-select" id="9144742e9e47" required=""><option value="">auswählen…</option><option value="eyJzdGF0dXMiOnRydWUsImlkIjoiOGY5ZDVhYjlkOWY4IiwiZW1haWwiOiJ3aWVja2VyQGh1bW1lbHQuY29tIn0="> Messstellenbetrieb</option><option value="eyJzdGF0dXMiOnRydWUsImlkIjoiOGRmYWU5MmQyNGVlIiwiZW1haWwiOiJpbmZvQGplbnN3aWVja2VyLmRlIn0="> Anschluss Erzeugungsanlagen bis 30k</option><option value="eyJzdGF0dXMiOnRydWUsImlkIjoiYjgyZDllMTA2NWFlIiwiZW1haWwiOiJqLndpZWNrZXJAZ214LmRlIn0="> Anschluss Erzeugungsanlagen ab 30kw</option><option value="eyJzdGF0dXMiOnRydWUsImlkIjoiZmEzNTcxMDg3NjkxIiwiZW1haWwiOiJqZW5zQGhhcnotd2ViLmNvbSJ9"> E-Mobilität</option></select><div class="invalid-feedback">Die ausgewählte E-Mail-Adresse ist ungültig.</div></div>
+                                <hr>
+
+
+                                <h5>Daten Upload</h5>
+                                <div class="form-text">Für den Daten-Upload stehen verschiedene Optionen in den E-Mail Settings zur Verfügung.</div>
+                                <hr>
+                                <p>
+                                    <span class="d-block small"> Die Option <i class="text-danger">File-Upload MimeTypes</i> kann individuell für jedes File-Upload Input Feld eingestellt werden.</span>
+                                </p>
+
+                                <pre>
+[label] File Upload
+[type=file*]<b class="text-danger">#</b>pdf,jpg,jpeg,png<b class="text-danger">#</b> your-file]
+                                </pre>
+
+                                    <span class="d-block small">
+                                        Zwischen den Rauten <b class="text-danger">#</b> können verschiedene Endungen von erlaubten Datentypen eingetragen werden.</span>
+                                <span class="d-block small pb-3">
+                                    Die Datentypen ohne Punkt oder MimeType angeben. Die einzelnen Typen können mit Koma, oder Semikolon getrennt werden.
+                                </span>
+
                             </div>
-                        </div>
                     </div>
                 </div><!--parent-->
             </div><!--card-->

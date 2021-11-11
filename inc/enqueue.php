@@ -21,10 +21,18 @@ if ( ! function_exists( 'bootstrap_formular_public_style' ) ) {
             wp_enqueue_script( 'bootstrap-bs-formular', BS_FORMULAR_PLUGIN_URL . '/assets/public/js/bs/bootstrap.bundle.min.js', array(),$modificated, true );
         }
 
+        //filepond
+        //$modificated = date( 'YmdHi', filemtime( BS_FORMULAR_PLUGIN_DIR . '/assets/public/css/filepond/filepond.min.css' ) );
+        //wp_enqueue_style( 'bootstrap-formular-filepond-style', BS_FORMULAR_PLUGIN_URL . '/assets/public/css/filepond/filepond.min.css', array(), $modificated, '');
+
         $modificated = date( 'YmdHi', filemtime( BS_FORMULAR_PLUGIN_DIR . '/assets/public/css/bs-formular-public.css' ) );
-        $modificated = date( 'YmdHi', filemtime( BS_FORMULAR_PLUGIN_DIR . '/assets/public/js/bs-formular-public.js' ) );
         wp_enqueue_style( 'bootstrap-formular-public-style', BS_FORMULAR_PLUGIN_URL . '/assets/public/css/bs-formular-public.css', array(), $modificated, '');
+        $modificated = date( 'YmdHi', filemtime( BS_FORMULAR_PLUGIN_DIR . '/assets/public/js/bs-formular-public.js' ) );
         wp_enqueue_script( 'bootstrap-formular-public-script', BS_FORMULAR_PLUGIN_URL . '/assets/public/js/bs-formular-public.js', array(),$modificated, true );
+        //filepond
+        $modificated = date( 'YmdHi', filemtime( BS_FORMULAR_PLUGIN_DIR . '/assets/public/js/filepond/filepond-config.js' ) );
+        wp_enqueue_script( 'bootstrap-formular-filepond-script', BS_FORMULAR_PLUGIN_URL . '/assets/public/js/filepond/filepond-config.js', array(),$modificated, true );
+
     }
 }
 add_action( 'wp_enqueue_scripts', 'bootstrap_formular_public_style' );
