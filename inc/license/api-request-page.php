@@ -54,6 +54,12 @@ switch ($data->make_id) {
 	    deactivate_plugins( BS_FORMULAR_SLUG_PATH );
 	    set_transient('show_lizenz_info', true, 5);
         break;
+    case'send_versions':
+        $backMsg = [
+            'status' => true,
+            'theme_version' => 'v'.BS_FORMULAR_PLUGIN_VERSION,
+        ];
+        break;
     default:
         $backMsg = [
           'status' => false
