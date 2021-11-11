@@ -23,6 +23,17 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Formular ganz einfach mit BS-Formulare erstellen.
 
 == Changelog ==
+= 1.0.5 =
+* File-Upload mit FilePond hinzugefügt.
+* FilePond Filter hinzugefügt.
+* File Upload-Optionen hinzugefügt.
+* E-Mail Select hinzugefügt.
+* Datenschutz Checkbox angepasst.
+* Datenschutz-Link angepasst.
+* Hilfe Seite aktualisiert.
+* SMTP Check vor dem Senden der E-Mail hinzugefügt (verhindert Server Error 500).
+
+== Changelog ==
 = 1.0.4 =
 * WP-Rest Fehler fixed.
 

@@ -10,6 +10,7 @@ defined('ABSPATH') or die();
 
 $responseJson = new stdClass();
 $record = new stdClass();
+use Form\BsFormular;
 
 $record->id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
 $record->formId = filter_input(INPUT_POST, 'formId', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
@@ -73,6 +74,7 @@ $argsData = new stdClass();
 $argsData->shortcode = $record->id;
 $argsData->where = sprintf('WHERE shortcode="%s"', $record->id);
 $send_arr = array();
+$attachments = [];
 
 foreach ($_POST as $key => $val) {
     $argsData->id = $key;
@@ -125,6 +127,10 @@ foreach ($send_arr as $tmp) {
         $sendSelectMail = $tmp->eingabe;
         continue;
     }
+    if($tmp->type == 'file'){
+        $attachments = $tmp->eingabe;
+        continue;
+    }
     $errMsg = apply_filters('bs_form_default_settings', 'by_field', 'error_message');
     $tmp->eingabe ? $eingabe = $tmp->eingabe : $eingabe = $errMsg->error_message;
     $ausgabe = '<b style="font-size: 16px;">Eingabe:</b><br /> <b>' . $tmp->label . ':</b> ' . $eingabe . '<br /><br /><hr />';
@@ -175,22 +181,6 @@ if ($cc) {
 }
 
 
-$files = filter_input(INPUT_POST, 'files_id', FILTER_SANITIZE_STRING);
-$attachments = [];
-if($files) {
-    $dir = BS_FILE_UPLOAD_DIR . $files . DIRECTORY_SEPARATOR;
-    $scanned = array_diff(scandir($dir), array('..', '.'));
-    if (is_dir($dir)) {
-        foreach ($scanned as $tmp) {
-            if (is_file($dir . $tmp)) {
-                  $attachments[] = $dir . $tmp;
-            }
-        }
-    }
-}
-
-//print_r($attachments);
-
 
 $send = wp_mail( $to, $subject ?: get_bloginfo( 'title' ), $sendMsg, array_unique( $headers ), $attachments );
 
@@ -204,7 +194,7 @@ if ( ! $send ) {
     return $responseJson;
 }
 
-do_action('bs_form_destroy_dir', BS_FILE_UPLOAD_DIR . $files . DIRECTORY_SEPARATOR);
+
 
 if (get_option('email_empfang_aktiv')) {
     $mailToDb[] = $to;
@@ -221,5 +211,8 @@ if (get_option('email_empfang_aktiv')) {
 $msg = apply_filters('bs_form_default_settings', 'by_field', 'success_message');
 $responseJson->status = true;
 $responseJson->show_success = true;
+$responseJson->if_file = true;
 $responseJson->msg = $msg->success_message;
 $responseJson->formId = $record->formId;
+
+do_action('bs_form_delete_file_folder');

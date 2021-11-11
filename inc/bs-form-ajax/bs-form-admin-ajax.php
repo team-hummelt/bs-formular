@@ -563,6 +563,8 @@ switch ($method) {
         $mime_type = filter_var($data['mime_type'], FILTER_SANITIZE_STRING);
         $upload_max_files = filter_var($data['upload_max_files'], FILTER_SANITIZE_NUMBER_INT);
 
+        $file_max_all_size = filter_var($data['file_max_all_size'], FILTER_SANITIZE_NUMBER_INT);
+
 		if(!$email_passwort) {
 			$email_passwort = get_option('bs_form_email_passwort');
 		}
@@ -603,6 +605,9 @@ switch ($method) {
 
         $file_max_size ? update_option('file_max_size', $file_max_size) : update_option('file_max_size', 3);
         $mime_type ? update_option('upload_mime_types', $mime_type) : update_option('upload_mime_types', 'pdf');
+        $file_max_all_size ? update_option('file_max_all_size', $file_max_all_size) : update_option('file_max_all_size', 6);
+
+
         update_option('multi_upload', $multi_upload);
         update_option('upload_max_files', $upload_max_files);
 		update_option('email_empfang_aktiv', $email_aktiv);
