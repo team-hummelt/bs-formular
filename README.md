@@ -28,9 +28,10 @@ Formular ganz einfach mit BS-Formulare erstellen.
 
 ***
 ### Changelog
-### 1.0.6
 
-* E-Mail Template hinzugefügt
+### 1.0.6
+* E-Mail Templates hinzugefügt
+* TinyMCE Erweiterungen hinzugefügt 
 
 ### 1.0.5
 * File-Upload mit FilePond hinzugefügt.

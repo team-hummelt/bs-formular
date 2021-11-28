@@ -23,7 +23,7 @@
 defined( 'ABSPATH' ) or die();
 
 //DATABASE VERSION
-const BS_FORMULAR_PLUGIN_DB_VERSION = '1.0.1';
+const BS_FORMULAR_PLUGIN_DB_VERSION = '1.0.2';
 const BS_FORMULAR_MIN_PHP_VERSION = '8.0';
 const BS_FORMULAR_MIN_WP_VERSION = '5.7';
 const SET_EMAIL_DEFAULT_MELDUNGEN = true;
@@ -42,6 +42,9 @@ define('BS_FORMULAR_SLUG_PATH', plugin_basename(__FILE__));
 define('BS_FORMULAR_PLUGIN_URL', plugins_url('bs-formular'));
 //PLUGIN INC DIR
 const BS_FORMULAR_INC = BS_FORMULAR_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'inc' . DIRECTORY_SEPARATOR;
+// E-MAIL TEMPLATE FOLDER
+const EMAIL_TEMPLATES_DIR = BS_FORMULAR_INC . 'templates' . DIRECTORY_SEPARATOR;
+
 //PLUGIN ASSETS URL
 define('BS_FORMULAR_PLUGIN_ASSETS_URL', plugins_url('bs-formular') . '/assets/public/');
 

@@ -38,6 +38,7 @@ defined( 'ABSPATH' ) or die();
         email_cc text NULL,
         message text NOT NULL,
         response_aktiv mediumint(1) NOT NULL DEFAULT 0,
+        email_template mediumint(1) NOT NULL DEFAULT 2,
         auto_betreff varchar(128) NULL,
         auto_msg text NULL,
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

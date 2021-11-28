@@ -85,7 +85,7 @@ if (!class_exists('BootstrapFormularFilter')) {
             // Get Formulardaten by JOIN
             add_filter('bs_form_formular_data_by_join', array($this, 'bsFormFormularDataByJoin'), 10, 2);
             //TODO VALIDATE FORMULAR SEND MESSAGE
-            add_filter('bs_formular_validate_message_inputs', array( $this, 'bsFormularValidateMessageInputs' ), 10, 3);
+            add_filter('bs_formular_validate_message_inputs', array($this, 'bsFormularValidateMessageInputs'), 10, 3);
             //TODO Get Input By ID
             add_filter('get_formular_inputs_by_id', array($this, 'bsFormGetFormulareInputsById'));
             // TODO VALIDATE formular Input Cgeckbox / Radio
@@ -96,6 +96,9 @@ if (!class_exists('BootstrapFormularFilter')) {
             add_action('bs_form_destroy_dir', array($this, 'bsFormDestroyDir'));
             // TODO Delete File Input Folders
             add_action('bs_form_delete_file_folder', array($this, 'bsFormDeleteFileFolder'));
+            //E-Mail Template auswahl
+            add_filter('bs_form_select_email_template', array($this, 'bsFormSelectEmailTemplate'), 10, 2);
+
 
             // TODO JOB EMAIL DATEN
             //Set E-Mail Data
@@ -340,11 +343,11 @@ if (!class_exists('BootstrapFormularFilter')) {
                     $regEx = '@#(.+?)#@i';
 
                     preg_match($regEx, $label, $matches);
-                    if($matches){
-                      $types =  preg_replace("/\s+/", "", $matches[1]);
-                      $label = str_replace($matches[0], '', $label);
+                    if ($matches) {
+                        $types = preg_replace("/\s+/", "", $matches[1]);
+                        $label = str_replace($matches[0], '', $label);
                     } else {
-                      $types = preg_replace("/\s+/", "", get_option('upload_mime_types'));
+                        $types = preg_replace("/\s+/", "", get_option('upload_mime_types'));
                     }
                     $html .= $inputStart;
                     if ($class_aktiv) {
@@ -355,19 +358,19 @@ if (!class_exists('BootstrapFormularFilter')) {
                         $html .= '<label class="form-label ' . $label_class . '" for="' . $id . '">' . $label . ' ' . $stern . '</label>';
                     }
 
-                    $fileType = str_replace([',',';'],'#', $types);
+                    $fileType = str_replace([',', ';'], '#', $types);
                     $mimes = explode('#', $fileType);
-                    if($mimes) {
+                    if ($mimes) {
                         $x = count($mimes);
                         for ($i = 0; $i < count($mimes); $i++) {
                             $i == $x - 1 ? $dot = '' : $dot = ',';
-                            $mimeTypes .= '.'.$mimes[$i].$dot;
+                            $mimeTypes .= '.' . $mimes[$i] . $dot;
                         }
                     }
 
                     get_option('multi_upload') ? $multi = ' multiple' : $multi = '';
                     $html .= '<div class="filePondWrapper">';
-                    $html .= '<input data-id="'.$id.'" type="' . $case . '"class="bsFiles files'.$id.'" ' . $placeholder . ' name="' . $id . '" id="' . $id . '" accept="'.$mimeTypes.'"  ' . $require . ' '.$multi.'/>' . $invDiv;
+                    $html .= '<input data-id="' . $id . '" type="' . $case . '"class="bsFiles files' . $id . '" ' . $placeholder . ' name="' . $id . '" id="' . $id . '" accept="' . $mimeTypes . '"  ' . $require . ' ' . $multi . '/>' . $invDiv;
                     $html .= '</div>';
                     $html .= $inputEnd;
                     $record->html = esc_textarea($html);
@@ -477,8 +480,8 @@ if (!class_exists('BootstrapFormularFilter')) {
                     $invDiv = '<div class="invalid-feedback">' . $invalidMsg->dataprotection . '</div>';
                     $regEx = '@#(.+)#@i';
                     preg_match($regEx, $label, $matches);
-                    if($matches){
-                        $labelUrl = '<a href="'.$values.'" target="_blank">'.$matches[1].'</a>';
+                    if ($matches) {
+                        $labelUrl = '<a href="' . $values . '" target="_blank">' . $matches[1] . '</a>';
                         $dataProtectLabel = str_replace($matches[0], $labelUrl, $label);
                     } else {
                         $dataProtectLabel = $label;
@@ -686,7 +689,7 @@ if (!class_exists('BootstrapFormularFilter')) {
             $result = $wpdb->$fetch("SELECT {$f}.* ,
 									  DATE_FORMAT({$f}.created_at, '%d.%m.%Y %H:%i:%s') AS created,
        								  {$fm}.betreff, {$fm}.email_at, {$fm}.email_cc, {$fm}.message,{$fm}.response_aktiv,
-									  {$fm}.auto_betreff, {$fm}.auto_msg
+									  {$fm}.auto_betreff, {$fm}.auto_msg, {$fm}.email_template
 									  FROM {$f} 
 									  LEFT JOIN {$fm} ON {$f}.id = {$fm}.formId {$args}");
             if (!$result) {
@@ -813,14 +816,15 @@ if (!class_exists('BootstrapFormularFilter')) {
                     'betreff' => $record->betreff,
                     'email_at' => $record->email,
                     'message' => $record->message,
-
+                    'email_template' => $record->email_template
                 ),
                 array('id' => $record->id),
                 array(
                     '%s',
                     '%s',
                     '%s',
-                    '%s'
+                    '%s',
+                    '%d'
                 ),
                 array('%d')
             );
@@ -1225,6 +1229,36 @@ if (!class_exists('BootstrapFormularFilter')) {
             return (object)[];
         }
 
+        public function bsFormSelectEmailTemplate($args = null, $id = null):object
+        {
+            $return = [];
+            $select = [
+                '0' => [
+                    'id' => 1,
+                    'bezeichnung' => 'Tabelle'
+                ],
+                '1' => [
+                    'id' => 2,
+                    'bezeichnung' => 'individuell'
+                ]
+            ];
+
+            switch ($args) {
+                case 'all':
+                    $return = $select;
+                    break;
+                case'by_id':
+                    foreach ($select as $tmp) {
+                        if ($tmp['id'] == $id) {
+                          $return = $tmp;
+                          break;
+                        }
+                    }
+                    break;
+            }
+
+            return $this->bsArrayToObject($return);
+        }
 
         public function bsFormularValidateMessageInputs($record, $input, $form = null): object
         {
@@ -1371,7 +1405,7 @@ if (!class_exists('BootstrapFormularFilter')) {
                     $selInput = json_decode(base64_decode($input));
                     $select = unserialize($record->values);
 
-                   isset($selInput->email) ? $eingabe = $selInput->email : $eingabe = false;
+                    isset($selInput->email) ? $eingabe = $selInput->email : $eingabe = false;
 
                     if ($record->required && !$eingabe) {
                         $return->status = false;
@@ -1414,10 +1448,10 @@ if (!class_exists('BootstrapFormularFilter')) {
                             continue;
                         $regEx = '/.{9}(.*)$/i';
                         preg_match($regEx, $file, $matches);
-                        if($matches){
+                        if ($matches) {
                             $oldName = $dir . $file;
                             $newName = $dir . $matches[1];
-                            if(rename($oldName, $newName)){
+                            if (rename($oldName, $newName)) {
                                 $name = $newName;
                             } else {
                                 $name = $oldName;
@@ -1426,7 +1460,7 @@ if (!class_exists('BootstrapFormularFilter')) {
                         }
                     }
 
-                    if($record->required && !$fileArr){
+                    if ($record->required && !$fileArr) {
                         $return->status = false;
                         $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
                         $return->msg = $msg->$type;
@@ -1566,23 +1600,25 @@ if (!class_exists('BootstrapFormularFilter')) {
          * =========== BS-FORMULAR PHP-MAILER CONFIG ===========
          * =====================================================
          */
-        public function bs_formular_mailer_smtp_options($phpmailer) {
+        public function bs_formular_mailer_smtp_options($phpmailer)
+        {
             $phpmailer->SMTPOptions = array(
                 'ssl' => array(
-                    'verify_peer'       => false,
-                    'verify_peer_name'  => false,
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
                     'allow_self_signed' => true
                 )
             );
             return $phpmailer;
         }
 
-      public function reArrayFiles($file_post):array {
+        public function reArrayFiles($file_post): array
+        {
             $file_ary = array();
             $file_count = count($file_post['name']);
             $file_keys = array_keys($file_post);
 
-            for ($i=0; $i<$file_count; $i++) {
+            for ($i = 0; $i < $file_count; $i++) {
                 foreach ($file_keys as $key) {
                     $file_ary[$i][$key] = $file_post[$key][$i];
                 }
@@ -1590,7 +1626,8 @@ if (!class_exists('BootstrapFormularFilter')) {
             return $file_ary;
         }
 
-        public function bsFormDestroyDir($dir): bool {
+        public function bsFormDestroyDir($dir): bool
+        {
             if (!is_dir($dir) || is_link($dir))
                 return unlink($dir);
 
@@ -1605,11 +1642,12 @@ if (!class_exists('BootstrapFormularFilter')) {
             return rmdir($dir);
         }
 
-        public function bsFormDeleteFileFolder() {
+        public function bsFormDeleteFileFolder()
+        {
             foreach (scandir(BS_FILE_UPLOAD_DIR) as $dir) {
                 if ($dir == "." || $dir == "..")
                     continue;
-                if(is_dir(BS_FILE_UPLOAD_DIR . $dir)){
+                if (is_dir(BS_FILE_UPLOAD_DIR . $dir)) {
                     $this->bsFormDestroyDir(BS_FILE_UPLOAD_DIR . $dir);
                 }
             }

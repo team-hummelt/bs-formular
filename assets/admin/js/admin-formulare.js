@@ -121,7 +121,8 @@ jQuery(document).ready(function ($) {
      =========================================================
      */
     $(document).on('click', ".placeholder", function () {
-        let value = '<span class="remove">&nbsp;</span>' + $(this).attr('data-value');
+        //let value = '<span class="remove">&nbsp;</span>' + $(this).attr('data-value');
+        let value = $(this).attr('data-value');
         $(this).removeClass('placeholder').addClass('placeholder-disabled');
         tinymce.get("sendMsgContent").selection.setContent(value);
     });
@@ -601,6 +602,20 @@ jQuery(document).ready(function ($) {
     <form class="send-bs-form-jquery-ajax-formular mb-3" action="#" method="post">
         <input type="hidden" name="method" value="update_form_message"/>
         <input id="formMsgId" type="hidden" name="id" value="${msg.id}">
+         
+         <div class="col-md-6 mb-3">
+            <label class="form-label" for="InputTemplateSelect">E-Mail Template</label>
+            <select onchange="this.blur()" name="email_template" value=""
+                   class="form-control" id="InputTemplateSelect"> `;
+             let sel = '';
+             for (const [key, val] of Object.entries(data.select)) {
+                 val.id == data.select_id ? sel = ' selected' : sel = '';
+                 html += `<option value="${val.id}" ${sel}>${val.bezeichnung}</option>`;
+        }
+        html += `
+            </select>       
+        </div>
+        
         <div class="col-md-6 mb-3">
             <label class="form-label" for="InputEmailTo">E-Mail senden an: *</label>
             <input type="email" name="sendTo" value="${msg.email_at}"
@@ -686,17 +701,59 @@ jQuery(document).ready(function ($) {
             content_css: bs_form.admin_url + '/assets/admin/css/tinyCustom.css',
             valid_elements: '*[*]',
             schema: "html5",
+            toolbar_sticky: true,
+            toolbar_mode: 'wrap',
+            statusbar: true,
             verify_html: false,
             valid_children: "+a[div], +div[*]",
             extended_valid_elements: "div[*]",
+            relative_urls: false,
+            remove_script_host: false,
+            convert_urls: true,
             force_p_newlines: false,
             forced_root_block: false,
+
+            plugins: `print preview importcss searchreplace fullscreen 
+            autolink autosave save directionality visualblocks visualchars image link 
+            media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime 
+            advlist lists wordcount imagetools textpattern noneditable code spellchecker quickbars
+            help charmap emoticons `,
+
+            menu: {
+                file: {title: 'File', items: 'newdocument restoredraft | preview | print '},
+                edit: {title: 'Edit', items: 'undo redo | cut copy paste | selectall | searchreplace'},
+                view: {title: 'View', items: 'code | visualaid visualchars visualblocks | spellchecker | preview fullscreen'},
+                insert: {
+                    title: 'Insert',
+                    items: 'template link codesample inserttable | charmap emoticons hr | pagebreak nonbreaking anchor toc | insertdatetime'
+                },
+                format: {
+                    title: 'Format',
+                    items: 'bold italic underline strikethrough superscript subscript codeformat | formats blockformats fontformats fontsizes align lineheight | forecolor backcolor | removeformat'
+                },
+                tools: {title: 'Tools', items: ' code wordcount'},
+                table: {title: 'Table', items: 'inserttable | cell row column | tableprops deletetable'},
+                help: {title: 'Help', items: 'help'}
+            },
+
+            toolbar1: `undo redo | formatselect | fontsizeselect |
+             bold italic forecolor backcolor | customInsertImage | alignleft aligncenter 
+              alignright alignjustify | bullist numlist outdent indent | 
+              code | preview | fullscreen`,
+            //toolbar2: 'alignleft aligncenter alignright',
+
+             quickbars_selection_toolbar: `bold italic | forecolor backcolor | quicklink | alignleft aligncenter 
+             alignright alignjustify | blockformats | h1 h2 h3 h4 h5 h6 `,
+
         });
 
         tinymce.init({
             selector: "textarea.response-formulare-tinymce",
             language: 'de',
             height: 300,
+            relative_urls: false,
+            remove_script_host: false,
+            convert_urls: true,
         });
     }
 
