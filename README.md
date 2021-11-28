@@ -28,7 +28,7 @@ Formular ganz einfach mit BS-Formulare erstellen.
 
 ***
 ### Changelog
-#### 1.0.6
+### 1.0.6
 
 * E-Mail Template hinzugefügt
 
@@ -42,18 +42,18 @@ Formular ganz einfach mit BS-Formulare erstellen.
 * Hilfe Seite aktualisiert.
 * SMTP Check vor dem Senden der E-Mail hinzugefügt (verhindert Server Error 500).
 
-####1.0.4
+### 1.0.4
 * WP-Rest Fehler fixed.
 
-####1.0.3 
+### 1.0.3 
 * Fixed Password vergessen error.
 
-####1.0.2
+### 1.0.2
 * Gutenberg Block Widget hinzugefügt.
 
-#### 1.0.1
+### 1.0.1
 * Widget und Sprachdateien hinzugefügt.
 
-####1.0.0
+### 1.0.0
 * BS-Formular release. Included basic plugin features.
 
