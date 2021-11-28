@@ -32,7 +32,7 @@ Formular ganz einfach mit BS-Formulare erstellen.
 
 * E-Mail Template hinzugefügt
 
-#### 1.0.5
+### 1.0.5
 * File-Upload mit FilePond hinzugefügt.
 * FilePond Filter hinzugefügt.
 * File Upload-Optionen hinzugefügt.
