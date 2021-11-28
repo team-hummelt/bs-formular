@@ -380,11 +380,20 @@ switch ($method) {
 
         $inputs = unserialize($form->record->inputs);
 
+        $notResponse = [
+           'button',
+           'dataprotection',
+           'email-send-select',
+           'file'
+        ];
+
         $in_arr = [];
         foreach ($inputs as $tmp) {
-            if ($tmp->type == 'button' || $tmp->type == 'dataprotection' || $tmp->type == 'email-send-select') {
+
+            if(in_array($tmp->type, $notResponse)) {
                 continue;
             }
+
             if ($tmp->type == 'select' || $tmp->type == 'radio') {
                 $value = '[' . $tmp->label . ' - ' . $tmp->type . ']';
             } else {
@@ -414,10 +423,12 @@ switch ($method) {
             $message->auto_msg = stripslashes_deep($message->auto_msg);
         }
 
+        $responseJson->select = apply_filters('bs_form_select_email_template', 'all');
         $message->response_aktiv = (bool) $message->response_aktiv;
         $responseJson->values = $in_arr;
         $responseJson->status = true;
         $responseJson->id = $id;
+        $responseJson->select_id = (int) $formMsg->record->email_template;
         $responseJson->message = $message;
         break;
 
@@ -427,6 +438,7 @@ switch ($method) {
         isset($data['sendTo']) && is_string($data['sendTo']) ? $record->email = esc_html($data['sendTo']) : $record->email = '';
         isset($data['id']) && is_numeric($data['id']) ? $record->id = (int)$data['id'] : $record->id = '';
         isset($data['sendCC']) && is_string($data['sendCC']) ? $email_cc = esc_html($data['sendCC']) : $email_cc = '';
+        isset($data['email_template']) && is_numeric($data['email_template']) ? $email_template = esc_html($data['email_template']) : $email_template = '';
 
         $responseJson->status = false;
         $emailCC = [];
@@ -464,6 +476,7 @@ switch ($method) {
            }
        }
 
+       $email_template ? $record->email_template = $email_template : $record->email_template = 1;
        $emailCC ? $record->email_cc =  implode(',', $emailCC) : $record->email_cc = '';
         apply_filters('update_bs_msg_formular', $record);
         $responseJson->status = true;

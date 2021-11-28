@@ -5,12 +5,10 @@ defined('ABSPATH') or die();
  * @package Hummelt & Partner WordPress Theme
  * Copyright 2021, Jens Wiecker
  * License: Commercial - goto https://www.hummelt-werbeagentur.de/
- * https://www.hummelt-werbeagentur.de/
  */
 
 $responseJson = new stdClass();
 $record = new stdClass();
-use Form\BsFormular;
 
 $record->id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
 $record->formId = filter_input(INPUT_POST, 'formId', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
@@ -120,8 +118,10 @@ foreach ($inputs as $tmp) {
 
 $message = htmlspecialchars_decode($form->message);
 $message = stripslashes_deep($message);
-$message = str_replace('<span class="remove">&nbsp;</span>', ' ', $message);
+$message = str_replace(['<span class="remove">&nbsp;</span>'], ' ', $message);
+
 $sendSelectMail = false;
+
 foreach ($send_arr as $tmp) {
     if ($tmp->type == 'email-send-select') {
         $sendSelectMail = $tmp->eingabe;
@@ -133,20 +133,43 @@ foreach ($send_arr as $tmp) {
     }
     $errMsg = apply_filters('bs_form_default_settings', 'by_field', 'error_message');
     $tmp->eingabe ? $eingabe = $tmp->eingabe : $eingabe = $errMsg->error_message;
-    $ausgabe = '<b style="font-size: 16px;">Eingabe:</b><br /> <b>' . $tmp->label . ':</b> ' . $eingabe . '<br /><br /><hr />';
-    $message = apply_filters('string_replace_limit', $tmp->user_value, $ausgabe, $message, $limit = 1);
+
+     switch ($form->email_template) {
+         case '1':
+             $ausgabe = '<b>' . $tmp->label . ':</b> ' . $eingabe . '<br /><br /><hr />';
+             $message = apply_filters('string_replace_limit', $tmp->user_value, $ausgabe, $message, $limit = 1);
+             break;
+         case '2':
+              $message = str_replace($tmp->user_value, $eingabe , $message);
+             break;
+         default:
+     }
 }
 
-$sendMsg = '<div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px;color:#5b5b5b">';
-$sendMsg .= $message;
-$sendMsg .= '</div>';
+switch ($form->email_template) {
+    case '1':
+        $sendMsg = '<div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px;color:#5b5b5b">';
+        $sendMsg .= $message;
+        $sendMsg .= '</div>';
+        break;
+    case '2':
+        $sendMsg = $message;
+        break;
+    default:
+        $sendMsg = '';
+}
+
+$tempDir =  EMAIL_TEMPLATES_DIR . 'email-default-template.html';
+$htmlBody = file_get_contents($tempDir, true);
+$htmlBody = str_replace('###EMAILMESSAGE###', $sendMsg, $htmlBody);
+$htmlBody = str_replace('###EMAILTITLE###', $form->betreff, $htmlBody);
 
 $regExp = '@\[.*?]@m';
-preg_match_all($regExp, $sendMsg, $matches, PREG_SET_ORDER, 0);
+preg_match_all($regExp, $htmlBody, $matches, PREG_SET_ORDER, 0);
 if ($matches) {
     foreach ($matches as $tmp) {
         if (isset($tmp[0])) {
-            $sendMsg = str_replace($tmp[0], '', $sendMsg);
+            $htmlBody = str_replace($tmp[0], '', $htmlBody);
         }
     }
 }
@@ -180,9 +203,7 @@ if ($cc) {
     }
 }
 
-
-
-$send = wp_mail( $to, $subject ?: get_bloginfo( 'title' ), $sendMsg, array_unique( $headers ), $attachments );
+$send = wp_mail( $to, $subject ?: get_bloginfo( 'title' ), $htmlBody, array_unique( $headers ), $attachments );
 
 if ( ! $send ) {
     $msg  = apply_filters( 'bs_form_default_settings', 'by_field', 'error_message' );
@@ -194,8 +215,6 @@ if ( ! $send ) {
     return $responseJson;
 }
 
-
-
 if (get_option('email_empfang_aktiv')) {
     $mailToDb[] = $to;
     $safeDb = new stdClass();
@@ -203,7 +222,7 @@ if (get_option('email_empfang_aktiv')) {
     $safeDb->betreff = $form->betreff;
     $safeDb->form_id = $form->id;
     $safeDb->abs_ip = $_SERVER['REMOTE_ADDR'];
-    $safeDb->message = esc_html($sendMsg);
+    $safeDb->message = esc_html($htmlBody);
     apply_filters('set_email_empfang_table', $safeDb);
 }
 

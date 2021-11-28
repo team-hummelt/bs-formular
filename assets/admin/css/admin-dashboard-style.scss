@@ -62,6 +62,14 @@ body .wp-bs-starter-wrapper {
   padding: .8rem;
 }
 
+.tox-tinymce-aux {
+  z-index: 100001!important;
+}
+
+.tox.tox-tinymce.tox-fullscreen {
+  z-index: 100000!important;
+}
+
 .colorPickers {
   /*display: flex;
   flex-direction: row-reverse;
