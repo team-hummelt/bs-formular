@@ -202,12 +202,12 @@ final class RegisterBsFormularPlugin
             if ($smtpCheck['status']) {
                 $phpmailer->isSMTP();
                 $phpmailer->Host = get_option('bs_form_smtp_host');
-                $phpmailer->SMTPAuth = (bool)get_option('bs_form_smtp_auth_check');
+                $phpmailer->SMTPAuth = get_option('bs_form_smtp_auth_check');
                 $phpmailer->Port = get_option('bs_form_smtp_port');
                 $phpmailer->Username = get_option('bs_form_email_benutzer');
                 $phpmailer->Password = get_option('bs_form_email_passwort');
                 $phpmailer->SMTPSecure = get_option('bs_form_smtp_secure');
-                $phpmailer->SMTPDebug = 1;
+                $phpmailer->SMTPDebug = 0;
                 $phpmailer->CharSet = "utf-8";
             }
         }

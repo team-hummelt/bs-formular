@@ -17,7 +17,7 @@
  * Requires PHP:      8.0
  * Requires at least: 5.8
  * Tested up to:      5.7
- * Stable tag:        1.0.5
+ * Stable tag:        1.0.6
  */
 
 defined( 'ABSPATH' ) or die();

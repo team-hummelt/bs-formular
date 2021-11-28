@@ -1,28 +1,28 @@
 # Bootstrap Formular
 
-![release](https://img.shields.io/github/v/tag/team-hummelt/bs-formular?style=plastic)
+[![release](https://img.shields.io/github/v/tag/team-hummelt/bs-formular?style=plastic)](https://github.com/team-hummelt/bs-formular)
 
-=== BS-Formular - Boostrap Formular Plugin ===
-Contributors: jwiecker
-Tags: bootstrap, formular
-Requires at least: 5.8
-Tested up to: 5.8
-Stable tag: 1.0.5
-Requires PHP: 8.0
-License: GPLv2 or later
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
+##### BS-Formular - Boostrap Formular Plugin
+* Contributors: jwiecker
+* Tags: bootstrap, formular
+* Requires at least: 5.8
+* Tested up to: 5.8
+* Stable tag: 1.0.6
+* Requires PHP: 8.0
+* License: GPLv2 or later
+* License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-## Features
+### Features
 * Formulare in Boostrap-Style
 * Individuelle Formulare erstellen
 * Posteingang
 * unbegrenzte Anzahl von Formulare erstellen
 * Spam-Schutz
 
-== Description ==
+### Description ==
 Formular ganz einfach mit BS-Formulare erstellen.
 
-== Changelog ==
+### Changelog ==
 = 1.0.5 =
 * File-Upload mit FilePond hinzugefügt.
 * FilePond Filter hinzugefügt.
@@ -32,22 +32,19 @@ Formular ganz einfach mit BS-Formulare erstellen.
 * Datenschutz-Link angepasst.
 * Hilfe Seite aktualisiert.
 * SMTP Check vor dem Senden der E-Mail hinzugefügt (verhindert Server Error 500).
-
-== Changelog ==
-= 1.0.4 =
+***
+#####1.0.4
 * WP-Rest Fehler fixed.
 
-== Changelog ==
-= 1.0.3 =
+#####1.0.3 
 * Fixed Password vergessen error.
 
-== Changelog ==
-= 1.0.2 =
+#####1.0.2
 * Gutenberg Block Widget hinzugefügt.
 
-= 1.0.1 =
+##### 1.0.1
 * Widget und Sprachdateien hinzugefügt.
-* 
-= 1.0.0 =
+
+####1.0.0
 * BS-Formular release. Included basic plugin features.
 
