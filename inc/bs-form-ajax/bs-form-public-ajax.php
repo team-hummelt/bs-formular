@@ -43,6 +43,7 @@ $table = $wpdb->prefix . 'bs_formulare';
 $args = sprintf('WHERE %s.shortcode="%s"', $table, $record->id);
 
 $formular = apply_filters('get_formulare_by_args', $args, false, 'id');
+
 if (!$formular->status) {
     $msg = apply_filters('bs_form_default_settings', 'by_field', 'error_message');
     $responseJson->status = false;
@@ -121,7 +122,7 @@ $message = stripslashes_deep($message);
 $message = str_replace(['<span class="remove">&nbsp;</span>'], ' ', $message);
 
 $sendSelectMail = false;
-
+$eingabe = '';
 foreach ($send_arr as $tmp) {
     if ($tmp->type == 'email-send-select') {
         $sendSelectMail = $tmp->eingabe;
@@ -132,7 +133,7 @@ foreach ($send_arr as $tmp) {
         continue;
     }
     $errMsg = apply_filters('bs_form_default_settings', 'by_field', 'error_message');
-    $tmp->eingabe ? $eingabe = $tmp->eingabe : $eingabe = $errMsg->error_message;
+    $tmp->eingabe ? $eingabe = $tmp->eingabe : $eingabe = '';
 
      switch ($form->email_template) {
          case '1':
