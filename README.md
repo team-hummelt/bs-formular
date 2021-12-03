@@ -1,6 +1,9 @@
 # Bootstrap Formular
+hummelt und partner | Werbeagentur GmbH
 
-[![release](https://img.shields.io/github/v/tag/team-hummelt/bs-formular?style=plastic)](https://github.com/team-hummelt/bs-formular)
+[![release](https://img.shields.io/github/v/release/team-hummelt/bs-formular?style=plastic)](https://github.com/team-hummelt/bs-formular)
+[![BS-Formular Release](https://img.shields.io/github/release-date/team-hummelt/bs-formular)](https://github.com/team-hummelt/bs-formular/releases/latest)
+[![GitHub](https://img.shields.io/github/license/team-hummelt/bs-formular)](https://github.com/team-hummelt/bs-formular/blob/master/LICENSE.txt)
 
 ***
 
@@ -9,10 +12,10 @@
 * Tags: bootstrap, formular
 * Requires at least: 5.8
 * Tested up to: 5.8
-* Stable tag: 1.0.6
+* Stable tag: 1.0.7
+* Version: 1.0.7
 * Requires PHP: 8.0
-* License: GPLv2 or later
-* License URI: https://www.gnu.org/licenses/gpl-2.0.html
+* License: MIT License
 
 ***
 
@@ -28,6 +31,9 @@ Formular ganz einfach mit BS-Formulare erstellen.
 
 ***
 ### Changelog
+
+### 1.0.7
+* Fehler individuelle E-Mail behoben
 
 ### 1.0.6
 * E-Mail Templates hinzugefügt
