@@ -38,6 +38,7 @@ define( "BS_FORMULAR_PLUGIN_VERSION", $plugin_data['Version']);
 define('BS_FORMULAR_PLUGIN_DIR', dirname(__FILE__));
 //PLUGIN SLUG
 define('BS_FORMULAR_SLUG_PATH', plugin_basename(__FILE__));
+define('BS_FORMULAR_BASENAME', plugin_basename(__DIR__));
 //PLUGIN URL
 define('BS_FORMULAR_PLUGIN_URL', plugins_url('bs-formular'));
 //PLUGIN INC DIR

@@ -14,7 +14,6 @@ defined('ABSPATH') or die();
 final class RegisterBsFormular
 {
     private static $bs_formular_instance;
-    private string $plugin_dir;
 
     /**
      * @return static
@@ -28,10 +27,7 @@ final class RegisterBsFormular
     }
 
     public function __construct(){
-        $file_path_from_plugin_root = str_replace(WP_PLUGIN_DIR . '/', '', __DIR__);
-        $path_array = explode('/', $file_path_from_plugin_root);
-        $plugin_folder_name = reset($path_array);
-        $this->plugin_dir = $plugin_folder_name;
+
     }
 
     public function init_bs_formular(): void
@@ -109,15 +105,11 @@ final class RegisterBsFormular
     */
     public function bs_formular_license_site_trigger_check(): void {
         global $wp;
-        $wp->add_query_var( $this->plugin_dir );
+        $wp->add_query_var( BS_FORMULAR_BASENAME );
     }
 
     function bs_formular_license_callback_trigger_check(): void {
-        $file_path_from_plugin_root = str_replace(WP_PLUGIN_DIR . '/', '', __DIR__);
-        $path_array = explode('/', $file_path_from_plugin_root);
-        $plugin_folder_name = reset($path_array);
-        //$requestUri = base64_encode($plugin_folder_name);
-       if ( get_query_var( $this->plugin_dir ) === $this->plugin_dir) {
+       if ( get_query_var( BS_FORMULAR_BASENAME ) === BS_FORMULAR_BASENAME) {
             require 'api-request-page.php';
             exit;
         }
