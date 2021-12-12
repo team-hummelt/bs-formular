@@ -12,8 +12,8 @@ hummelt und partner | Werbeagentur GmbH
 * Tags: bootstrap, formular
 * Requires at least: 5.8
 * Tested up to: 5.8
-* Stable tag: 1.0.7
-* Version: 1.0.7
+* Stable tag: 1.0.8
+* Version: 1.0.8
 * Requires PHP: 8.0
 * License: MIT License
 
@@ -31,6 +31,8 @@ Formular ganz einfach mit BS-Formulare erstellen.
 
 ***
 ### Changelog
+### 1.0.8
+* Lizenz Informationen hinzugefügt
 
 ### 1.0.7
 * Fehler individuelle E-Mail behoben
