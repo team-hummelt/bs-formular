@@ -99,7 +99,7 @@ if (!class_exists('HupaApiPluginBSServerHandle')) {
                 'version' => BS_FORMULAR_PLUGIN_VERSION,
             ];
 
-            return $this->bsFormularPOSTApiResource('install');
+            return $this->bsFormularPOSTApiResource('install', $body);
         }
 
         public function bsFormularPOSTApiResource($scope, $body = false)
