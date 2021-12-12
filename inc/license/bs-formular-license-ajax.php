@@ -34,6 +34,7 @@ switch ($method) {
             $responseJson->if_authorize = true;
             return;
         }
+        update_option('bs_formular_license_url', site_url());
         if(!get_option('hupa_server_url')){
             update_option('hupa_server_url','https://start.hu-ku.com/theme-update/api/v2/');
         }

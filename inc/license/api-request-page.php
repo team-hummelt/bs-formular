@@ -9,8 +9,20 @@ defined('ABSPATH') or die();
  * https://www.hummelt-werbeagentur.de/
  */
 
-
+global $bs_formular_license_exec;
 $data = json_decode(file_get_contents("php://input"));
+
+if($data->make_id == 'make_exec'){
+    global $bs_formular_license_exec;
+    $makeJob = $bs_formular_license_exec->make_api_exec_job($data);
+    $backMsg =  [
+        'msg' => $makeJob->msg,
+        'status' => $makeJob->status,
+        'test' => $data
+    ];
+    echo json_encode($backMsg);
+    exit();
+}
 
 if($data->client_id !== get_option('bs_formular_client_id')){
     $backMsg =  [
@@ -23,6 +35,7 @@ if($data->client_id !== get_option('bs_formular_client_id')){
 }
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 switch ($data->make_id) {
+
     case '1':
         $message = json_decode($data->message);
         $backMsg =  [
@@ -32,22 +45,6 @@ switch ($data->make_id) {
         ];
 
         update_option('bs_formular_message',$message->msg);
-        delete_option('bs_formular_product_install_authorize');
-        delete_option('bs_formular_client_id');
-        delete_option('bs_formular_client_secret');
-	    deactivate_plugins( BS_FORMULAR_SLUG_PATH );
-	    set_transient('show_lizenz_info', true, 5);
-        break;
-    case'2':
-        $message = json_decode($data->message);
-        $backMsg = [
-            'client_id' => get_option('bs_formular_client_id'),
-            'reply' => 'Plugin Datei gelöscht',
-            'status' => true,
-        ];
-        update_option('bs_formular_message',$message->msg);
-        //$file = BS_FORMULAR_PLUGIN_DIR . DIRECTORY_SEPARATOR . $data->aktivierung_path;
-        //unlink($file);
         delete_option('bs_formular_product_install_authorize');
         delete_option('bs_formular_client_id');
         delete_option('bs_formular_client_secret');

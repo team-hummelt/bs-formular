@@ -31,7 +31,9 @@ class Bs_Formular_Activator {
 	 */
 	public static function activate() {
 		$register = BS_FORMULAR_INC . 'register-bs-formular.php';
-		unlink($register);
+        if(!get_option('bs_formular_product_install_authorize')){
+            unlink($register);
+        }
 		delete_option("bs_formular_product_install_authorize");
 		delete_option("bs_formular_client_id");
 		delete_option("bs_formular_client_secret");

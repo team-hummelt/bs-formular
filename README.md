@@ -31,6 +31,8 @@ Formular ganz einfach mit BS-Formulare erstellen.
 
 ***
 ### Changelog
+### 1.0.8
+* Lizenz Informationen hinzugefügt
 
 ### 1.0.7
 * Fehler individuelle E-Mail behoben

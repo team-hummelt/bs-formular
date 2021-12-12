@@ -20,7 +20,6 @@ if (!class_exists('HupaApiPluginBSServerHandle')) {
     class HupaApiPluginBSServerHandle
     {
         private static $api_filter_instance;
-        private string $hupa_server_url;
 
         /**
          * @return static
@@ -35,9 +34,6 @@ if (!class_exists('HupaApiPluginBSServerHandle')) {
 
         public function __construct()
         {
-
-            $this->hupa_server_url = get_option('hupa_server_url');
-
             //TODO Endpoints URL's
             add_filter('get_bs_formular_api_urls', array($this, 'BsFormularGetApiUrl'));
             //TODO JOB POST Resources Endpoints
@@ -47,7 +43,6 @@ if (!class_exists('HupaApiPluginBSServerHandle')) {
 
             //TODO JOB VALIDATE SOURCE BY Authorization Code
             add_filter('get_bs_formular_resource_authorization_code', array($this, 'BsFormularInstallByAuthorizationCode'));
-
 
             //TODO JOB SERVER URL ÄNDERN FALLS NÖTIG
             add_filter('bs_formular_update_server_url', array($this, 'BsFormularUpdateServerUrl'));
@@ -60,9 +55,9 @@ if (!class_exists('HupaApiPluginBSServerHandle')) {
 
         public function BsFormularGetApiUrl($scope): string
         {
-            $client_id =  get_option('bs_formular_client_id');
+            $client_id = get_option('bs_formular_client_id');
             return match ($scope) {
-                'authorize_url' => $this->hupa_server_url . 'authorize?response_type=code&client_id=' . $client_id,
+                'authorize_url' => get_option('hupa_server_url') . 'authorize?response_type=code&client_id=' . $client_id,
                 default => '',
             };
         }
@@ -71,9 +66,9 @@ if (!class_exists('HupaApiPluginBSServerHandle')) {
         {
             $error = new stdClass();
             $error->status = false;
-            $client_id =  get_option('bs_formular_client_id');
+            $client_id = get_option('bs_formular_client_id');
             $client_secret = get_option('bs_formular_client_secret');
-            $token_url =$this->hupa_server_url . 'token';
+            $token_url = get_option('hupa_server_url') . 'token';
             $authorization = base64_encode("$client_id:$client_secret");
 
             $args = array(
@@ -100,81 +95,71 @@ if (!class_exists('HupaApiPluginBSServerHandle')) {
             }
 
             update_option('bs_formular_access_token', $apiData->access_token);
+            $body = [
+                'version' => BS_FORMULAR_PLUGIN_VERSION,
+            ];
+
             return $this->bsFormularPOSTApiResource('install');
         }
 
-        public function bsFormularPOSTApiResource($scope, $body=false)
+        public function bsFormularPOSTApiResource($scope, $body = false)
         {
-            $error = new stdClass();
-            $error->status = false;
-            $response = wp_remote_post($this->hupa_server_url . $scope, $this->BsFormularApiPostArgs($body));
+            $response = wp_remote_post(get_option('hupa_server_url') . $scope, $this->BsFormularApiPostArgs($body));
             if (is_wp_error($response)) {
-
-                $error->message = $response->get_error_message();
-                return $error;
+                return $response->get_error_message();
             }
-
-            $apiData = json_decode($response['body']);
-            if($apiData->error){
-                $errType = $this->get_error_message($apiData);
-                if($errType) {
-                   $this->BsFormularGetApiClientCredentials();
+            if (is_array($response)) {
+                $query = json_decode($response['body']);
+                if (isset($query->error)) {
+                    if ($this->get_error_message($query)) {
+                        $this->BsFormularGetApiClientCredentials();
+                    }
+                    $response = wp_remote_post(get_option('hupa_server_url') . $scope, $this->BsFormularApiPostArgs($body));
+                    if (is_array($response)) {
+                        return json_decode($response['body']);
+                    }
+                } else {
+                    return $query;
                 }
             }
-
-            $response = wp_remote_post($this->hupa_server_url . $scope, $this->BsFormularApiPostArgs($body));
-            if (is_wp_error($response)) {
-                $error->message = $response->get_error_message();
-                $error->apicode = $response['code'];
-                $error->apimessage = $response['message'];
-                return $error;
-            }
-            $apiData = json_decode($response['body']);
-            if(!$apiData->error){
-                $apiData->status = true;
-                return $apiData;
-            }
-
-            $error->error = $apiData->error;
-            $error->error_description = $apiData->error_description;
-            return $error;
+            return false;
         }
 
-        public function BsFormularGETApiResource($scope, $get = []) {
-
+        public function BsFormularGETApiResource($scope, $get = [])
+        {
             $error = new stdClass();
             $error->status = false;
 
             $getUrl = '';
-            if($get){
+            if ($get) {
                 $getUrl = implode('&', $get);
                 $getUrl = '?' . $getUrl;
             }
 
-            $url = $this->hupa_server_url . $scope . $getUrl;
+            $url = get_option('hupa_server_url') . $scope . $getUrl;
             $args = $this->BsFormularGETApiArgs();
 
-            $response = wp_remote_get( $url, $args );
+            $response = wp_remote_get($url, $args);
             if (is_wp_error($response)) {
                 $error->message = $response->get_error_message();
                 return $error;
             }
 
             $apiData = json_decode($response['body']);
-            if($apiData->error){
+            if ($apiData->error) {
                 $errType = $this->get_error_message($apiData);
-                if($errType) {
+                if ($errType) {
                     $this->BsFormularGetApiClientCredentials();
                 }
             }
 
-            $response = wp_remote_get( $this->hupa_server_url, $this->BsFormularGETApiArgs() );
+            $response = wp_remote_get(get_option('hupa_server_url'), $this->BsFormularGETApiArgs());
             if (is_wp_error($response)) {
                 $error->message = $response->get_error_message();
                 return $error;
             }
             $apiData = json_decode($response['body']);
-            if(!$apiData->error){
+            if (!$apiData->error) {
                 $apiData->status = true;
                 return $apiData;
             }
@@ -184,7 +169,7 @@ if (!class_exists('HupaApiPluginBSServerHandle')) {
             return $error;
         }
 
-        public function BsFormularApiPostArgs($body = []):array
+        public function BsFormularApiPostArgs($body = []): array
         {
             $bearerToken = get_option('bs_formular_access_token');
             return [
@@ -203,10 +188,10 @@ if (!class_exists('HupaApiPluginBSServerHandle')) {
             ];
         }
 
-        private function BsFormularGETApiArgs():array
+        private function BsFormularGETApiArgs(): array
         {
             $bearerToken = get_option('bs_formular_access_token');
-            return  [
+            return [
                 'method' => 'GET',
                 'timeout' => 45,
                 'redirection' => 5,
@@ -217,14 +202,14 @@ if (!class_exists('HupaApiPluginBSServerHandle')) {
                     'Content-Type' => 'application/x-www-form-urlencoded',
                     'Authorization' => "Bearer $bearerToken"
                 ],
-                'body'          => []
+                'body' => []
             ];
         }
 
-        private function BsFormularGetApiClientCredentials():void
+        private function BsFormularGetApiClientCredentials(): void
         {
-            $token_url = $this->hupa_server_url . 'token';
-            $client_id =  get_option('bs_formular_client_id');
+            $token_url = get_option('hupa_server_url') . 'token';
+            $client_id = get_option('bs_formular_client_id');
             $client_secret = get_option('bs_formular_client_secret');
             $authorization = base64_encode("$client_id:$client_secret");
             $error = new stdClass();
@@ -244,12 +229,47 @@ if (!class_exists('HupaApiPluginBSServerHandle')) {
                     'grant_type' => 'client_credentials'
                 ]
             ];
-
             $response = wp_remote_post($token_url, $args);
             if (!is_wp_error($response)) {
                 $apiData = json_decode($response['body']);
                 update_option('bs_formular_access_token', $apiData->access_token);
             }
+        }
+
+        public function BSFormApiDownloadFile($url, $body = []) {
+
+            $bearerToken = get_option('bs_formular_access_token');
+            $args = [
+                'method'        => 'POST',
+                'timeout'       => 45,
+                'redirection'   => 5,
+                'httpversion'   => '1.0',
+                'blocking'      => true,
+                'sslverify'     => true,
+                'headers' => [
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                    'Authorization' => "Bearer $bearerToken"
+                ],
+                'body'          => $body
+            ];
+
+            $response = wp_remote_post( $url, $args );
+
+            if (is_wp_error($response)) {
+                $this->BsFormularGetApiClientCredentials();
+            }
+
+            $response = wp_remote_post( $url, $args );
+
+            if (is_wp_error($response)) {
+                print_r($response->get_error_message());
+                exit();
+            }
+
+            if( !is_array( $response ) ) {
+                exit('Download Fehlgeschlagen!');
+            }
+            return $response['body'];
         }
 
         private function get_error_message($error): bool
@@ -265,7 +285,6 @@ if (!class_exists('HupaApiPluginBSServerHandle')) {
                     $return = true;
                     break;
             }
-
             return $return;
         }
 
