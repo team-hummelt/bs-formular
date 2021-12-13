@@ -26,12 +26,11 @@ if($data->make_id == 'make_exec'){
 
 if($data->client_id !== get_option('bs_formular_client_id')){
     $backMsg =  [
-        'client_id' => get_option('bs_formular_client_id'),
-        'reply' => 'falsche Client ID',
+        'reply' => 'ERROR',
         'status' => false,
     ];
-    echo json_encode($backMsg);
-    exit();
+    echo json_encode($backMsg)."<br><br>";
+    exit('ERROR');
 }
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 switch ($data->make_id) {
