@@ -8,7 +8,13 @@ defined( 'ABSPATH' ) or die();
  * https://www.hummelt-werbeagentur.de/
  */
 
+global $bs_formular_filter;
+
+$args = sprintf('WHERE id=%d',16);
+$msg = $bs_formular_filter->bs_formular_message(16,'email');
+print_r($msg->email);
 ?>
+
 <div class="wp-bs-starter-wrapper">
 
     <div class="container">

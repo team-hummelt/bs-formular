@@ -39,7 +39,7 @@ switch ($method) {
 
         $regEx = '@(textarea)-([\d])@m';
         preg_match_all($regEx, $type, $matches, PREG_SET_ORDER, 0);
-        if (isset($matches)) {
+        if (isset($matches[0][1])) {
             if ($matches[0][1]) {
                 $matches[0][2] ? $row = '-' . $matches[0][2] : $row = '';
                 $return = '[label] ' . $matches[0][1] . '-Label' . "\r\n";
@@ -92,7 +92,7 @@ switch ($method) {
 
 	    $regEx = '@(.+)#@i';
 	    preg_match($regEx, $btn_icon, $hit);
-	    isset($hit) && $hit[1] ? $faIcon = '<i class="'.$hit[1].'"></i>&nbsp; ' : $faIcon = '';
+	    isset($hit[1]) && $hit[1] ? $faIcon = '<i class="'.$hit[1].'"></i>&nbsp; ' : $faIcon = '';
 
         $responseJson->status = false;
 
@@ -147,69 +147,145 @@ switch ($method) {
         $record->bezeichnung = $bezeichnung;
         $record->form_id = $formId;
 
+        $create = new stdClass();
         for ($i = 0; $i < count($label); $i++) {
             $selType = trim(str_replace('*', '', $type[$i]));
 
             if ($selType == 'text') {
-                $text = apply_filters('create_formular_fields',$class_aktiv, $type[$i], $label[$i], $val[$i], $selType, $input_class, $label_class);
+                $create->class_aktiv = $class_aktiv;
+                $create->type = $type[$i];
+                $create->label = $label[$i];
+                $create->values = $val[$i];
+                $create->case = $selType;
+                $create->input_class = $input_class;
+                $create->label_class = $label_class;
+                $create->form_id =  $data->id;
+
+                $text = apply_filters('create_formular_fields',$create);
                 $search = $matches[$i][0];
                 $formular = apply_filters('string_replace_limit', $search, '###' . $text->inputId . '###', $formular, $limit = 1);
                 $return_arr[] = $text;
             }
 
             if ($selType == 'password') {
-                $password = apply_filters('create_formular_fields',$class_aktiv, $type[$i], $label[$i], $val[$i], $selType, $input_class, $label_class);
+                $create->class_aktiv = $class_aktiv;
+                $create->type = $type[$i];
+                $create->label = $label[$i];
+                $create->values = $val[$i];
+                $create->case = $selType;
+                $create->input_class = $input_class;
+                $create->label_class = $label_class;
+                $create->form_id =  $data->id;
+                $password = apply_filters('create_formular_fields',$create);
                 $search = $matches[$i][0];
                 $formular = apply_filters('string_replace_limit', $search, '###' . $password->inputId . '###', $formular, $limit = 1);
                 $return_arr[] = $password;
             }
 
             if ($selType == 'email') {
-                $email = apply_filters('create_formular_fields',$class_aktiv, $type[$i], $label[$i], $val[$i], $selType, $input_class, $label_class );
+                $create->class_aktiv = $class_aktiv;
+                $create->type = $type[$i];
+                $create->label = $label[$i];
+                $create->values = $val[$i];
+                $create->case = $selType;
+                $create->input_class = $input_class;
+                $create->label_class = $label_class;
+                $create->form_id =  $data->id;
+                $email = apply_filters('create_formular_fields',$create);
                 $search = $matches[$i][0];
                 $formular = apply_filters('string_replace_limit', $search, '###' . $email->inputId . '###', $formular, $limit = 1);
                 $return_arr[] = $email;
             }
 
             if ($selType == 'url') {
-                $url = apply_filters('create_formular_fields',$class_aktiv, $type[$i], $label[$i], $val[$i], $selType, $input_class, $label_class);
+                $create->class_aktiv = $class_aktiv;
+                $create->type = $type[$i];
+                $create->label = $label[$i];
+                $create->values = $val[$i];
+                $create->case = $selType;
+                $create->input_class = $input_class;
+                $create->label_class = $label_class;
+                $create->form_id =  $data->id;
+                $url = apply_filters('create_formular_fields',$create);
                 $search = $matches[$i][0];
                 $formular = apply_filters('string_replace_limit', $search, '###' . $url->inputId . '###', $formular, $limit = 1);
                 $return_arr[] = $url;
             }
 
             if ($selType == 'file') {
-                $file = apply_filters('create_formular_fields',$class_aktiv, $type[$i], $label[$i], $val[$i], $selType, $input_class, $label_class);
+                $create->class_aktiv = $class_aktiv;
+                $create->type = $type[$i];
+                $create->label = $label[$i];
+                $create->values = $val[$i];
+                $create->case = $selType;
+                $create->input_class = $input_class;
+                $create->label_class = $label_class;
+                $create->form_id =  $data->id;
+                $file = apply_filters('create_formular_fields',$create);
                 $search = $matches[$i][0];
                 $formular = apply_filters('string_replace_limit', $search, '###' . $file->inputId . '###', $formular, $limit = 1);
                 $return_arr[] = $file;
             }
 
             if ($selType == 'number') {
-                $number = apply_filters('create_formular_fields',$class_aktiv, $type[$i], $label[$i], $val[$i], $selType, $input_class, $label_class);
+                $create->class_aktiv = $class_aktiv;
+                $create->type = $type[$i];
+                $create->label = $label[$i];
+                $create->values = $val[$i];
+                $create->case = $selType;
+                $create->input_class = $input_class;
+                $create->label_class = $label_class;
+                $create->form_id =  $data->id;
+                $number = apply_filters('create_formular_fields',$create);
                 $search = $matches[$i][0];
                 $formular = apply_filters('string_replace_limit', $search, '###' . $number->inputId . '###', $formular, $limit = 1);
                 $return_arr[] = $number;
             }
 
             if ($selType == 'date') {
-                $date = apply_filters('create_formular_fields',$class_aktiv, $type[$i], $label[$i], $val[$i], $selType, $input_class, $label_class);
+                $create->class_aktiv = $class_aktiv;
+                $create->type = $type[$i];
+                $create->label = $label[$i];
+                $create->values = $val[$i];
+                $create->case = $selType;
+                $create->input_class = $input_class;
+                $create->label_class = $label_class;
+                $create->form_id =  $data->id;
+                $date = apply_filters('create_formular_fields',$create);
                 $formular = apply_filters('string_replace_limit', $matches[$i][0], '###' . $date->inputId . '###', $formular, $limit = 1);
                 $return_arr[] = $date;
             }
 
             $areaRegeEx = '@(textarea)|.+(\d)@m';
             preg_match_all($areaRegeEx, $type[$i], $hit, PREG_SET_ORDER, 0);
-            if (isset($hit) && $hit[0][1] == 'textarea') {
-                $textarea = apply_filters('create_formular_fields',$class_aktiv, $type[$i] . '#' . $hit[1][2], $label[$i], $val[$i], $hit[0][1], $input_class, $label_class);
+            if (isset($hit[0][1]) && $hit[0][1] == 'textarea') {
+                $create->class_aktiv = $class_aktiv;
+                $create->type = $type[$i] . '#' . $hit[1][2];
+                $create->label = $label[$i];
+                $create->values = $val[$i];
+                $create->case = $hit[0][1];
+                $create->input_class = $input_class;
+                $create->label_class = $label_class;
+                $create->form_id =  $data->id;
+                $textarea = apply_filters('create_formular_fields',$create);
                 $formular = apply_filters('string_replace_limit', $matches[$i][0], '###' . $textarea->inputId . '###', $formular, $limit = 1);
                 $return_arr[] = $textarea;
             }
 
             if ($selType == 'select') {
                 $arr = preg_replace("/\s+/", " ", $val[$i]);
+
                 $SelArr = explode(', ', $arr);
-                $select = apply_filters('create_formular_fields',$class_aktiv, $type[$i], $label[$i], $SelArr, $selType, $input_class, $label_class);
+
+                $create->class_aktiv = $class_aktiv;
+                $create->type = $type[$i];
+                $create->label = $label[$i];
+                $create->values = $SelArr;
+                $create->case = $selType;
+                $create->input_class = $input_class;
+                $create->label_class = $label_class;
+                $create->form_id =  $data->id;
+                $select = apply_filters('create_formular_fields',$create);
                 $formular = apply_filters('string_replace_limit', $matches[$i][0], '###' . $select->inputId . '###', $formular, $limit = 1);
                 $return_arr[] = $select;
             }
@@ -217,15 +293,30 @@ switch ($method) {
             if ($selType == 'email-send-select') {
                 $arr = trim(preg_replace("/\s+/", " ", $val[$i]));
                 $EmailSelArr = explode(', ', $arr);
-
-                $email_send_select = apply_filters('create_formular_fields',$class_aktiv, $type[$i], $label[$i], $EmailSelArr, $selType, $input_class, $label_class);
+                $create->class_aktiv = $class_aktiv;
+                $create->type = $type[$i];
+                $create->label = $label[$i];
+                $create->values = $EmailSelArr;
+                $create->case = $selType;
+                $create->input_class = $input_class;
+                $create->label_class = $label_class;
+                $create->form_id =  $data->id;
+                $email_send_select = apply_filters('create_formular_fields',$create);
 
                 $formular = apply_filters('string_replace_limit', $matches[$i][0], '###' . $email_send_select->inputId . '###', $formular, $limit = 1);
                 $return_arr[] = $email_send_select;
             }
 
             if ($selType == 'checkbox') {
-                $check = apply_filters('create_formular_fields',$class_aktiv, $type[$i], $label[$i], $val[$i], $selType, $input_class, $label_class);
+                $create->class_aktiv = $class_aktiv;
+                $create->type = $type[$i];
+                $create->label = $label[$i];
+                $create->values = $val[$i];
+                $create->case = $selType;
+                $create->input_class = $input_class;
+                $create->label_class = $label_class;
+                $create->form_id =  $data->id;
+                $check = apply_filters('create_formular_fields',$create);
                 $formular = apply_filters('string_replace_limit', $matches[$i][0], '###' . $check->inputId . '###', $formular, $limit = 1);
                 $return_arr[] = $check;
             }
@@ -233,19 +324,49 @@ switch ($method) {
             if ($selType == 'radio-inline' || $selType == 'radio-default') {
                 $arr = preg_replace("/\s+/", " ", $val[$i]);
                 $RadioArr = explode(', ', $arr);
-                $radio = apply_filters('create_formular_fields',$class_aktiv, $type[$i], $label[$i], $RadioArr, $selType, $input_class, $label_class);
+                $create->class_aktiv = $class_aktiv;
+                $create->type = $type[$i];
+                $create->label = $label[$i];
+                $create->values = $RadioArr;
+                $create->case = $selType;
+                $create->input_class = $input_class;
+                $create->label_class = $label_class;
+                $create->form_id =  $data->id;
+                $radio = apply_filters('create_formular_fields',$create);
                 $formular = apply_filters('string_replace_limit', $matches[$i][0], '###' . $radio->inputId . '###', $formular, $limit = 1);
                 $return_arr[] = $radio;
             }
 
             if ($selType == 'button') {
-                $button = apply_filters('create_formular_fields',$class_aktiv, $type[$i], $label[$i], $val[$i], $selType, $input_class, $label_class,$faIcon, $button_class);
+
+                // $button = apply_filters('create_formular_fields',$class_aktiv, $type[$i], $label[$i], $val[$i], $selType, $input_class, $label_class,$faIcon, $button_class);
+                $create->class_aktiv = $class_aktiv;
+                $create->type = $type[$i];
+                $create->label = $label[$i];
+                $create->values = $val[$i];
+                $create->case = $selType;
+                $create->input_class = $input_class;
+                $create->label_class = $label_class;
+                $create->label_class = $label_class;
+                $create->faIcon = $faIcon;
+                $create->button_class = $button_class;
+                $create->form_id =  $data->id;
+
+                $button = apply_filters('create_formular_fields',$create);
                 $formular = apply_filters('string_replace_limit', $matches[$i][0], '###' . $button->inputId . '###', $formular, $limit = 1);
                 $return_arr[] = $button;
             }
 
             if ($selType == 'dataprotection') {
-                $dataprotection = apply_filters('create_formular_fields',$class_aktiv, $type[$i], $label[$i], $val[$i], $selType, $input_class, $label_class);
+                $create->class_aktiv = $class_aktiv;
+                $create->type = $type[$i];
+                $create->label = $label[$i];
+                $create->values = $val[$i];
+                $create->case = $selType;
+                $create->input_class = $input_class;
+                $create->label_class = $label_class;
+                $create->form_id =  $data->id;
+                $dataprotection = apply_filters('create_formular_fields',$create);
                 $formular = apply_filters('string_replace_limit', $matches[$i][0], '###' . $dataprotection->inputId . '###', $formular, $limit = 1);
                 $return_arr[] = $dataprotection;
             }
