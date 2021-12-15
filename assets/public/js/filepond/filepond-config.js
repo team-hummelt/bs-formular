@@ -43,13 +43,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
         bsFileNode.forEach(function (bsFileNode) {
 
             if (typeof FilePond === 'undefined') {
-
+                let lang = bs_form_ajax_obj.language;
                 let pondBtn = document.createElement('button');
                 pondBtn.classList.add('btn');
                 pondBtn.classList.add('btn-outline-secondary');
                 pondBtn.classList.add('btn-file-upload');
                 pondBtn.classList.add('filepond-browse-files')
-                pondBtn.innerHTML = 'Datei auswählen';
+                pondBtn.innerHTML = lang.datei_select; //'Datei auswählen';
                 pondBtn.type = 'button';
                 bsFileNode.parentNode.insertAdjacentElement('beforeend', pondBtn);
 
@@ -75,12 +75,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
                             bsFileNode,
                             {
                                 //maxFiles: bs_form_ajax_obj.max_files,
-                                labelIdle: 'Datei hier per Drag & Drop ablegen.',
-                                labelFileProcessingError: 'Fehler beim Upload',
-                                labelTapToRetry: 'erneut versuchen',
-                                labelTapToCancel: 'zum Abbrechen antippen',
-                                labelTapToUndo: 'zum Löschen klicken',
-                                Remove: 'entfernen',
+                                labelIdle: lang.drag_file, //'Datei hier per Drag & Drop ablegen.',
+                                labelFileProcessingError: lang.upload_err, //'Fehler beim Upload',
+                                labelTapToRetry:  lang.erneut_vers,  //'erneut versuchen',
+                                labelTapToCancel: lang.tap_cancel, //'zum Abbrechen antippen',
+                                labelTapToUndo: lang.click_delete, //'zum Löschen klicken',
+                                Remove: lang.remove, //'entfernen',
                                 credits: false,
                                 maxParallelUploads: 2,
                                 //instantUpload:null,
@@ -95,10 +95,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
                                 minFileSize: null,
                                 maxFileSize: bs_form_ajax_obj.file_size_mb+'MB',
                                 maxTotalFileSize: bs_form_ajax_obj.file_size_all_mb+'MB',
-                                labelMaxFileSizeExceeded: 'Datei ist zu groß',
-                                labelMaxFileSize: 'Maximale Dateigröße ist {filesize}',
-                                labelMaxTotalFileSizeExceeded: 'Maximale Gesamtgröße überschritten',
-                                labelMaxTotalFileSize:'Maximale Gesamtgröße der Datei ist {filesize}',
+                                labelMaxFileSizeExceeded: lang.file_large, //'Datei ist zu groß',
+                                labelMaxFileSize: lang.max_filesize, //'Maximale Dateigröße ist {filesize}',
+                                labelMaxTotalFileSizeExceeded: lang.max_total_size, //'Maximale Gesamtgröße überschritten',
+                                labelMaxTotalFileSize: lang.max_total_file,//'Maximale Gesamtgröße der Datei ist {filesize}',
 
                                 /*======================= FileType Plugin =======================*/
                                 allowFileTypeValidation: true,
@@ -115,8 +115,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
                                             return null;
                                         }
                                     }),
-                                labelFileTypeNotAllowed : 'Ungültiger Dateityp',
-                                fileValidateTypeLabelExpectedTypes : 'Erwartet {allButLastType} oder {lastType}',
+                                labelFileTypeNotAllowed : lang.invalid_type, //'Ungültiger Dateityp',
+                                fileValidateTypeLabelExpectedTypes : lang.expects,//'Erwartet {allButLastType} oder {lastType}',
                                 fileValidateTypeLabelExpectedTypesMap : {},
                             }
                         );

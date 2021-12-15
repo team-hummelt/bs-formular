@@ -9,7 +9,7 @@ defined('ABSPATH') or die();
 
 $responseJson = new stdClass();
 $record = new stdClass();
-
+global $bs_formular_filter;
 $record->id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
 $record->formId = filter_input(INPUT_POST, 'formId', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
 isset( $_POST['terms'] ) && is_string( $_POST['terms'] ) ? $record->terms = 1 : $record->terms = 0;
@@ -18,7 +18,7 @@ isset($_POST['dscheck']) && is_string($_POST['dscheck']) ? $record->dscheck = 1 
 $_POST['repeat_email'] ? $record->repeat_email = $_POST['repeat_email'] : $record->repeat_email = false;
 
 if (!$record->id) {
-    $msg = apply_filters('bs_form_default_settings', 'by_field', 'error_message');
+    $msg = $bs_formular_filter->bs_formular_message($record->id,'error_message', true);
     $responseJson->status = false;
     $responseJson->show_error = true;
     $responseJson->formId = $record->formId;
@@ -28,7 +28,7 @@ if (!$record->id) {
 }
 
 if ($record->terms || $record->repeat_email) {
-    $msg = apply_filters('bs_form_default_settings', 'by_field', 'spam');
+    $msg = $bs_formular_filter->bs_formular_message($record->id,'spam', true);
     $responseJson->status = false;
     $responseJson->show_error = true;
     $responseJson->formId = $record->formId;
@@ -45,7 +45,7 @@ $args = sprintf('WHERE %s.shortcode="%s"', $table, $record->id);
 $formular = apply_filters('get_formulare_by_args', $args, false, 'id');
 
 if (!$formular->status) {
-    $msg = apply_filters('bs_form_default_settings', 'by_field', 'error_message');
+    $msg = $bs_formular_filter->bs_formular_message($record->id,'error_message', true);
     $responseJson->status = false;
     $responseJson->show_error = true;
     $responseJson->formId = $record->formId;
@@ -59,7 +59,7 @@ $args = sprintf('WHERE %s.shortcode="%s"', $table, $record->id);
 $form = apply_filters('bs_form_formular_data_by_join', $args, false);
 
 if (!$form->status) {
-    $msg = apply_filters('bs_form_default_settings', 'by_field', 'error_message');
+    $msg = $bs_formular_filter->bs_formular_message($record->id,'error_message', true);
     $responseJson->status = false;
     $responseJson->show_error = true;
     $responseJson->formId = $record->formId;
@@ -132,7 +132,7 @@ foreach ($send_arr as $tmp) {
         $attachments = $tmp->eingabe;
         continue;
     }
-    $errMsg = apply_filters('bs_form_default_settings', 'by_field', 'error_message');
+    $msg = $bs_formular_filter->bs_formular_message($record->id,'error_message', true);
     $tmp->eingabe ? $eingabe = $tmp->eingabe : $eingabe = '';
 
      switch ($form->email_template) {
@@ -207,7 +207,7 @@ if ($cc) {
 $send = wp_mail( $to, $subject ?: get_bloginfo( 'title' ), $htmlBody, array_unique( $headers ), $attachments );
 
 if ( ! $send ) {
-    $msg  = apply_filters( 'bs_form_default_settings', 'by_field', 'error_message' );
+    $msg = $bs_formular_filter->bs_formular_message($record->id,'error_message', true);
     $responseJson->status     = false;
     $responseJson->msg        = $msg->error_message;
     $responseJson->show_error = true;
@@ -227,8 +227,7 @@ if (get_option('email_empfang_aktiv')) {
     apply_filters('set_email_empfang_table', $safeDb);
 }
 
-
-$msg = apply_filters('bs_form_default_settings', 'by_field', 'success_message');
+$msg = $bs_formular_filter->bs_formular_message($record->id,'success_message', true);
 $responseJson->status = true;
 $responseJson->show_success = true;
 $responseJson->if_file = true;

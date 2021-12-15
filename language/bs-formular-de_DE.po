@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BS-Formular\n"
-"POT-Creation-Date: 2021-10-02 00:36+0200\n"
-"PO-Revision-Date: 2021-10-02 00:38+0200\n"
+"POT-Creation-Date: 2021-12-15 14:54+0100\n"
+"PO-Revision-Date: 2021-12-15 14:54+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -15,54 +15,56 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-SearchPath-0: admin-pages\n"
 "X-Poedit-SearchPath-1: optionen/metabox/classic\n"
+"X-Poedit-SearchPath-2: .\n"
+"X-Poedit-SearchPath-3: register-bs-formular.php\n"
 
-#: admin-pages/bs-formulare.php:17 admin-pages/bs-formulare.php:21
-#: admin-pages/bs-formulare.php:34
+#: admin-pages/bs-formulare.php:18 admin-pages/bs-formulare.php:22
+#: admin-pages/bs-formulare.php:35
 msgid "Forms"
 msgstr "Formulare"
 
-#: admin-pages/bs-formulare.php:22 admin-pages/bs-formulare.php:27
+#: admin-pages/bs-formulare.php:23 admin-pages/bs-formulare.php:28
 msgid "Overview"
 msgstr "Übersicht"
 
-#: admin-pages/bs-formulare.php:37 admin-pages/bs-formulare.php:43
+#: admin-pages/bs-formulare.php:38 admin-pages/bs-formulare.php:44
 msgid "Create | Edit"
 msgstr "Erstellen | Bearbeiten"
 
-#: admin-pages/bs-formulare.php:46 admin-pages/bs-formulare.php:52
-#: admin-pages/bs-formulare.php:79
+#: admin-pages/bs-formulare.php:47 admin-pages/bs-formulare.php:53
+#: admin-pages/bs-formulare.php:80
 msgid "Inbox"
 msgstr "Posteingang"
 
-#: admin-pages/bs-formulare.php:55 admin-pages/bs-formulare.php:60
+#: admin-pages/bs-formulare.php:56 admin-pages/bs-formulare.php:61
 msgid "E-Mail Settings"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:63
+#: admin-pages/bs-formulare.php:64
 msgid "Examples"
 msgstr "Beispiele"
 
-#: admin-pages/bs-formulare.php:68
+#: admin-pages/bs-formulare.php:69
 msgid "Help"
 msgstr "Hilfe"
 
-#: admin-pages/bs-formulare.php:87 admin-pages/bs-formulare.php:96
+#: admin-pages/bs-formulare.php:88 admin-pages/bs-formulare.php:97
 msgid "Name"
 msgstr "Bezeichnung"
 
-#: admin-pages/bs-formulare.php:88 admin-pages/bs-formulare.php:97
+#: admin-pages/bs-formulare.php:89 admin-pages/bs-formulare.php:98
 msgid "Shortcode"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:89 admin-pages/bs-formulare.php:98
+#: admin-pages/bs-formulare.php:90 admin-pages/bs-formulare.php:99
 msgid "Created"
 msgstr "Erstellt"
 
-#: admin-pages/bs-formulare.php:135
+#: admin-pages/bs-formulare.php:136
 msgid "SMTP Settings"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:146
+#: admin-pages/bs-formulare.php:147
 msgid "Name oder Firma des Absenders:"
 msgstr ""
 
@@ -94,12 +96,46 @@ msgstr ""
 msgid "SMTP Authentifizierung:"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:265
+#: admin-pages/bs-formulare.php:251
+msgid "File Upload Settings"
+msgstr ""
+
+#: admin-pages/bs-formulare.php:258
+msgid "maximale File Größe (MB):"
+msgstr ""
+
+#: admin-pages/bs-formulare.php:268
+msgid "maximale gesamt Upload-Größe (MB:)"
+msgstr ""
+
+#: admin-pages/bs-formulare.php:280
+msgid "Max. Files pro E-Mail"
+msgstr ""
+
+#: admin-pages/bs-formulare.php:289
+msgid "File-Upload MimeTypes"
+msgstr ""
+
+#: admin-pages/bs-formulare.php:323
 msgid "Hilfe"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:473
+#: admin-pages/bs-formulare.php:569 license/register-hupa-plugin.php:54
+#: license/register-hupa-plugin.php:55
 msgid "BS-Formular"
+msgstr ""
+
+#: license/activate-bs-formular-page.php:66
+msgid "Client ID"
+msgstr ""
+
+#: license/activate-bs-formular-page.php:74
+msgid "Client secret"
+msgstr ""
+
+#: optionen/filter/bs-formular-filter.php:152
+#: optionen/filter/bs-formular-filter.php:200
+msgid "auswählen"
 msgstr ""
 
 #: optionen/metabox/classic/bs-formular-widget.php:23
@@ -123,5 +159,90 @@ msgstr "Formular auswählen"
 msgid "select"
 msgstr "auswählen"
 
-#~ msgid "BS Formular"
-#~ msgstr "BS Formular"
+#: register-bs-formular.php:106 register-bs-formular.php:107
+#, fuzzy
+#| msgid "BS Formular"
+msgid "Formulare"
+msgstr "BS Formular"
+
+#: register-bs-formular.php:149
+msgid "Select file"
+msgstr "Datei auswählen"
+
+#: register-bs-formular.php:151
+msgid "Drag and drop the file here."
+msgstr "Datei hier per Drag & Drop ablegen."
+
+#: register-bs-formular.php:153
+msgid "Upload error"
+msgstr "Fehler beim Upload"
+
+#: register-bs-formular.php:155
+msgid "Try again"
+msgstr "erneut versuchen"
+
+#: register-bs-formular.php:157
+msgid "Tap to cancel"
+msgstr "zum Abbrechen antippen"
+
+#: register-bs-formular.php:159
+msgid "Click to delete"
+msgstr "zum Löschen klicken"
+
+#: register-bs-formular.php:161
+msgid "remove"
+msgstr "entfernen"
+
+#: register-bs-formular.php:164
+msgid "File is too large"
+msgstr "Datei ist zu groß"
+
+#: register-bs-formular.php:166
+msgid "Maximum file size is {filesize}"
+msgstr "Maximale Dateigröße ist {filesize}"
+
+#: register-bs-formular.php:168
+msgid "Maximum total size exceeded"
+msgstr "Maximale Gesamtgröße überschritten"
+
+#: register-bs-formular.php:170
+msgid "Maximum total size of the file is {filesize}"
+msgstr "Maximale Gesamtgröße der Datei ist {filesize}"
+
+#: register-bs-formular.php:172
+msgid "Invalid file type"
+msgstr "Ungültiger Dateityp"
+
+#: register-bs-formular.php:174
+msgid "Expects {allButLastType} or {lastType}"
+msgstr "Erwartet {allButLastType} oder {lastType}"
+
+#: register-bs-formular.php:404
+#, php-format
+msgid ""
+"This plugin has been disabled because it requires a PHP version greater than "
+"%s and a WordPress version greater than %s. Your PHP version can be updated "
+"by your hosting provider."
+msgstr ""
+
+#: update-checker/yahnis-elsts/plugin-update-checker/Puc/v4p11/Plugin/Ui.php:54
+msgid "View details"
+msgstr ""
+
+#: update-checker/yahnis-elsts/plugin-update-checker/Puc/v4p11/Plugin/Ui.php:77
+#, php-format
+msgid "More information about %s"
+msgstr ""
+
+#: update-checker/yahnis-elsts/plugin-update-checker/Puc/v4p11/Plugin/Ui.php:128
+msgid "Check for updates"
+msgstr ""
+
+#: update-checker/yahnis-elsts/plugin-update-checker/Puc/v4p11/Plugin/Ui.php:224
+#, php-format
+msgid "Unknown update checker status \"%s\""
+msgstr ""
+
+#: update-checker/yahnis-elsts/plugin-update-checker/Puc/v4p11/Vcs/PluginUpdateChecker.php:98
+msgid "There is no changelog available."
+msgstr ""

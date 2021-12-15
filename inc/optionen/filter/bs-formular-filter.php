@@ -46,7 +46,7 @@ if (!class_exists('BootstrapFormularFilter')) {
             //SMTP FILTER
             //add_filter('wp_mail_smtp_custom_options', array($this, 'bs_formular_mailer_smtp_options'));
             //TODO CREATE FORMULAR FELDER
-            add_filter('create_formular_fields', array($this, 'bs_form_create_formular_fields'), 10, 9);
+            add_filter('create_formular_fields', array($this, 'bs_form_create_formular_fields'));
             add_filter('string_replace_limit', array($this, 'bs_form_string_replace_limit'), 10, 4);
             //GET Formulare
             add_filter('get_formulare_by_args', array($this, 'bsFormGetFormulareByArgs'), 10, 3);
@@ -112,7 +112,7 @@ if (!class_exists('BootstrapFormularFilter')) {
         /**
          * @throws Exception
          */
-        public function bs_form_create_formular_fields($class_aktiv, $type, $label, $values, $case, $input_class, $label_class, $faIcon = false, $button_class = false): object
+        public function bs_form_create_formular_fields($create): object
         {
             $record = new stdClass();
             $record->status = true;
@@ -120,21 +120,21 @@ if (!class_exists('BootstrapFormularFilter')) {
 
             $id = $this->bs_load_random_string();
             $id = substr($id, 0, 12);
-            if ($input_class) {
-                $inputStart = '<div class="' . $input_class . '">';
+            if ($create->input_class) {
+                $inputStart = '<div class="' . $create->input_class . '">';
                 $inputEnd = '</div>';
             } else {
                 $inputStart = '';
                 $inputEnd = '';
             }
 
-            switch ($case) {
+            switch ($create->case) {
                 case'select':
-                    if (strpos($type, '*')) {
+                    if (strpos($create->type, '*')) {
                         $stern = '<span class="text-danger"> *</span>';
                         $require = 'required';
-                        $field = trim(str_replace('*', '', $type));
-                        $invalidMsg = $this->bsFormDefaultSettings('by_field', $field);
+                        $field = trim(str_replace('*', '', $create->type));
+                        $invalidMsg = $this->bs_formular_message($create->form_id, $field);
                         $invDiv = '<div class="invalid-feedback">' . $invalidMsg->$field . '</div>';
                     } else {
                         $require = false;
@@ -144,13 +144,13 @@ if (!class_exists('BootstrapFormularFilter')) {
 
                     $valArr = array();
                     $html = $inputStart;
-                    if (!$class_aktiv) {
-                        $html .= '<label class="form-label ' . $label_class . '" for="' . $id . '">' . $label . ' ' . $stern . '</label>';
+                    if (!$create->class_aktiv) {
+                        $html .= '<label class="form-label ' . $create->label_class . '" for="' . $id . '">' . $create->label . ' ' . $stern . '</label>';
                     }
 
                     $html .= '<select onchange="this.blur()" name="' . $id . '" class="form-control" id="' . $id . '" ' . $require . '>';
                     $html .= '<option value="">' . __('auswählen', 'bs-formular') . '...</option>';
-                    foreach ($values as $tmp) {
+                    foreach ($create->values as $tmp) {
                         $random = $this->bs_load_random_string();
                         $random = substr($random, 0, 12);
                         $valItem = array(
@@ -171,19 +171,18 @@ if (!class_exists('BootstrapFormularFilter')) {
                     $record->values = serialize($valArr);
                     $record->inputId = $id;
                     $record->label = $id;
-                    $record->type = $case;
-                    $record->label = $label;
+                    $record->type = $create->case;
+                    $record->label = $create->label;
                     $record->required = $require;
 
                     return $record;
 
                 case'email-send-select':
-                    if (strpos($type, '*')) {
+                    if (strpos($create->type, '*')) {
                         $stern = '<span class="text-danger"> *</span>';
                         $require = 'required';
-                        $field = trim(str_replace('*', '', $type));
-                        //echo $field;
-                        $invalidMsg = $this->bsFormDefaultSettings('by_field', $field);
+                        $field = trim(str_replace('*', '', $create->type));
+                        $invalidMsg = $this->bs_formular_message($create->form_id, $field);
                         $invDiv = '<div class="invalid-feedback">' . $invalidMsg->$field . '</div>';
                     } else {
                         $require = false;
@@ -193,13 +192,13 @@ if (!class_exists('BootstrapFormularFilter')) {
 
                     $valArr = array();
                     $html = $inputStart;
-                    if (!$class_aktiv) {
-                        $html .= '<label class="form-label ' . $label_class . '" for="' . $id . '">' . $label . ' ' . $stern . '</label>';
+                    if (!$create->class_aktiv) {
+                        $html .= '<label class="form-label ' . $create->label_class . '" for="' . $id . '">' . $create->label . ' ' . $stern . '</label>';
                     }
 
                     $html .= '<select onchange="this.blur()" name="' . $id . '" class="form-control email-send-select" id="' . $id . '" ' . $require . '>';
                     $html .= '<option value="">' . __('auswählen', 'bs-formular') . '...</option>';
-                    foreach ($values as $tmp) {
+                    foreach ($create->values as $tmp) {
 
                         $random = $this->bs_load_random_string();
                         $random = substr($random, 0, 12);
@@ -241,8 +240,8 @@ if (!class_exists('BootstrapFormularFilter')) {
                     $record->values = serialize($valArr);
                     $record->inputId = $id;
                     $record->label = $id;
-                    $record->type = $case;
-                    $record->label = $label;
+                    $record->type = $create->case;
+                    $record->label = $create->label;
                     $record->required = $require;
 
                     return $record;
@@ -250,10 +249,10 @@ if (!class_exists('BootstrapFormularFilter')) {
                 case'radio-inline':
                 case'radio-default':
                     $valArr = array();
-                    $inpType = substr($type, 0, strpos($type, '-'));
-                    $format = substr($type, strpos($type, '-') + 1);
+                    $inpType = substr($create->type, 0, strpos($create->type, '-'));
+                    $format = substr($create->type, strpos($create->type, '-') + 1);
                     $html = '';
-                    foreach ($values as $tmp) {
+                    foreach ($create->values as $tmp) {
                         $random = $this->bs_load_random_string();
                         $random = substr($random, 0, 12);
                         $valItem = array(
@@ -283,7 +282,7 @@ if (!class_exists('BootstrapFormularFilter')) {
                     $record->html = esc_textarea($html);
                     $record->values = serialize($valArr);
                     $record->inputId = $id;
-                    $record->label = $label;
+                    $record->label = $create->label;
                     $record->type = $inpType;
 
                     return $record;
@@ -294,11 +293,11 @@ if (!class_exists('BootstrapFormularFilter')) {
                 case'number':
                 case'date':
                 case'password':
-                    if (strpos($type, '*')) {
+                    if (strpos($create->type, '*')) {
                         $require = 'required';
                         $stern = '<span class="text-danger"> *</span>';
-                        $field = trim(str_replace('*', '', $type));
-                        $invalidMsg = $this->bsFormDefaultSettings('by_field', $field);
+                        $field = trim(str_replace('*', '', $create->type));
+                        $invalidMsg = $this->bs_formular_message($create->form_id, $field);
                         $invDiv = '<div class="invalid-feedback">' . $invalidMsg->$field . '</div>';
                     } else {
                         $require = false;
@@ -306,32 +305,31 @@ if (!class_exists('BootstrapFormularFilter')) {
                         $invDiv = '';
                     }
 
-
-                    $case == 'password' ? $autocomplete = 'autocomplete="cc-number"' : $autocomplete = '';
+                    $create->case == 'password' ? $autocomplete = 'autocomplete="cc-number"' : $autocomplete = '';
                     $html .= $inputStart;
-                    if ($class_aktiv) {
+                    if ($create->class_aktiv) {
                         $stern = strip_tags($stern);
-                        $placeholder = 'placeholder="' . $label . ' ' . $stern . '"';
+                        $placeholder = 'placeholder="' . $create->label . ' ' . $stern . '"';
                     } else {
                         $placeholder = '';
-                        $html .= '<label class="form-label ' . $label_class . '" for="' . $id . '">' . $label . ' ' . $stern . '</label>';
+                        $html .= '<label class="form-label ' . $create->label_class . '" for="' . $id . '">' . $create->label . ' ' . $stern . '</label>';
                     }
-                    $html .= '<input type="' . $case . '" class="form-control" ' . $placeholder . ' name="' . $id . '" id="' . $id . '"  ' . $require . ' ' . $autocomplete . '/>' . $invDiv;
+                    $html .= '<input type="' . $create->case . '" class="form-control" ' . $placeholder . ' name="' . $id . '" id="' . $id . '"  ' . $require . ' ' . $autocomplete . '/>' . $invDiv;
                     $html .= $inputEnd;
                     $record->html = esc_textarea($html);
                     $record->inputId = $id;
                     $record->required = $require;
-                    $record->label = $label;
-                    $record->values = $values;
-                    $record->type = $case;
+                    $record->label = $create->label;
+                    $record->values = $create->values;
+                    $record->type = $create->case;
 
                     return $record;
                 case 'file':
-                    if (strpos($type, '*')) {
+                    if (strpos($create->type, '*')) {
                         $require = 'required';
                         $stern = '<span class="text-danger"> *</span>';
-                        $field = trim(str_replace('*', '', $type));
-                        $invalidMsg = $this->bsFormDefaultSettings('by_field', $field);
+                        $field = trim(str_replace('*', '', $create->type));
+                        $invalidMsg = $this->bs_formular_message($create->form_id, $field);
                         $invDiv = '<div class="invalid-feedback mt-n2 mb-2">' . $invalidMsg->$field . '</div>';
                     } else {
                         $require = false;
@@ -341,21 +339,21 @@ if (!class_exists('BootstrapFormularFilter')) {
 
                     $mimeTypes = '';
                     $regEx = '@#(.+?)#@i';
-
-                    preg_match($regEx, $label, $matches);
+                    $label = '';
+                    preg_match($regEx, $create->label, $matches);
                     if ($matches) {
                         $types = preg_replace("/\s+/", "", $matches[1]);
-                        $label = str_replace($matches[0], '', $label);
+                        $label = str_replace($matches[0], '', $create->label);
                     } else {
                         $types = preg_replace("/\s+/", "", get_option('upload_mime_types'));
                     }
                     $html .= $inputStart;
-                    if ($class_aktiv) {
+                    if ($create->class_aktiv) {
                         $stern = strip_tags($stern);
                         $placeholder = 'placeholder="' . $label . ' ' . $stern . '"';
                     } else {
                         $placeholder = '';
-                        $html .= '<label class="form-label ' . $label_class . '" for="' . $id . '">' . $label . ' ' . $stern . '</label>';
+                        $html .= '<label class="form-label ' . $create->label_class . '" for="' . $id . '">' . $label . ' ' . $stern . '</label>';
                     }
 
                     $fileType = str_replace([',', ';'], '#', $types);
@@ -370,28 +368,28 @@ if (!class_exists('BootstrapFormularFilter')) {
 
                     get_option('multi_upload') ? $multi = ' multiple' : $multi = '';
                     $html .= '<div class="filePondWrapper">';
-                    $html .= '<input data-id="' . $id . '" type="' . $case . '"class="bsFiles files' . $id . '" ' . $placeholder . ' name="' . $id . '" id="' . $id . '" accept="' . $mimeTypes . '"  ' . $require . ' ' . $multi . '/>' . $invDiv;
+                    $html .= '<input data-id="' . $id . '" type="' . $create->case . '"class="bsFiles files' . $id . '" ' . $placeholder . ' name="' . $id . '" id="' . $id . '" accept="' . $mimeTypes . '"  ' . $require . ' ' . $multi . '/>' . $invDiv;
                     $html .= '</div>';
                     $html .= $inputEnd;
                     $record->html = esc_textarea($html);
                     $record->inputId = $id;
                     $record->required = $require;
                     $record->label = $label;
-                    $record->values = $values;
-                    $record->type = $case;
+                    $record->values = $create->values;
+                    $record->type = $create->case;
 
                     return $record;
 
                 case'textarea':
-                    $rowLines = substr($type, strrpos($type, '#') + 1);
+                    $rowLines = substr($create->type, strrpos($create->type, '#') + 1);
 
                     $rowLines ? $row = 'rows="' . $rowLines . '"' : $row = '';
 
-                    if (strpos($type, '*')) {
+                    if (strpos($create->type, '*')) {
                         $stern = '<span class="text-danger"> *</span>';
                         $require = 'required';
-                        $field = trim(str_replace('*', '', $type));
-                        $invalidMsg = $this->bsFormDefaultSettings('by_field', $field);
+                        $field = trim(str_replace('*', '', $create->type));
+                        $invalidMsg = $this->bs_formular_message($create->form_id, $field);
                         $invDiv = '<div class="invalid-feedback">' . $invalidMsg->$field . '</div>';
                     } else {
                         $require = false;
@@ -400,12 +398,12 @@ if (!class_exists('BootstrapFormularFilter')) {
                     }
 
                     $html .= $inputStart;
-                    if ($class_aktiv) {
+                    if ($create->class_aktiv) {
                         $stern = strip_tags($stern);
-                        $placeholder = 'placeholder="' . $label . ' ' . $stern . '"';
+                        $placeholder = 'placeholder="' . $create->label . ' ' . $stern . '"';
                     } else {
                         $placeholder = '';
-                        $html .= '<label class="form-label ' . $label_class . '" for="' . $id . '">' . $label . ' ' . $stern . '</label>';
+                        $html .= '<label class="form-label ' . $create->label_class . '" for="' . $id . '">' . $create->label . ' ' . $stern . '</label>';
                     }
 
                     $html .= '<textarea ' . $placeholder . ' name="' . $id . '" class="form-control" id="' . $id . '" ' . $row . ' ' . $require . '></textarea>' . $invDiv;
@@ -413,26 +411,28 @@ if (!class_exists('BootstrapFormularFilter')) {
                     $record->html = esc_textarea($html);
                     $record->inputId = $id;
                     $record->required = $require;
-                    $record->label = $label;
-                    $record->values = $values;
-                    $record->type = $case;
+                    $record->label = $create->label;
+                    $record->values = $create->values;
+                    $record->type = $create->case;
 
                     return $record;
 
                 case'checkbox':
-                    if (strpos($label, '*')) {
+
+                    $label = '';
+                    if (strpos($create->label, '*')) {
                         $required = 'required';
                         $stern = '<span class="text-danger"> *</span>';
-                        $label = str_replace('*', '', $label);
+                        $label = str_replace('*', '', $create->label);
                         $field = trim(str_replace('*', '', $label));
-                        $invalidMsg = $this->bsFormDefaultSettings('by_field', $field);
+                        $invalidMsg = $this->bs_formular_message($create->form_id, $field);
                         $invDiv = '<div class="invalid-feedback">' . $invalidMsg->$field . '</div>';
                     } else {
                         $required = false;
                         $stern = '';
                         $invDiv = '';
                     }
-                    if (strpos($type, '*')) {
+                    if (strpos($create->type, '*')) {
                         $checked = 'checked';
                     } else {
                         $checked = false;
@@ -449,42 +449,41 @@ if (!class_exists('BootstrapFormularFilter')) {
                     $html .= $inputEnd;
                     $record->html = esc_textarea($html);
                     $record->inputId = $id;
-                    $record->values = $values;
+                    $record->values = $create->values;
                     $record->checked = $checked;
                     $record->required = $required;
                     $record->label = $label;
-                    $record->type = $case;
+                    $record->type = $create->case;
 
                     return $record;
 
                 case'button':
-                    $button_class ? $btn = $button_class : $btn = 'btn-outline-secondary';
+                    $create->button_class ? $btn = $create->button_class : $btn = 'btn-outline-secondary';
                     $html = $inputStart;
                     $html .= '<div class="bs-btn-wrapper">';
-                    $html .= ' <button id="' . $id . '" name="' . $id . '" type="' . $values . '" class="btn ' . $btn . '">' . $faIcon . $label . '</button>';
+                    $html .= ' <button id="' . $id . '" name="' . $id . '" type="' . $create->values . '" class="btn ' . $btn . '">' . $create->faIcon . $create->label . '</button>';
                     $html .= '<div class="bs-form-sending"><span class="sending-text">Daten werden gesendet </span><span class="dot-pulse"></span></div>';
                     $html .= '</div>';
                     $html .= $inputEnd;
                     $record->html = esc_textarea($html);
                     $record->inputId = $id;
-                    $record->values = $values;
-                    $record->bezeichnung = $label;
-                    $record->type = $case;
+                    $record->values = $create->values;
+                    $record->bezeichnung = $create->label;
+                    $record->type = $create->case;
 
                     return $record;
 
                 case'dataprotection':
-                    strpos($type, '*') ? $checked = 'checked' : $checked = false;
-
-                    $invalidMsg = $this->bsFormDefaultSettings('by_field', 'dataprotection');
+                    strpos($create->type, '*') ? $checked = 'checked' : $checked = false;
+                    $invalidMsg = $this->bs_formular_message($create->form_id, 'dataprotection');
                     $invDiv = '<div class="invalid-feedback">' . $invalidMsg->dataprotection . '</div>';
                     $regEx = '@#(.+)#@i';
-                    preg_match($regEx, $label, $matches);
+                    preg_match($regEx, $create->label, $matches);
                     if ($matches) {
-                        $labelUrl = '<a href="' . $values . '" target="_blank">' . $matches[1] . '</a>';
-                        $dataProtectLabel = str_replace($matches[0], $labelUrl, $label);
+                        $labelUrl = '<a href="' . $create->values . '" target="_blank">' . $matches[1] . '</a>';
+                        $dataProtectLabel = str_replace($matches[0], $labelUrl, $create->label);
                     } else {
-                        $dataProtectLabel = $label;
+                        $dataProtectLabel = $create->label;
                     }
 
                     $html = $inputStart;
@@ -498,10 +497,10 @@ if (!class_exists('BootstrapFormularFilter')) {
                     $html .= $inputEnd;
                     $record->html = esc_textarea($html);
                     $record->inputId = $id;
-                    $record->url = $values;
-                    $record->label = $label;
+                    $record->url = $create->values;
+                    $record->label = $create->label;
                     $record->checked = $checked;
-                    $record->type = $case;
+                    $record->type = $create->case;
 
                     return $record;
 
@@ -995,6 +994,37 @@ if (!class_exists('BootstrapFormularFilter')) {
             return $return;
         }
 
+        public function bs_formular_message($id, $format, $shortcode = false): object
+        {
+            global $wpdb;
+            $table = $wpdb->prefix . $this->table_formulare;
+            if($shortcode){
+                $where = sprintf('WHERE shortcode="%s"', $id);
+            } else {
+                $where = sprintf('WHERE id=%d', $id);
+            }
+
+            $return = new stdClass();
+            $return->$format = false;
+            $result = $wpdb->get_row("SELECT form_meldungen FROM {$table} {$where}");
+            if (!$result) {
+                return $return;
+            }
+            $msg = '';
+            $data = json_decode($result->form_meldungen);
+            foreach ($data as $tmp) {
+                if ($tmp->format == $format) {
+                    $msg = $tmp->msg;
+                }
+            }
+            if (!$msg) {
+                $msg = $data[5]->msg;
+            }
+
+            $return->$format = $msg;
+            return $return;
+        }
+
         public function getEmailEmpfangData($args, $fetchMethod = true): object
         {
             global $wpdb;
@@ -1229,7 +1259,7 @@ if (!class_exists('BootstrapFormularFilter')) {
             return (object)[];
         }
 
-        public function bsFormSelectEmailTemplate($args = null, $id = null):object
+        public function bsFormSelectEmailTemplate($args = null, $id = null): object
         {
             $return = [];
             $select = [
@@ -1250,8 +1280,8 @@ if (!class_exists('BootstrapFormularFilter')) {
                 case'by_id':
                     foreach ($select as $tmp) {
                         if ($tmp['id'] == $id) {
-                          $return = $tmp;
-                          break;
+                            $return = $tmp;
+                            break;
                         }
                     }
                     break;
@@ -1262,8 +1292,10 @@ if (!class_exists('BootstrapFormularFilter')) {
 
         public function bsFormularValidateMessageInputs($record, $input, $form = null): object
         {
+
             $return = new stdClass();
             $type = $record->type;
+            $form_id = $form->record->id;
             switch ($record->type) {
                 case'text':
                 case'password':
@@ -1271,7 +1303,8 @@ if (!class_exists('BootstrapFormularFilter')) {
                     isset($input) && is_string($input) ? $postValue = sanitize_text_field($input) : $postValue = '';
                     if ($record->required && !$postValue) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1287,7 +1320,8 @@ if (!class_exists('BootstrapFormularFilter')) {
                 case'number':
                     if ($record->required && !$input) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1295,7 +1329,8 @@ if (!class_exists('BootstrapFormularFilter')) {
 
                     if ($input && !filter_var($input, FILTER_VALIDATE_INT)) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1313,14 +1348,16 @@ if (!class_exists('BootstrapFormularFilter')) {
                     $email = sanitize_text_field($input);
                     if ($record->required && !$email) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
                     }
                     if ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1336,7 +1373,8 @@ if (!class_exists('BootstrapFormularFilter')) {
                 case'date':
                     if ($record->required && !$input) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1348,7 +1386,8 @@ if (!class_exists('BootstrapFormularFilter')) {
                     if ($input && !$date) {
                         $return->status = false;
                         //$this->lang = sanitize_text_field($record->label);
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1379,7 +1418,8 @@ if (!class_exists('BootstrapFormularFilter')) {
 
                     if ($record->required && !$eingabe) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1409,7 +1449,8 @@ if (!class_exists('BootstrapFormularFilter')) {
 
                     if ($record->required && !$eingabe) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1417,7 +1458,8 @@ if (!class_exists('BootstrapFormularFilter')) {
 
                     if (isset($selInput->email) && !filter_var($selInput->email, FILTER_VALIDATE_EMAIL)) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1462,7 +1504,8 @@ if (!class_exists('BootstrapFormularFilter')) {
 
                     if ($record->required && !$fileArr) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1481,14 +1524,16 @@ if (!class_exists('BootstrapFormularFilter')) {
                     $url = sanitize_text_field($input);
                     if ($record->required && !$url) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
                     }
                     if ($input && !filter_var($url, FILTER_VALIDATE_URL)) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1552,6 +1597,7 @@ if (!class_exists('BootstrapFormularFilter')) {
                     if ($inputArr->required == 'required') {
                         $return->status = false;
                         $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                       // $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1576,6 +1622,7 @@ if (!class_exists('BootstrapFormularFilter')) {
                     if ($inputArr->required == 'required') {
                         $return->status = false;
                         $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1654,3 +1701,6 @@ if (!class_exists('BootstrapFormularFilter')) {
         }
     }//endClass
 }
+
+global $bs_formular_filter;
+$bs_formular_filter = BootstrapFormularFilter::init();

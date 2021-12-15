@@ -7,8 +7,8 @@ defined( 'ABSPATH' ) or die();
  * License: Commercial - goto https://www.hummelt-werbeagentur.de/
  * https://www.hummelt-werbeagentur.de/
  */
-
 ?>
+
 <div class="wp-bs-starter-wrapper">
 
     <div class="container">
