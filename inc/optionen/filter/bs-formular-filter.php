@@ -994,11 +994,16 @@ if (!class_exists('BootstrapFormularFilter')) {
             return $return;
         }
 
-        public function bs_formular_message($id, $format): object
+        public function bs_formular_message($id, $format, $shortcode = false): object
         {
             global $wpdb;
             $table = $wpdb->prefix . $this->table_formulare;
-            $where = sprintf('WHERE id=%d', $id);
+            if($shortcode){
+                $where = sprintf('WHERE shortcode="%s"', $id);
+            } else {
+                $where = sprintf('WHERE id=%d', $id);
+            }
+
             $return = new stdClass();
             $return->$format = false;
             $result = $wpdb->get_row("SELECT form_meldungen FROM {$table} {$where}");
@@ -1287,9 +1292,10 @@ if (!class_exists('BootstrapFormularFilter')) {
 
         public function bsFormularValidateMessageInputs($record, $input, $form = null): object
         {
-            print_r($record);
+
             $return = new stdClass();
             $type = $record->type;
+            $form_id = $form->record->id;
             switch ($record->type) {
                 case'text':
                 case'password':
@@ -1297,7 +1303,8 @@ if (!class_exists('BootstrapFormularFilter')) {
                     isset($input) && is_string($input) ? $postValue = sanitize_text_field($input) : $postValue = '';
                     if ($record->required && !$postValue) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1313,7 +1320,8 @@ if (!class_exists('BootstrapFormularFilter')) {
                 case'number':
                     if ($record->required && !$input) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1321,7 +1329,8 @@ if (!class_exists('BootstrapFormularFilter')) {
 
                     if ($input && !filter_var($input, FILTER_VALIDATE_INT)) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1339,14 +1348,16 @@ if (!class_exists('BootstrapFormularFilter')) {
                     $email = sanitize_text_field($input);
                     if ($record->required && !$email) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
                     }
                     if ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1362,7 +1373,8 @@ if (!class_exists('BootstrapFormularFilter')) {
                 case'date':
                     if ($record->required && !$input) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1374,7 +1386,8 @@ if (!class_exists('BootstrapFormularFilter')) {
                     if ($input && !$date) {
                         $return->status = false;
                         //$this->lang = sanitize_text_field($record->label);
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1405,7 +1418,8 @@ if (!class_exists('BootstrapFormularFilter')) {
 
                     if ($record->required && !$eingabe) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1435,7 +1449,8 @@ if (!class_exists('BootstrapFormularFilter')) {
 
                     if ($record->required && !$eingabe) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1443,7 +1458,8 @@ if (!class_exists('BootstrapFormularFilter')) {
 
                     if (isset($selInput->email) && !filter_var($selInput->email, FILTER_VALIDATE_EMAIL)) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1488,7 +1504,8 @@ if (!class_exists('BootstrapFormularFilter')) {
 
                     if ($record->required && !$fileArr) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1507,14 +1524,16 @@ if (!class_exists('BootstrapFormularFilter')) {
                     $url = sanitize_text_field($input);
                     if ($record->required && !$url) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
                     }
                     if ($input && !filter_var($url, FILTER_VALIDATE_URL)) {
                         $return->status = false;
-                        $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1578,6 +1597,7 @@ if (!class_exists('BootstrapFormularFilter')) {
                     if ($inputArr->required == 'required') {
                         $return->status = false;
                         $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                       // $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
@@ -1602,6 +1622,7 @@ if (!class_exists('BootstrapFormularFilter')) {
                     if ($inputArr->required == 'required') {
                         $return->status = false;
                         $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
+                        //$msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;

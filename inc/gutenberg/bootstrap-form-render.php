@@ -15,8 +15,13 @@ function callback_bootstrap_formular_block( $attributes ) {
 function gutenberg_block_bs_formular_render_filter($attributes) {
 
 	if ($attributes ) {
-		ob_start();
+		ob_start(); ?>
+        <div class="custom-form-bs-wrapper <?=$attributes['className']?>">
+       <?php
 		echo do_shortcode('[bs-formular id="'.$attributes['selectedFormular'].'"]');
+       ?>
+        </div>
+        <?php
 		return ob_get_clean();
 	}
 }

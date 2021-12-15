@@ -144,6 +144,36 @@ final class RegisterBsFormularPlugin
      */
     public function bs_formular_public_one_trigger_check()
     {
+        $fileLang = [
+            //Datei auswählen
+            'datei_select' => __('Select file', 'bs-formular'),
+            //Datei hier per Drag & Drop ablegen.
+            'drag_file' => __('Drag and drop the file here.', 'bs-formular'),
+            //Fehler beim Upload
+            'upload_err' => __('Upload error', 'bs-formular'),
+            //erneut versuchen
+            'erneut_vers' => __('Try again', 'bs-formular'),
+            //zum Abbrechen antippen
+            'tap_cancel' => __('Tap to cancel', 'bs-formular'),
+            //zum Löschen klicken
+            'click_delete' => __('Click to delete', 'bs-formular'),
+            //entfernen
+            'remove' => __('remove', 'bs-formular'),
+
+            //Datei ist zu groß
+            'file_large' => __('File is too large', 'bs-formular'),
+            //Maximale Dateigröße ist {filesize}
+            'max_filesize' => __('Maximum file size is {filesize}', 'bs-formular'),
+            //Maximale Gesamtgröße überschritten
+            'max_total_size' => __('Maximum total size exceeded', 'bs-formular'),
+            //Maximale Gesamtgröße der Datei ist {filesize}
+            'max_total_file' => __('Maximum total size of the file is {filesize}', 'bs-formular'),
+            //Ungültiger Dateityp
+            'invalid_type' => __('Invalid file type', 'bs-formular'),
+            //Erwartet {allButLastType} oder {lastType}
+            'expects' => __('Expects {allButLastType} or {lastType}', 'bs-formular'),
+        ];
+
         $title_nonce = wp_create_nonce('bs_form_public_handle');
         wp_register_script('bs-formular-public-ajax-script', '', [], '', true);
         wp_enqueue_script('bs-formular-public-ajax-script');
@@ -154,7 +184,8 @@ final class RegisterBsFormularPlugin
             'file_size_mb' => get_option('file_max_size'),
             'file_size_all_mb' => get_option('file_max_all_size'),
             'max_files' => get_option('upload_max_files'),
-            'assets_url' => BS_FORMULAR_PLUGIN_ASSETS_URL
+            'assets_url' => BS_FORMULAR_PLUGIN_ASSETS_URL,
+            'language' => $fileLang
         ));
     }
 

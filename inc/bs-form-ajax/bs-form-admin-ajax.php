@@ -39,7 +39,7 @@ switch ($method) {
 
         $regEx = '@(textarea)-([\d])@m';
         preg_match_all($regEx, $type, $matches, PREG_SET_ORDER, 0);
-        if (isset($matches[0][1])) {
+        if (isset($matches)) {
             if ($matches[0][1]) {
                 $matches[0][2] ? $row = '-' . $matches[0][2] : $row = '';
                 $return = '[label] ' . $matches[0][1] . '-Label' . "\r\n";
@@ -976,7 +976,6 @@ switch ($method) {
 			"recordsFiltered" => $tbCount->count,
 			"data" => $data_arr,
 		);
-		//print_r($table);
 
 		break;
 }

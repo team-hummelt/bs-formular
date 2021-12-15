@@ -3,8 +3,6 @@
 
 namespace Form\BsFormular;
 
-use stdClass;
-
 defined( 'ABSPATH' ) or die();
 
 /**
@@ -12,7 +10,6 @@ defined( 'ABSPATH' ) or die();
  * @package Hummelt & Partner WordPress Theme
  * Copyright 2021, Jens Wiecker
  * License: Commercial - goto https://www.hummelt-werbeagentur.de/
- * https://www.hummelt-werbeagentur.de/
  */
 
 if ( ! class_exists( 'BsFormularShortCode' ) ) {
@@ -94,8 +91,8 @@ if ( ! class_exists( 'BsFormularShortCode' ) ) {
                   <input class="terms" type="checkbox" name="terms">
                   '.$formStart.'';
             $record['bottom'] = $formEnd . '
-			<div id="error'.$randomId.'" class="bs-form-alert alert alert-danger mt-3 d-none" role="alert"></div>
-			<div id="success'.$randomId.'" class="bs-form-alert alert alert-success mt-3 d-none" role="alert"></div>
+			<div id="error'.$randomId.'" class="bs-form-alert alert alert-danger mt-3 d-none fst-normal" role="alert"></div>
+			<div id="success'.$randomId.'" class="bs-form-alert alert alert-success mt-3 d-none fst-normal" role="alert"></div>
 			</form></div>';
             return (object) $record;
         }
