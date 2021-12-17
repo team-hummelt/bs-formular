@@ -16,7 +16,7 @@ function gutenberg_block_bs_formular_render_filter($attributes) {
 
 	if ($attributes ) {
 		ob_start(); ?>
-        <div class="custom-form-bs-wrapper <?=$attributes['className']?>">
+        <div class="custom-form-bs-wrapper <?= isset($attributes['className']) &&  $attributes['className'] ? $attributes['className'] : ''?>">
        <?php
 		echo do_shortcode('[bs-formular id="'.$attributes['selectedFormular'].'"]');
        ?>

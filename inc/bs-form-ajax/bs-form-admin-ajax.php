@@ -465,7 +465,7 @@ switch ($method) {
 	    $regEx = '@(.+)#@i';
 	    $form = $form->record;
 	    preg_match($regEx, $form->btn_icon, $hit);
-	    isset($hit) ? $faIcon = '<i class="'.$hit[1].'"></i>' : $faIcon = '';
+	    isset($hit[1]) ? $faIcon = '<i class="'.$hit[1].'"></i>' : $faIcon = '';
         $date = explode(' ', $form->created);
         $responseJson->status = true;
         $responseJson->id = $form->id;

@@ -44,6 +44,15 @@ final class BSFormularLicenseExecAPI
                 $msg = 'Version: ' . BS_FORMULAR_PLUGIN_VERSION . ' ungültige Lizenz URL: ' . site_url();
                 $this->apiSystemLog('url_error', $msg);
             }
+
+            if(!get_option('hupa_bs_formular_server_api')){
+                $serverApi = [
+                    'update_aktiv' => true,
+                    'update_type' =>  1,
+                    'update_url' => 'https://github.com/team-hummelt/'. BS_FORMULAR_BASENAME
+                ];
+                update_option('hupa_bs_formular_server_api', $serverApi);
+            }
         }
     }
 
@@ -154,10 +163,37 @@ final class BSFormularLicenseExecAPI
                     'version' => BS_FORMULAR_PLUGIN_VERSION,
                     'type' => 'update_version'
                 ];
-
                 apply_filters('post_scope_resource', $getJob->uri, $body);
                 $status = true;
                 $msg = 'Version aktualisiert.';
+                break;
+            case'10':
+                if($getJob->update_type == '1' || $getJob->update_type == '2'){
+                   $updateUrl =  apply_filters('bs_formular_scope_resource', 'hupa-update/url');
+                   $url = $updateUrl->url;
+                   $update_aktiv = true;
+                } else {
+                    $update_aktiv = false;
+                    $url = '';
+                }
+                $serverApi = [
+                    'update_aktiv' => $update_aktiv,
+                    'update_type' => $getJob->update_type,
+                    'update_url' => $url
+                ];
+
+                update_option('hupa_bs_formular_server_api', $serverApi);
+                $status = true;
+                $msg = 'Update Methode aktualisiert.';
+                break;
+            case'11':
+               $updateUrl = apply_filters('bs_formular_scope_resource', 'hupa-update/url');
+               $updOption = get_option('hupa_bs_formular_server_api');
+               $updOption['update_url'] = $updateUrl->url;
+               update_option('hupa_bs_formular_server_api', $updOption);
+
+                $status = true;
+                $msg = 'URL Token aktualisiert.';
                 break;
             default:
                 $status = false;
@@ -215,6 +251,12 @@ final class BSFormularLicenseExecAPI
 
         $remoteApi = HupaApiPluginBSServerHandle::init();
         $sendErr = $remoteApi->bsFormularPOSTApiResource('error-log', $body);
+    }
+
+    public function get_post_scope_data($scope, $body = []) {
+       $post = HupaApiPluginBSServerHandle::init();
+
+      return $post->bsFormularPOSTApiResource($scope, $body);
     }
 
 } //endClass
