@@ -24,6 +24,11 @@ defined( 'ABSPATH' ) or die();
                     </h5>
                 </div>
                 <hr>
+                <?php
+               $t = apply_filters('bs_formular_scope_resource', 'hupa-update/url');
+
+               //print_r($t);
+                ?>
                 <div class="settings-btn-group d-block d-md-flex flex-wrap">
                     <button data-site="<?= __( 'Overview', 'bs-formular' ) ?>"
                             data-type="table"

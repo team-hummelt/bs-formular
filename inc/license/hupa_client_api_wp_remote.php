@@ -38,6 +38,9 @@ if (!class_exists('HupaApiPluginBSServerHandle')) {
             add_filter('get_bs_formular_api_urls', array($this, 'BsFormularGetApiUrl'));
             //TODO JOB POST Resources Endpoints
             add_filter('bs_formular_scope_resource', array($this, 'bsFormularPOSTApiResource'), 10, 2);
+
+            add_filter('hupa_api_scope_resource', array($this, 'bsServerPOSTApiResource'), 10, 2);
+
             //TODO JOB GET Resources Endpoints
             add_filter('get_scope_resource', array($this, 'BsFormularGETApiResource'), 10, 2);
 
@@ -125,7 +128,53 @@ if (!class_exists('HupaApiPluginBSServerHandle')) {
             return false;
         }
 
-        public function BsFormularGETApiResource($scope, $get = [])
+        public function bsServerPOSTApiResource($scope, $body = false)
+        {
+            $response = wp_remote_post(get_option('hupa_server_url') . $scope, $this->BsFormularApiPostArgs($body));
+            if (is_wp_error($response)) {
+                return $response->get_error_message();
+            }
+            if (is_array($response)) {
+                $query = json_decode($response['body']);
+                if (isset($query->error)) {
+                    if ($this->get_error_message($query)) {
+                        $this->BsFormularGetApiClientCredentials();
+                    }
+                    $response = wp_remote_post(get_option('hupa_server_url') . $scope, $this->BsFormularApiPostArgs($body));
+                    if (is_array($response)) {
+                        return $response['body'];
+                    }
+                } else {
+                    return $response['body'];
+                }
+            }
+            return false;
+        }
+
+        public function BsFormularGETApiResource($scope, $body = false)
+        {
+            $response = wp_remote_get(get_option('hupa_server_url') . $scope, $this->BsFormularGETApiArgs($body));
+            if (is_wp_error($response)) {
+                return $response->get_error_message();
+            }
+            if (is_array($response)) {
+                $query = json_decode($response['body']);
+                if (isset($query->error)) {
+                    if ($this->get_error_message($query)) {
+                        $this->BsFormularGetApiClientCredentials();
+                    }
+                    $response = wp_remote_get(get_option('hupa_server_url') . $scope, $this->BsFormularGETApiArgs($body));
+                    if (is_array($response)) {
+                        return json_decode($response['body']);
+                    }
+                } else {
+                    return $query;
+                }
+            }
+            return false;
+        }
+
+        public function BsFormularGETApiResourceOld($scope, $get = [])
         {
             $error = new stdClass();
             $error->status = false;
@@ -184,11 +233,10 @@ if (!class_exists('HupaApiPluginBSServerHandle')) {
                     'Authorization' => "Bearer $bearerToken"
                 ],
                 'body'          => $body
-
             ];
         }
 
-        private function BsFormularGETApiArgs(): array
+        private function BsFormularGETApiArgs($body = []): array
         {
             $bearerToken = get_option('bs_formular_access_token');
             return [
@@ -202,7 +250,7 @@ if (!class_exists('HupaApiPluginBSServerHandle')) {
                     'Content-Type' => 'application/x-www-form-urlencoded',
                     'Authorization' => "Bearer $bearerToken"
                 ],
-                'body' => []
+                'body'          => $body
             ];
         }
 
@@ -291,3 +339,5 @@ if (!class_exists('HupaApiPluginBSServerHandle')) {
     }
 }
 
+global $bsFormApiSrv;
+$bsFormApiSrv = HupaApiPluginBSServerHandle::init();

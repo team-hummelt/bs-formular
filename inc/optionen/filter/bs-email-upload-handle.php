@@ -198,18 +198,21 @@ final class BsFormularUploadHandle
         $uploadDir = BS_FILE_UPLOAD_DIR . $input_id . DIRECTORY_SEPARATOR;
 
         $x = 0;
-        foreach (scandir($uploadDir) as $file) {
-            if ($file == "." || $file == "..")
-                continue;
-            if (preg_match("/.{9}($file_name)$/i", $file)) {
-                unlink($uploadDir . $file);
-                $x++;
+        if(is_dir($uploadDir)) {
+            foreach (scandir($uploadDir) as $file) {
+                if ($file == "." || $file == "..")
+                    continue;
+                if (preg_match("/.{9}($file_name)$/i", $file)) {
+                    if (is_file($uploadDir . $file)) {
+                        unlink($uploadDir . $file);
+                        $x++;
+                    }
+                }
             }
         }
-
         if (!$x) {
-            $response->msg = 'Datei wurde nicht gefunden!';
-            return $response;
+           // $response->msg = 'Datei wurde nicht gefunden!';
+           // return $response;
         }
 
         $response->status = true;
