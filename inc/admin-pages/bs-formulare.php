@@ -24,11 +24,6 @@ defined( 'ABSPATH' ) or die();
                     </h5>
                 </div>
                 <hr>
-                <?php
-               $t = apply_filters('bs_formular_scope_resource', 'hupa-update/url');
-
-               //print_r($t);
-                ?>
                 <div class="settings-btn-group d-block d-md-flex flex-wrap">
                     <button data-site="<?= __( 'Overview', 'bs-formular' ) ?>"
                             data-type="table"
@@ -528,6 +523,43 @@ defined( 'ABSPATH' ) or die();
                                     Die Datentypen ohne Punkt oder MimeType angeben. Die einzelnen Typen können mit Koma, oder Semikolon getrennt werden.
                                 </span>
 
+                                <hr>
+                                <h5>Javascript Redirect Daten Array</h5>
+                                <div class="form-text">Bei einer Weiterleitung nach dem Absenden des Formulars, können die Formulareingaben auf der ausgewählten Seiten mit Javscript ausgegeben werden.</div>
+                                <hr>
+                                <i class="fa fa-info-circle font-blue"> </i> Die Daten stehen nur nach dem Absenden des Formulars auf der Folgeseite zur Verfügung.
+                                <p>
+                                    <span class="d-block small pt-3">
+                                        Jedes erstellte Formular verfügt über eine eindeutige ID. Die ID wird in der Formularübersicht unter Shortcode angezeigt.<br>
+                                        Die ID vom Shortcode <b class="strong-font-weight">" [bs-formular id="07107b9b03cb"] "</b> ist in diesem Beispiel <b class="text-danger">
+                                        07107b9b03cb.</b>
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="d-block small">
+                                     Alle werte sind in einem Array gespeichert und können mit Javascript abgerufen werden. Um die Eingabewerte anzuzeigen sind folgende Schritte notwendig.
+                                    </span>
+
+                                </p>
+                                <pre class="bg-light p-3 overflow-hidden"><code>
+document.addEventListener("DOMContentLoaded", function (event) {
+     if (<b>bs_form_ajax_obj.bs_form_redirect_data</b><b class="text-danger"> ['07107b9b03cb']</b>) {
+        let <b>testDaten = bs_form_ajax_obj.bs_form_redirect_data</b><b class="text-danger">['07107b9b03cb']</b>;
+        console.log(testDaten);
+    }
+});                   </code> </pre>
+                             <p>
+                                 Die Ausgabe:
+
+                                 <pre  class="bg-light p-3 overflow-hidden">
+[
+    0: "Firma Example",
+    1: "inf@hummelt.com",
+    2: "2021-12-09"
+]
+                                </pre>
+                                Die Daten stehen nur <b class="strong-font-weight text-danger">einmal nach der Weiterleitung</b> zur Verfügung.
+                             </p>
                             </div>
                     </div>
                 </div><!--parent-->

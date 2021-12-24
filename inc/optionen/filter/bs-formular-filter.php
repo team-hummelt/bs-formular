@@ -99,6 +99,9 @@ if (!class_exists('BootstrapFormularFilter')) {
             //E-Mail Template auswahl
             add_filter('bs_form_select_email_template', array($this, 'bsFormSelectEmailTemplate'), 10, 2);
 
+            //TODO UPDATE REDIRECT DATA
+            add_action('bs_form_update_redirect_data', array($this, 'updateRedirectData'));
+
 
             // TODO JOB EMAIL DATEN
             //Set E-Mail Data
@@ -721,8 +724,11 @@ if (!class_exists('BootstrapFormularFilter')) {
                     'class_aktiv' => $record->class_aktiv,
                     'btn_class' => $record->btn_class,
                     'btn_icon' => $record->btn_icon,
+                    'redirect_page' => $record->redirect_page,
+                    'redirect_aktiv' => $record->redirection_aktiv,
+                    'send_redirection_data_aktiv' => $record->send_redirection_data_aktiv,
                 ),
-                array('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s')
+                array('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s','%d','%d','%d')
             );
             $return = new stdClass();
             if (!$wpdb->insert_id) {
@@ -785,20 +791,14 @@ if (!class_exists('BootstrapFormularFilter')) {
                     'label_class' => $record->label_class,
                     'class_aktiv' => $record->class_aktiv,
                     'btn_class' => $record->btn_class,
-                    'btn_icon' => $record->btn_icon
+                    'btn_icon' => $record->btn_icon,
+                    'redirect_page' => $record->redirect_page,
+                    'redirect_aktiv' => $record->redirection_aktiv,
+                    'send_redirection_data_aktiv' => $record->send_redirection_data_aktiv,
                 ),
                 array('id' => $record->id),
                 array(
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%d',
-                    '%s',
-                    '%s'
+                    '%s','%s','%s','%s','%s','%s','%s','%d','%s','%s','%d','%d','%d',
                 ),
                 array('%d')
             );
@@ -1112,6 +1112,24 @@ if (!class_exists('BootstrapFormularFilter')) {
                     $key => $value,
                 ),
                 array('id' => $id),
+                array('%s')
+            );
+        }
+
+        public function updateRedirectData($record)
+        {
+
+            global $wpdb;
+            $table = $wpdb->prefix . $this->table_formulare;
+            $wpdb->update(
+                $table,
+                array(
+                    'redirect_data' => $record->redirect_data
+                ),
+                array('shortcode' => $record->shortcode),
+                array(
+                    '%s'
+                ),
                 array('%s')
             );
         }

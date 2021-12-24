@@ -90,6 +90,11 @@ switch ($method) {
 	    isset($data->button_class) && is_string($data->button_class) ? $button_class = trim($data->button_class) : $button_class = '';
 	    isset($data->btn_icon) && is_string($data->btn_icon) ? $btn_icon = trim($data->btn_icon) : $btn_icon = '';
 
+        //Redirect PAGES
+        isset($data->redirection_aktiv) && is_string($data->redirection_aktiv) ? $redirection_aktiv = 1 : $redirection_aktiv = 0;
+        isset($data->send_redirection_data_aktiv) && is_string($data->send_redirection_data_aktiv) ? $send_redirection_data_aktiv = 1 : $send_redirection_data_aktiv = 0;
+        isset($data->redirect_page) && is_numeric($data->redirect_page) ? $redirect_page = (int)$data->redirect_page : $redirect_page = '';
+
 	    $regEx = '@(.+)#@i';
 	    preg_match($regEx, $btn_icon, $hit);
 	    isset($hit[1]) && $hit[1] ? $faIcon = '<i class="'.$hit[1].'"></i>&nbsp; ' : $faIcon = '';
@@ -386,6 +391,16 @@ switch ($method) {
         $record->layout = esc_textarea($formular);
         $record->form_inputs = serialize($return_arr);
 
+        if($redirection_aktiv && $redirect_page){
+            $record->redirect_page = $redirect_page;
+        } else {
+            $record->redirect_page = 0;
+        }
+
+        $record->redirection_aktiv = $redirection_aktiv;
+        $record->send_redirection_data_aktiv = $send_redirection_data_aktiv;
+
+
         switch ($dbType) {
             case 'insert':
 	            $meldungen = apply_filters('bs_form_get_settings_by_select', 'form_meldungen')->form_meldungen;
@@ -462,6 +477,18 @@ switch ($method) {
             return $responseJson;
         }
 
+        $pages = get_pages();
+        $retArr = [];
+        foreach ($pages as $page) {
+            $ret_item = [
+                'name' => $page->post_title,
+                'id' => $page->ID,
+                'type' => 'page'
+            ];
+            $retArr[] = $ret_item;
+        }
+
+
 	    $regEx = '@(.+)#@i';
 	    $form = $form->record;
 	    preg_match($regEx, $form->btn_icon, $hit);
@@ -473,12 +500,16 @@ switch ($method) {
 	    $responseJson->input_class = $form->input_class;
 	    $responseJson->label_class = $form->label_class;
 	    $responseJson->form_class = $form->form_class;
+        $responseJson->redirect_page =  $form->redirect_page;
+        $responseJson->redirect_aktiv = $form->redirect_aktiv != '0';
+        $responseJson->send_redirection_data_aktiv = $form->send_redirection_data_aktiv != '0';
 	    $responseJson->class_aktiv = (bool) $form->class_aktiv;
 	    $responseJson->btn_class = $form->btn_class;
 	    $responseJson->btn_icon = $form->btn_icon;
 	    $responseJson->faIcon = $faIcon;
         $responseJson->date = $date[0];
         $responseJson->shortcode = $form->shortcode;
+        $responseJson->redirect_pages = $retArr;
         $responseJson->time = $date[1];
         $responseJson->user_layout = html_entity_decode($form->user_layout);
         break;
@@ -841,6 +872,23 @@ switch ($method) {
 		$responseJson->method = $method;
 		$responseJson->status = true;
 		break;
+
+    case'get_pages_select':
+
+        $pages = get_pages();
+        $retArr = [];
+        foreach ($pages as $page) {
+            $ret_item = [
+                'name' => $page->post_title,
+                'id' => $page->ID,
+                'type' => 'page'
+            ];
+            $retArr[] = $ret_item;
+        }
+        $responseJson->status = true;
+        $responseJson->record = $retArr;
+
+        break;
 
     case'formular_data_table':
 

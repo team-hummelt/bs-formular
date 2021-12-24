@@ -68,6 +68,7 @@ if (!$form->status) {
     return $responseJson;
 }
 
+$form->record->redirect_page && $form->record->send_redirection_data_aktiv && $form->record->redirect_aktiv ? $redirect = true : $redirect = false;
 
 $argsData = new stdClass();
 $argsData->shortcode = $record->id;
@@ -82,8 +83,8 @@ foreach ($_POST as $key => $val) {
     if (!$result->status) {
         continue;
     }
-    $validate = apply_filters('bs_formular_validate_message_inputs', $result->record, $val, $form);
 
+    $validate = apply_filters('bs_formular_validate_message_inputs', $result->record, $val, $form);
     if (!$validate->status) {
         $responseJson->status = false;
         $responseJson->msg = $validate->msg;
@@ -123,6 +124,7 @@ $message = str_replace(['<span class="remove">&nbsp;</span>'], ' ', $message);
 
 $sendSelectMail = false;
 $eingabe = '';
+$reDataArr = [];
 foreach ($send_arr as $tmp) {
     if ($tmp->type == 'email-send-select') {
         $sendSelectMail = $tmp->eingabe;
@@ -135,6 +137,15 @@ foreach ($send_arr as $tmp) {
     $msg = $bs_formular_filter->bs_formular_message($record->id,'error_message', true);
     $tmp->eingabe ? $eingabe = $tmp->eingabe : $eingabe = '';
 
+    if($redirect){
+        if($tmp->type != 'password'):
+            $lbl =  str_replace(['[',']'],'', $tmp->user_value);
+              $re_data_item = [
+                  $eingabe
+            ];
+            $reDataArr[] = $eingabe;
+        endif;
+    }
      switch ($form->email_template) {
          case '1':
              $ausgabe = '<b>' . $tmp->label . ':</b> ' . $eingabe . '<br /><br /><hr />';
@@ -145,6 +156,19 @@ foreach ($send_arr as $tmp) {
              break;
          default:
      }
+}
+
+
+if($reDataArr){
+    $saveRedirectData = [
+        $record->id => $reDataArr
+    ];
+    $saveRedirectData = json_encode($saveRedirectData);
+    $updData = [
+        'shortcode' => $record->id,
+        'redirect_data' => $saveRedirectData
+    ];
+    apply_filters('bs_form_update_redirect_data', (object) $updData);
 }
 
 switch ($form->email_template) {
@@ -228,6 +252,17 @@ if (get_option('email_empfang_aktiv')) {
 }
 
 $msg = $bs_formular_filter->bs_formular_message($record->id,'success_message', true);
+
+$responseJson->redirect = false;
+if($form->redirect_aktiv && $form->redirect_page) {
+    $responseJson->redirect = true;
+    global $post;
+    $post = get_post($form->redirect_page);
+    if(isset($post)){
+        $responseJson->redirect_uri = get_the_permalink();
+    }
+}
+
 $responseJson->status = true;
 $responseJson->show_success = true;
 $responseJson->if_file = true;

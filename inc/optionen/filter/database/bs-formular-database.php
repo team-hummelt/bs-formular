@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) or die();
 			$charset_collate = $wpdb->get_charset_collate();
 			$sql = "CREATE TABLE $table_name (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
-        shortcode varchar(14) NOT NULL UNIQUE,
+        shortcode varchar(14) NOT NULL UNIQUE, 
         bezeichnung varchar(50) NOT NULL,
         input_class varchar(64) NULL,
         form_class varchar(64) NULL,
@@ -19,6 +19,10 @@ defined( 'ABSPATH' ) or die();
         btn_icon varchar(64) NULL,
         label_class varchar(64) NULL,
         class_aktiv tinyint(1) NOT NULL DEFAULT 0,
+        redirect_aktiv tinyint(1) NOT NULL DEFAULT 0,
+        send_redirection_data_aktiv tinyint(1) NOT NULL DEFAULT 0,
+        redirect_page int(12) NOT NULL DEFAULT 0,
+        redirect_data TEXT NULL,
         layout text NOT NULL,
         inputs text NOT NULL,
         user_layout text NOT NULL,

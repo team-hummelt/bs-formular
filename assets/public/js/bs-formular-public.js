@@ -41,6 +41,13 @@
         })
 })()
 
+document.addEventListener("DOMContentLoaded", function (event) {
+    if (bs_form_ajax_obj.bs_form_redirect_data['07107b9b03cb']) {
+        let testDaten = bs_form_ajax_obj.bs_form_redirect_data['07107b9b03cb'];
+      //  console.log(testDaten);
+    }
+});
+
 let closeAlert = document.querySelectorAll('.bs-form-alert');
 if (closeAlert) {
     let alertNode = Array.prototype.slice.call(closeAlert, 0);
@@ -115,6 +122,14 @@ function send_xhr_bs_forms_data(data) {
             sendMsg.classList.remove('show-sending');
 
             if (data.status) {
+
+                if(data.redirect){
+                    if(data.redirect_uri) {
+                        location.href = data.redirect_uri;
+                        return false;
+                    }
+                }
+
                 if (data.show_success) {
                     err.classList.add('d-none');
                     success.parentNode.firstChild.remove();
