@@ -525,7 +525,7 @@ defined( 'ABSPATH' ) or die();
 
                                 <hr>
                                 <h5>Javascript Redirect Daten Array</h5>
-                                <div class="form-text">Bei einer Weiterleitung nach dem Absenden des Formulars, können die Formulareingaben auf der ausgewählten Seiten mit Javscript ausgegeben werden.</div>
+                                <div class="form-text">Bei einer Weiterleitung nach dem Absenden des Formulars, können die Formulareingaben auf der ausgewählten Seite mit Javascript ausgegeben werden.</div>
                                 <hr>
                                 <i class="fa fa-info-circle font-blue"> </i> Die Daten stehen nur nach dem Absenden des Formulars auf der Folgeseite zur Verfügung.
                                 <p>
@@ -537,20 +537,19 @@ defined( 'ABSPATH' ) or die();
                                 </p>
                                 <p>
                                     <span class="d-block small">
-                                     Alle werte sind in einem Array gespeichert und können mit Javascript abgerufen werden. Um die Eingabewerte anzuzeigen sind folgende Schritte notwendig.
+                                     Alle Werte sind in einem Array gespeichert und können mit Javascript abgerufen werden. Um die Eingabewerte anzuzeigen sind folgende Schritte notwendig.
                                     </span>
 
                                 </p>
                                 <pre class="bg-light p-3 overflow-hidden"><code>
 document.addEventListener("DOMContentLoaded", function (event) {
-     if (<b>bs_form_ajax_obj.bs_form_redirect_data</b><b class="text-danger"> ['07107b9b03cb']</b>) {
+     if (<b>bs_form_ajax_obj.bs_form_redirect_data</b><b class="text-danger">['07107b9b03cb']</b>) {
         let <b>testDaten = bs_form_ajax_obj.bs_form_redirect_data</b><b class="text-danger">['07107b9b03cb']</b>;
         console.log(testDaten);
     }
 });                   </code> </pre>
                              <p>
                                  Die Ausgabe:
-
                                  <pre  class="bg-light p-3 overflow-hidden">
 [
     0: "Firma Example",
