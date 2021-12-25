@@ -13,7 +13,6 @@ defined('ABSPATH') or die();
  * @package Hummelt & Partner WordPress Theme
  * Copyright 2021, Jens Wiecker
  * License: Commercial - goto https://www.hummelt-werbeagentur.de/
- * https://www.hummelt-werbeagentur.de/
  */
 
 if (!class_exists('BootstrapFormularFilter')) {
@@ -98,6 +97,9 @@ if (!class_exists('BootstrapFormularFilter')) {
             add_action('bs_form_delete_file_folder', array($this, 'bsFormDeleteFileFolder'));
             //E-Mail Template auswahl
             add_filter('bs_form_select_email_template', array($this, 'bsFormSelectEmailTemplate'), 10, 2);
+
+            //TODO UPDATE REDIRECT DATA
+            add_action('bs_form_update_redirect_data', array($this, 'updateRedirectData'));
 
 
             // TODO JOB EMAIL DATEN
@@ -511,7 +513,14 @@ if (!class_exists('BootstrapFormularFilter')) {
             }
         }
 
-        public function bs_form_string_replace_limit($search, $replace, $string, $limit = 1)
+        /**
+         * @param $search
+         * @param $replace
+         * @param $string
+         * @param int $limit
+         * @return mixed
+         */
+        public function bs_form_string_replace_limit($search, $replace, $string, int $limit = 1): string
         {
             $pos = strpos($string, $search);
             if ($pos === false) {
@@ -529,6 +538,10 @@ if (!class_exists('BootstrapFormularFilter')) {
             return $string;
         }
 
+        /**
+         * @param $input
+         * @param $id
+         */
         public function updateMessageEmailTxt($input, $id)
         {
 
@@ -588,6 +601,9 @@ if (!class_exists('BootstrapFormularFilter')) {
             $this->update_db_message_text($record);
         }
 
+        /**
+         * @param $record
+         */
         public function update_db_message_text($record)
         {
             global $wpdb;
@@ -607,7 +623,13 @@ if (!class_exists('BootstrapFormularFilter')) {
             );
         }
 
-        public function bsFormGetFormularMessageByArgs($args, $fetchMethod = true, $col = false): object
+        /**
+         * @param $args
+         * @param bool $fetchMethod
+         * @param null $col
+         * @return object
+         */
+        public function bsFormGetFormularMessageByArgs($args, bool $fetchMethod = true, $col = NULL): object
         {
             global $wpdb;
             $return = new stdClass();
@@ -629,7 +651,13 @@ if (!class_exists('BootstrapFormularFilter')) {
         }
 
 
-        public function bsFormGetFormulareByArgs($args, $fetchMethod = true, $col = false): object
+        /**
+         * @param $args
+         * @param bool $fetchMethod
+         * @param string|null $col
+         * @return object
+         */
+        public function bsFormGetFormulareByArgs($args, bool $fetchMethod = true, string $col = NULL): object
         {
             global $wpdb;
             $return = new stdClass();
@@ -650,6 +678,10 @@ if (!class_exists('BootstrapFormularFilter')) {
             return $return;
         }
 
+        /**
+         * @param $args
+         * @return object
+         */
         public function bsFormGetFormulareInputsById($args): object
         {
             global $wpdb;
@@ -676,7 +708,12 @@ if (!class_exists('BootstrapFormularFilter')) {
         }
 
 
-        public function bsFormFormularDataByJoin($args, $fetchMethod = true): object
+        /**
+         * @param $args
+         * @param bool $fetchMethod
+         * @return object
+         */
+        public function bsFormFormularDataByJoin($args, bool $fetchMethod = true): object
         {
             global $wpdb;
             $return = new stdClass();
@@ -702,6 +739,10 @@ if (!class_exists('BootstrapFormularFilter')) {
             return $return;
         }
 
+        /**
+         * @param $record
+         * @return object
+         */
         public function bsFormSetFormular($record): object
         {
             global $wpdb;
@@ -721,8 +762,11 @@ if (!class_exists('BootstrapFormularFilter')) {
                     'class_aktiv' => $record->class_aktiv,
                     'btn_class' => $record->btn_class,
                     'btn_icon' => $record->btn_icon,
+                    'redirect_page' => $record->redirect_page,
+                    'redirect_aktiv' => $record->redirection_aktiv,
+                    'send_redirection_data_aktiv' => $record->send_redirection_data_aktiv,
                 ),
-                array('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s')
+                array('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s','%d','%d','%d')
             );
             $return = new stdClass();
             if (!$wpdb->insert_id) {
@@ -739,6 +783,10 @@ if (!class_exists('BootstrapFormularFilter')) {
             return $return;
         }
 
+        /**
+         * @param $record
+         * @return object
+         */
         public function setMessageFormular($record): object
         {
             global $wpdb;
@@ -769,6 +817,9 @@ if (!class_exists('BootstrapFormularFilter')) {
             return $return;
         }
 
+        /**
+         * @param $record
+         */
         public function updateBsFormular($record): void
         {
             global $wpdb;
@@ -785,25 +836,22 @@ if (!class_exists('BootstrapFormularFilter')) {
                     'label_class' => $record->label_class,
                     'class_aktiv' => $record->class_aktiv,
                     'btn_class' => $record->btn_class,
-                    'btn_icon' => $record->btn_icon
+                    'btn_icon' => $record->btn_icon,
+                    'redirect_page' => $record->redirect_page,
+                    'redirect_aktiv' => $record->redirection_aktiv,
+                    'send_redirection_data_aktiv' => $record->send_redirection_data_aktiv,
                 ),
                 array('id' => $record->id),
                 array(
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%d',
-                    '%s',
-                    '%s'
+                    '%s','%s','%s','%s','%s','%s','%s','%d','%s','%s','%d','%d','%d',
                 ),
                 array('%d')
             );
         }
 
+        /**
+         * @param $record
+         */
         public function updateFormMessage($record): void
         {
             global $wpdb;
@@ -829,6 +877,9 @@ if (!class_exists('BootstrapFormularFilter')) {
             );
         }
 
+        /**
+         * @param $record
+         */
         public function updateFormMeldungen($record): void
         {
             global $wpdb;
@@ -846,6 +897,9 @@ if (!class_exists('BootstrapFormularFilter')) {
             );
         }
 
+        /**
+         * @param $record
+         */
         public function updateFormAutoMessage($record): void
         {
             global $wpdb;
@@ -881,6 +935,9 @@ if (!class_exists('BootstrapFormularFilter')) {
             );
         }
 
+        /**
+         * @param $id
+         */
         public function deleteBsFormular($id): void
         {
             global $wpdb;
@@ -903,6 +960,9 @@ if (!class_exists('BootstrapFormularFilter')) {
             );
         }
 
+        /**
+         * @param $id
+         */
         public function deleteFormularEmail($id): void
         {
             global $wpdb;
@@ -934,7 +994,14 @@ if (!class_exists('BootstrapFormularFilter')) {
             return $str;
         }
 
-        public function getBSFormGenerateRandomId($passwordlength = 12, $numNonAlpha = 1, $numNumberChars = 4, $useCapitalLetter = true): string
+        /**
+         * @param int $passwordlength
+         * @param int $numNonAlpha
+         * @param int $numNumberChars
+         * @param bool $useCapitalLetter
+         * @return string
+         */
+        public function getBSFormGenerateRandomId(int $passwordlength = 12, int $numNonAlpha = 1, int $numNumberChars = 4, bool $useCapitalLetter = true): string
         {
             $numberChars = '123456789';
             //$specialChars = '!$&?*-:.,+@_';
@@ -1112,6 +1179,24 @@ if (!class_exists('BootstrapFormularFilter')) {
                     $key => $value,
                 ),
                 array('id' => $id),
+                array('%s')
+            );
+        }
+
+        public function updateRedirectData($record)
+        {
+
+            global $wpdb;
+            $table = $wpdb->prefix . $this->table_formulare;
+            $wpdb->update(
+                $table,
+                array(
+                    'redirect_data' => $record->redirect_data
+                ),
+                array('shortcode' => $record->shortcode),
+                array(
+                    '%s'
+                ),
                 array('%s')
             );
         }

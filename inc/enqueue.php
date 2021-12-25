@@ -12,11 +12,15 @@ defined( 'ABSPATH' ) or die();
 if ( ! function_exists( 'bootstrap_formular_public_style' ) ) {
     function bootstrap_formular_public_style() {
 
-
         $ifHupaStarter = wp_get_theme('hupa-starter');
         if (!$ifHupaStarter->exists()) {
+
+            $modificated = date( 'YmdHi', filemtime( BS_FORMULAR_PLUGIN_DIR . '/assets/admin/css/font-awesome.css' ) );
+            wp_enqueue_style( 'bootstrap-formular-font-awesome', BS_FORMULAR_PLUGIN_URL . '/assets/admin/css/font-awesome.css', array(),$modificated , '' );
+
             $modificated = date( 'YmdHi', filemtime( BS_FORMULAR_PLUGIN_DIR . '/assets/public/css/bs/bootstrap.min.css' ) );
             wp_enqueue_style( 'bootstrap-formular-namespace', BS_FORMULAR_PLUGIN_URL . '/assets/public/css/bs/bootstrap.min.css', array(),$modificated , '' );
+
             $modificated = date('YmdHi', filemtime(BS_FORMULAR_PLUGIN_DIR . '/assets/public/js/bs/bootstrap.bundle.min.js'));
             wp_enqueue_script( 'bootstrap-bs-formular', BS_FORMULAR_PLUGIN_URL . '/assets/public/js/bs/bootstrap.bundle.min.js', array(),$modificated, true );
         }

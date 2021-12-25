@@ -165,7 +165,8 @@ jQuery(document).ready(function ($) {
                         $('#TableFormulare').DataTable().draw();
                         break;
                     case'formular':
-                        render_bs_formular_edit_template(false);
+                        get_bs_form_select_pages();
+
                         break;
                     case'posteingang':
                         load_email_table_data();
@@ -219,6 +220,27 @@ jQuery(document).ready(function ($) {
             }
         });
     });
+
+
+    /**==========================================================
+     ================ Load REDIRECT PAGES SELECT ================
+     ============================================================
+     */
+
+    function get_bs_form_select_pages() {
+
+        $.post(bs_form_ajax_obj.ajax_url, {
+            '_ajax_nonce': bs_form_ajax_obj.nonce,
+            'action': 'BsFormularHandle',
+            method: 'get_pages_select',
+        }, function (data) {
+            if (data.status) {
+                render_bs_formular_edit_template(false, data.record);
+            }
+        });
+
+
+    }
 
     /**=======================================================
      ================ Load Formular Meldungen ================
@@ -333,14 +355,14 @@ jQuery(document).ready(function ($) {
             id: id
         }, function (data) {
             if (data.status) {
-                render_bs_formular_edit_template(data);
+                render_bs_formular_edit_template(data, data.redirect_pages);
             } else {
                 warning_message(data.msg);
             }
         });
     }
 
-    function render_bs_formular_edit_template(data) {
+    function render_bs_formular_edit_template(data, select=false) {
         let html = `
            <div class="border rounded mt-1 mb-3 shadow-sm p-3 bg-custom-gray" style="min-height: 50vh">
            <h5><i class="font-blue fa fa-wordpress"></i>&nbsp;Formular ${data ? 'bearbeiten' : 'erstellen'}</h5>
@@ -442,6 +464,7 @@ jQuery(document).ready(function ($) {
                    <hr>
                    <button type="button" data-parent="collapseDivClass" data-bs-toggle="collapse" data-bs-target="#collapseDivClass"  class="btn-form-settings btn btn-blue-outline btn-sm"> Extra CSS Settings</button>
                    <button type="button" data-parent="collapseButtonSettings" data-bs-toggle="collapse" data-bs-target="#collapseButtonSettings"  class="btn-form-settings btn btn-blue-outline btn-sm"> Button Settings</button>
+                   <button type="button" data-parent="collapseFormularSettings" data-bs-toggle="collapse" data-bs-target="#collapseFormularSettings"  class="btn-form-settings btn btn-blue-outline btn-sm"> Formular Settings</button>
                    <div id="settings_parent_wrapper">
                    <div class="collapse" id="collapseDivClass" data-bs-parent="#settings_parent_wrapper">
                    <hr>
@@ -502,6 +525,45 @@ jQuery(document).ready(function ($) {
                         <input id="iconInput" value="${data && data.btn_icon ? data.btn_icon : ''}" type="hidden" name="btn_icon">
                      </div>
                  </div><!--butoon collapse-->
+                 
+                 <div class="collapse" data-bs-parent="#settings_parent_wrapper" id="collapseFormularSettings">
+                 <hr>
+                <h6>Weiterleitung nach dem Senden des Formulars</h6>
+                
+                <div class="form-check form-switch mb-3">
+                <input onclick="this.blur()" class="form-check-input" name="redirection_aktiv" 
+                type="checkbox" data-bs-toggle="collapse" href="#collapseRedirectSettings" 
+                data-field="inputDivClass" id="checkRedirection" ${data && data.redirect_aktiv ? 'checked' : ''}>
+                <label class="form-check-label" for="checkRedirection"> Redirection aktiv</label>
+                <div class="form-text">Bei aktiver Weiterleitung muss eine Seite ausgewählt werden, die nach dem Absenden aufgerufen werden soll.</div>
+                </div>
+                    <div class="collapse ${data && data.redirect_aktiv ? 'show' : ''}" id="collapseRedirectSettings">
+                        <div class="card p-3">
+                        <label for="selectRedirectPage" class="form-label">Redirect Page</label>
+                        <select onchange="this.blur()" id="selectRedirectPage" name="redirect_page" class="form-control">
+                           <option>auswählen...</option>`;
+                             $.each(select, function (key, val) {
+                                 let sel = '';
+                                 data.redirect_page == val.id ? sel = 'selected' : sel = '';
+                                  html +=`<option value="${val.id}" ${sel}>${val.name}</option>`;
+                                });
+
+                        html += `</select>
+                        </div>
+                        
+                        <div class="form-check form-switch my-3">
+                        <input onclick="this.blur()" class="form-check-input" name="send_redirection_data_aktiv" 
+                        type="checkbox" id="checkRedirectionData" ${data && data.send_redirection_data_aktiv ? 'checked' : ''}>
+                        <label class="form-check-label" for="checkRedirectionData"> Formulardaten an Seite übergeben</label>
+                        <div class="form-text">Es können Daten an die Redirect-Page übergeben werden. <span class="text-danger"> 
+                        Passwörter und Uploads werden nicht weitergeleitet.</span> 
+                        <p>Die Daten stehen unter dem Javascript Object <code>bs_form_ajax_obj.bs_form_redirect_data['shortcode']</code> zur Verfügung.</p>
+                        Ein Bespiel für die Ausgabe eines <i class="text-danger">"redirect_data Objekts"</i> ist unter " <i class="fa fa-life-ring"></i> Hilfe " zu finden.
+                        </div>
+                        </div>
+                    </div>
+                   
+                </div><!--collapse-->
 
                  </div><!--parent-wrapper-->
                <hr>
@@ -527,7 +589,7 @@ jQuery(document).ready(function ($) {
     }
 
     $(document).on('click', '#checkDivColappse', function () {
-        $(this).blur();
+        $(this).trigger('blur');
         let field = $(this).attr('data-field');
         $('#' + field).attr('disabled', function (_, attr) {
             return !attr
@@ -607,10 +669,10 @@ jQuery(document).ready(function ($) {
             <label class="form-label" for="InputTemplateSelect">E-Mail Template</label>
             <select onchange="this.blur()" name="email_template" value=""
                    class="form-control" id="InputTemplateSelect"> `;
-             let sel = '';
-             for (const [key, val] of Object.entries(data.select)) {
-                 val.id == data.select_id ? sel = ' selected' : sel = '';
-                 html += `<option value="${val.id}" ${sel}>${val.bezeichnung}</option>`;
+        let sel = '';
+        for (const [key, val] of Object.entries(data.select)) {
+            val.id == data.select_id ? sel = ' selected' : sel = '';
+            html += `<option value="${val.id}" ${sel}>${val.bezeichnung}</option>`;
         }
         html += `
             </select>       
@@ -722,7 +784,10 @@ jQuery(document).ready(function ($) {
             menu: {
                 file: {title: 'File', items: 'newdocument restoredraft | preview | print '},
                 edit: {title: 'Edit', items: 'undo redo | cut copy paste | selectall | searchreplace'},
-                view: {title: 'View', items: 'code | visualaid visualchars visualblocks | spellchecker | preview fullscreen'},
+                view: {
+                    title: 'View',
+                    items: 'code | visualaid visualchars visualblocks | spellchecker | preview fullscreen'
+                },
                 insert: {
                     title: 'Insert',
                     items: 'template link codesample inserttable | charmap emoticons hr | pagebreak nonbreaking anchor toc | insertdatetime'
@@ -742,7 +807,7 @@ jQuery(document).ready(function ($) {
               code | preview | fullscreen`,
             //toolbar2: 'alignleft aligncenter alignright',
 
-             quickbars_selection_toolbar: `bold italic | forecolor backcolor | quicklink | alignleft aligncenter 
+            quickbars_selection_toolbar: `bold italic | forecolor backcolor | quicklink | alignleft aligncenter 
              alignright alignjustify | blockformats | h1 h2 h3 h4 h5 h6 `,
 
         });
@@ -915,7 +980,7 @@ jQuery(document).ready(function ($) {
             let type = button.getAttribute('data-bs-type');
             let modalTitle = deleteModal.querySelector('.modal-title');
             let modalBodyMsg = deleteModal.querySelector('.modal-body');
-            switch (method){
+            switch (method) {
                 case 'delete_bs_formular':
                     formType = 'Formular';
                     break;

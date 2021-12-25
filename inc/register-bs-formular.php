@@ -174,19 +174,39 @@ final class RegisterBsFormularPlugin
             'expects' => __('Expects {allButLastType} or {lastType}', 'bs-formular'),
         ];
 
+        $redirectData = [];
+        global $post;
+        $formData = apply_filters('get_formulare_by_args','WHERE redirect_page='.$post->ID.'', false);
+        if($formData->status) {
+            $data = $formData->record;
+            if(isset($data->redirect_data) && $data->redirect_data) {
+                $redirectData = json_decode($data->redirect_data);
+            }
+        }
+
         $title_nonce = wp_create_nonce('bs_form_public_handle');
         wp_register_script('bs-formular-public-ajax-script', '', [], '', true);
         wp_enqueue_script('bs-formular-public-ajax-script');
         wp_localize_script('bs-formular-public-ajax-script', 'bs_form_ajax_obj', array(
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => $title_nonce,
+            'bs_form_redirect_data' => $redirectData,
             'file_size' => get_option('file_max_size') * 1024 * 1024,
+            'post_id' => $post->ID,
             'file_size_mb' => get_option('file_max_size'),
             'file_size_all_mb' => get_option('file_max_all_size'),
             'max_files' => get_option('upload_max_files'),
             'assets_url' => BS_FORMULAR_PLUGIN_ASSETS_URL,
             'language' => $fileLang
         ));
+
+        if($formData->status) {
+            $updData = [
+                'shortcode' => $formData->record->shortcode,
+                'redirect_data' => ''
+            ];
+            apply_filters('bs_form_update_redirect_data', (object) $updData);
+        }
     }
 
     public function prefix_ajax_BsFormularHandle(): void
