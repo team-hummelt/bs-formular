@@ -791,6 +791,19 @@ switch ($method) {
 
 		break;
 
+    case'update_bs_formular_settings':
+        $user_role = filter_var($data['user_role'], FILTER_SANITIZE_STRING);
+        if (!$user_role) {
+            $responseJson->status = false;
+            $responseJson->msg = 'Ein Fehler ist aufgetreten!';
+            return $responseJson;
+        }
+        update_option('bs_formular_user_role', $user_role);
+        $responseJson->status = true;
+        $responseJson->spinner = true;
+        $responseJson->msg = date('H:i:s', current_time('timestamp'));
+        break;
+
 	case 'smtp_check':
 		$smtpCheck = apply_filters('bs_form_get_smtp_test', false);
 		$responseJson->status = $smtpCheck['status'];

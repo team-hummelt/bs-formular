@@ -39,3 +39,5 @@ delete_option("bs_formular_client_secret");
 delete_option("bs_formular_message");
 delete_option("bs_formular_access_token");
 
+delete_option("bs_formular_user_role");
+

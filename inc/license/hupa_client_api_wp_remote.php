@@ -91,7 +91,7 @@ if (!class_exists('HupaApiPluginBSServerHandle')) {
             }
 
             $apiData = json_decode($response['body']);
-            if ($apiData->error) {
+            if (isset($apiData->error)) {
                 $apiData->status = false;
                 return $apiData;
             }

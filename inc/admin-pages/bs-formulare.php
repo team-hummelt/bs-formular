@@ -61,10 +61,18 @@ defined( 'ABSPATH' ) or die();
 						<?= __( 'E-Mail Settings', 'bs-formular' ) ?>
                     </button>
 
+                    <button data-site="<?= __( 'Settings', 'bs-formular' ) ?>"
+                            type="button"
+                            data-bs-toggle="collapse" data-bs-target="#collapseSettingsSite"
+                            class="btn-formular-collapse btn btn-hupa btn-outline-secondary btn-sm ms-auto"><i
+                                class="fa fa-cogs"></i>&nbsp;
+                        <?= __( 'Settings', 'bs-formular' ) ?>
+                    </button>
+
                     <button data-site="<?= __( 'Examples', 'bs-formular' ) ?>"
                             type="button"
                             data-bs-toggle="collapse" data-bs-target="#collapseHelpSite"
-                            class="btn-formular-collapse btn btn-hupa btn-outline-secondary btn-sm ms-auto"><i
+                            class="btn-formular-collapse btn btn-hupa btn-outline-secondary btn-sm"><i
                                 class="fa fa-life-ring"></i>&nbsp;
 						<?= __( 'Help', 'bs-formular' ) ?>
                     </button>
@@ -125,6 +133,48 @@ defined( 'ABSPATH' ) or die();
                     <!--//TODO JOB POSTEINGANG SITE-->
                     <div class="collapse" id="formPostEingangCollapse"
                          data-bs-parent="#formular_display_data">
+                    </div>
+
+
+                    <!--//TODO JOB SETTINGS SITE-->
+                    <div class="collapse" id="collapseSettingsSite"
+                         data-bs-parent="#formular_display_data">
+                        <div class="border rounded mt-1 mb-3 shadow-sm p-3 bg-custom-gray" style="max-height: 55vh">
+                            <div class="d-flex align-items-center">
+                                <h5 class="card-title">
+                                    <i class="font-blue fa fa-wordpress"></i>&nbsp;<?= __( 'WordPress Settings', 'bs-formular' ) ?>
+                                </h5>
+                                <div class="ajax-status-spinner ms-auto d-inline-block mb-2 pe-2"></div>
+                            </div>
+                            <hr class="mt-1">
+                            <h6>
+                                <i class="font-blue fa fa-arrow-circle-down"></i>
+                                <?= esc_html__('Minimum requirement for using this Plugin', 'bs-formular') ?>
+                            </h6>
+                            <hr>
+                            <form class="send-bs-form-auto-save-ajax-formular">
+                                <input type="hidden" name="method" value="update_bs_formular_settings">
+                                <div class="row  g-2" style="min-height: 55vh">
+                                    <div class="col-xl-6 col">
+                                        <div class="mb-3">
+                                            <label for="capabilitySelect"
+                                                   class="form-label mb-1 strong-font-weight"><?= esc_html__('User Role', 'bs-formular') ?>
+                                            </label>
+                                            <select name="user_role"
+                                                    id="capabilitySelect" class="form-select no-blur">
+                                                <?php
+                                                $select = apply_filters('bs_formular_user_roles_select', '');
+                                                foreach ($select as $key => $val):
+                                                    $key == get_option('bs_formular_user_role') ? $sel = 'selected' : $sel = ''; ?>
+                                                    <option value="<?= $key ?>" <?= $sel ?>><?= $val ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
                     </div>
 
                     <!--//TODO JOB WARNING SMTP SETTINGS-->
