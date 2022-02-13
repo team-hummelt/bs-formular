@@ -34,6 +34,10 @@ class Bs_Formular_Activator {
         if(!get_option('bs_formular_product_install_authorize')){
             unlink($register);
         }
+
+        if(!get_option('bs_formular_user_role')){
+            update_option('bs_formular_user_role', 'manage_options');
+        }
 		delete_option("bs_formular_product_install_authorize");
 		delete_option("bs_formular_client_id");
 		delete_option("bs_formular_client_secret");

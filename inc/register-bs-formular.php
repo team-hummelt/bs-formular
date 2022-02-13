@@ -105,7 +105,7 @@ final class RegisterBsFormularPlugin
         $hook_suffix = add_menu_page(
             __('Formulare', 'bs-formular'),
             __('Formulare', 'bs-formular'),
-            'manage_options',
+            get_option('bs_formular_user_role'),
             'bs-formular',
             array($this, 'admin_bs_formular_page'),
             'dashicons-email-alt', 7

@@ -70,6 +70,12 @@ body .wp-bs-starter-wrapper {
   z-index: 100000!important;
 }
 
+.no-blur:focus, .no-blur:active, .no-blur:focus {
+  outline: none !important;
+  box-shadow: none!important;
+  overflow: hidden!important;
+}
+
 .colorPickers {
   /*display: flex;
   flex-direction: row-reverse;
@@ -202,7 +208,6 @@ background-color: #fdfdfd!important;
     opacity: 1;
     -webkit-animation: fadeinOpacity 1s ease-in-out;
     -moz-animation: fadeinOpacity 1s ease-in-out;
-    -ms-animation: fadeinOpacity 1s ease-in-out;
     -o-animation: fadeinOpacity 1s ease-in-out;
     animation: fadeinOpacity 1s ease-in-out;
   }

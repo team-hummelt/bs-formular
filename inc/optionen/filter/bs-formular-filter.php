@@ -44,28 +44,29 @@ if (!class_exists('BootstrapFormularFilter')) {
         {
             //SMTP FILTER
             //add_filter('wp_mail_smtp_custom_options', array($this, 'bs_formular_mailer_smtp_options'));
-            //TODO CREATE FORMULAR FELDER
+            //TODO CREATE FORMULAR FELDER //JOB CHECK
             add_filter('create_formular_fields', array($this, 'bs_form_create_formular_fields'));
+            //JOB CHECK
             add_filter('string_replace_limit', array($this, 'bs_form_string_replace_limit'), 10, 4);
-            //GET Formulare
+            //GET Formulare JOB CHECK
             add_filter('get_formulare_by_args', array($this, 'bsFormGetFormulareByArgs'), 10, 3);
-            //GET Formular Message
+            //GET Formular Message //JOB Check
             add_filter('get_formular_message_by_args', array($this, 'bsFormGetFormularMessageByArgs'), 10, 3);
-            // Formular Speichern
+            // Formular Speichern //JOB CHECK
             add_filter('set_bs_formular', array($this, 'bsFormSetFormular'));
-            // Formular Message Speichern
+            // Formular Message Speichern // JOB CHECK
             add_filter('set_bs_message_formular', array($this, 'setMessageFormular'));
-            // Formular Update
+            // Formular Update //JOB CHECK
             add_filter('update_bs_formular', array($this, 'updateBsFormular'));
-            // Formular Send Message Update
+            // Formular Send Message Update //JOB CHECK
             add_filter('update_bs_msg_formular', array($this, 'updateFormMessage'));
-            // Formular löschen
+            // Formular löschen // JOB CHECK
             add_filter('delete_bs_formular', array($this, 'deleteBsFormular'));
-            // Formular E-Mail Message Update
+            // Formular E-Mail Message Update //JOB CHECK
             add_filter('update_form_message_email_txt', array($this, 'updateMessageEmailTxt'), 10, 2);
-            // Formular Auto Send Message Update
+            // Formular Auto Send Message Update // JOB CHECK
             add_filter('update_form_auto_message', array($this, 'updateFormAutoMessage'), 10, 2);
-            // Helper ArrayToObject
+            // Helper ArrayToObject // JOB CHECK
             add_filter('bs_array_to_object', array($this, 'bsArrayToObject'));
             // Helper Random String
             add_filter('bs_get_random_string', array($this, 'bs_load_random_string'));
@@ -73,41 +74,43 @@ if (!class_exists('BootstrapFormularFilter')) {
             add_filter('get_bs_form_generate_random', array($this, 'getBSFormGenerateRandomId'), 10, 4);
             // Set Default Settings
             add_filter('bs_form_set_default_settings', array($this, 'bsFormSetDefaultSettings'));
-            // Get Settings by Select
+            // Get Settings by Select // JOB CHECK
             add_filter('bs_form_get_settings_by_select', array($this, 'bsFormGetFormularSettingsByArgs'));
-            // Get Default Settings (JSon String)
+            // JOB CHECK Get Default Settings (JSon String)
             add_filter('bs_form_default_settings', array($this, 'bsFormDefaultSettings'), 10, 2);
-            // UPDATE Default Settings
+            // UPDATE Default Settings //JOB CHECK
             add_filter('bs_update_default_settings', array($this, 'updateDefaultSettings'), 10, 2);
-            // Update Formular Meldungen
+            // Update Formular Meldungen // JOB CHECK
             add_filter('update_bs_form_meldungen', array($this, 'updateFormMeldungen'));
-            // Get Formulardaten by JOIN
+            // Get Formulardaten by JOIN //JOB CHECK
             add_filter('bs_form_formular_data_by_join', array($this, 'bsFormFormularDataByJoin'), 10, 2);
-            //TODO VALIDATE FORMULAR SEND MESSAGE
+            // TODO VALIDATE FORMULAR SEND MESSAGE JOB CHECK
             add_filter('bs_formular_validate_message_inputs', array($this, 'bsFormularValidateMessageInputs'), 10, 3);
-            //TODO Get Input By ID
+            //TODO Get Input By ID //JOB CHECK
             add_filter('get_formular_inputs_by_id', array($this, 'bsFormGetFormulareInputsById'));
-            // TODO VALIDATE formular Input Cgeckbox / Radio
+            // TODO VALIDATE formular Input Checkbox / Radio JOB Check
             add_filter('validate_formular_radio_checkbox', array($this, 'validateFormularRadioCheckbox'), 10, 3);
-            //Todo Create File multi Upload
+            //Todo Create File multi Upload // JOB CHECK
             add_filter('re_array_files', array($this, 'reArrayFiles'));
-            // TODO DESTROY DIR
+            // TODO DESTROY DIR //JOB CHECK
             add_action('bs_form_destroy_dir', array($this, 'bsFormDestroyDir'));
-            // TODO Delete File Input Folders
+            // TODO Delete File Input Folders JOB CHECK
             add_action('bs_form_delete_file_folder', array($this, 'bsFormDeleteFileFolder'));
-            //E-Mail Template auswahl
+            //E-Mail Template auswahl JOB CHECK
             add_filter('bs_form_select_email_template', array($this, 'bsFormSelectEmailTemplate'), 10, 2);
 
-            //TODO UPDATE REDIRECT DATA
+            //TODO UPDATE REDIRECT DATA JOB CHECK
             add_action('bs_form_update_redirect_data', array($this, 'updateRedirectData'));
 
+            // USER ROLE
+            add_action('bs_formular_user_roles_select', array($this, 'bs_formular_selector_user_roles_select'));
 
             // TODO JOB EMAIL DATEN
-            //Set E-Mail Data
+            //Set E-Mail Data JOB CHECK
             add_filter('set_email_empfang_table', array($this, 'bsFormSetEmailEmpfang'));
-            // Get E-Mail Data
+            // Get E-Mail Data JOB CHECK
             add_filter('get_email_empfang_data', array($this, 'getEmailEmpfangData'), 10, 2);
-            // Delete E-Mail
+            // Delete E-Mail JOB CHECK
             add_filter('delete_bs_formular_email', array($this, 'deleteFormularEmail'));
         }
 
@@ -539,7 +542,7 @@ if (!class_exists('BootstrapFormularFilter')) {
         }
 
         /**
-         * @param $input
+         * @param $input //JOB CHECK
          * @param $id
          */
         public function updateMessageEmailTxt($input, $id)
@@ -602,7 +605,7 @@ if (!class_exists('BootstrapFormularFilter')) {
         }
 
         /**
-         * @param $record
+         * @param $record //JOB CHECK
          */
         public function update_db_message_text($record)
         {
@@ -1334,7 +1337,7 @@ if (!class_exists('BootstrapFormularFilter')) {
                     }
 
                     return (object)$msg;
-                    break;
+
                 default:
                     $defaults->meldungen = json_encode($meldungen);
 
@@ -1742,6 +1745,18 @@ if (!class_exists('BootstrapFormularFilter')) {
                 )
             );
             return $phpmailer;
+        }
+
+
+        public function bs_formular_selector_user_roles_select(): array {
+
+            return [
+                'read'           => esc_html__( 'Subscriber', 'bs-formular' ),
+                'edit_posts'     => esc_html__( 'Contributor', 'bs-formular' ),
+                'publish_posts'  => esc_html__( 'Author', 'bs-formular' ),
+                'publish_pages'  => esc_html__( 'Editor', 'bs-formular' ),
+                'manage_options' => esc_html__( 'Administrator', 'bs-formular' )
+            ];
         }
 
         public function reArrayFiles($file_post): array

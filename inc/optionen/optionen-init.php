@@ -9,6 +9,11 @@ defined( 'ABSPATH' ) or die();
  * https://www.hummelt-werbeagentur.de/
  */
 
+
+if(!get_option('bs_formular_user_role')){
+    update_option('bs_formular_user_role', 'manage_options');
+}
+
 //TODO INSTALL THEME DATABASE
 require  'filter/bs-formular-filter.php';
 require 'shortcode/bs-formular-shortcode.php';

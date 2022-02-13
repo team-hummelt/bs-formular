@@ -1,22 +1,22 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BS-Formular\n"
-"POT-Creation-Date: 2021-12-15 14:54+0100\n"
-"PO-Revision-Date: 2021-12-15 14:54+0100\n"
+"POT-Creation-Date: 2022-02-13 14:35+0100\n"
+"PO-Revision-Date: 2022-02-13 14:35+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
-"X-Poedit-Basepath: ../inc\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-KeywordsList: __;_e\n"
-"X-Poedit-SearchPath-0: admin-pages\n"
-"X-Poedit-SearchPath-1: optionen/metabox/classic\n"
-"X-Poedit-SearchPath-2: .\n"
-"X-Poedit-SearchPath-3: register-bs-formular.php\n"
+"X-Generator: Poedit 3.0.1\n"
+"X-Poedit-Basepath: ../inc\n"
+"X-Poedit-KeywordsList: __;_e;esc_html__\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: optionen\n"
+"X-Poedit-SearchPath-2: admin-pages\n"
+"X-Poedit-SearchPathExcluded-0: ../assets/admin/js/tools/tiny5\n"
 
 #: admin-pages/bs-formulare.php:18 admin-pages/bs-formulare.php:22
 #: admin-pages/bs-formulare.php:35
@@ -32,96 +32,112 @@ msgid "Create | Edit"
 msgstr "Erstellen | Bearbeiten"
 
 #: admin-pages/bs-formulare.php:47 admin-pages/bs-formulare.php:53
-#: admin-pages/bs-formulare.php:80
+#: admin-pages/bs-formulare.php:88
 msgid "Inbox"
 msgstr "Posteingang"
 
 #: admin-pages/bs-formulare.php:56 admin-pages/bs-formulare.php:61
 msgid "E-Mail Settings"
-msgstr ""
+msgstr "E-Mail-Einstellungen"
 
-#: admin-pages/bs-formulare.php:64
+#: admin-pages/bs-formulare.php:64 admin-pages/bs-formulare.php:69
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: admin-pages/bs-formulare.php:72
 msgid "Examples"
 msgstr "Beispiele"
 
-#: admin-pages/bs-formulare.php:69
+#: admin-pages/bs-formulare.php:77
 msgid "Help"
 msgstr "Hilfe"
 
-#: admin-pages/bs-formulare.php:88 admin-pages/bs-formulare.php:97
+#: admin-pages/bs-formulare.php:96 admin-pages/bs-formulare.php:105
 msgid "Name"
 msgstr "Bezeichnung"
 
-#: admin-pages/bs-formulare.php:89 admin-pages/bs-formulare.php:98
+#: admin-pages/bs-formulare.php:97 admin-pages/bs-formulare.php:106
 msgid "Shortcode"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:90 admin-pages/bs-formulare.php:99
+#: admin-pages/bs-formulare.php:98 admin-pages/bs-formulare.php:107
 msgid "Created"
 msgstr "Erstellt"
 
-#: admin-pages/bs-formulare.php:136
+#: admin-pages/bs-formulare.php:145
+msgid "WordPress Settings"
+msgstr "WordPress Einstellungen"
+
+#: admin-pages/bs-formulare.php:152
+msgid "Minimum requirement for using this Plugin"
+msgstr "Mindestvoraussetzung für die Verwendung dieses Plugins"
+
+#: admin-pages/bs-formulare.php:161
+msgid "User Role"
+msgstr "Benutzer Rolle"
+
+#: admin-pages/bs-formulare.php:186
 msgid "SMTP Settings"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:147
+#: admin-pages/bs-formulare.php:197
 msgid "Name oder Firma des Absenders:"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:162
+#: admin-pages/bs-formulare.php:212
 msgid "Absender E-Mail:"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:176
+#: admin-pages/bs-formulare.php:226
 msgid "SMTP Host:"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:189
+#: admin-pages/bs-formulare.php:239
 msgid "SMTP Port:"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:199
+#: admin-pages/bs-formulare.php:249
 msgid "SMTP Secure:"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:211
+#: admin-pages/bs-formulare.php:261
 msgid "Benutzername:"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:221
+#: admin-pages/bs-formulare.php:271
 msgid "Passwort:"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:236
+#: admin-pages/bs-formulare.php:286
 msgid "SMTP Authentifizierung:"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:251
+#: admin-pages/bs-formulare.php:301
 msgid "File Upload Settings"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:258
+#: admin-pages/bs-formulare.php:308
 msgid "maximale File Größe (MB):"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:268
+#: admin-pages/bs-formulare.php:318
 msgid "maximale gesamt Upload-Größe (MB:)"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:280
+#: admin-pages/bs-formulare.php:330
 msgid "Max. Files pro E-Mail"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:289
+#: admin-pages/bs-formulare.php:339
 msgid "File-Upload MimeTypes"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:323
+#: admin-pages/bs-formulare.php:373
 msgid "Hilfe"
 msgstr ""
 
-#: admin-pages/bs-formulare.php:569 license/register-hupa-plugin.php:54
-#: license/register-hupa-plugin.php:55
+#: admin-pages/bs-formulare.php:655 license/register-hupa-plugin.php:53
+#: license/register-hupa-plugin.php:54
 msgid "BS-Formular"
 msgstr ""
 
@@ -133,10 +149,30 @@ msgstr ""
 msgid "Client secret"
 msgstr ""
 
-#: optionen/filter/bs-formular-filter.php:152
-#: optionen/filter/bs-formular-filter.php:200
+#: optionen/filter/bs-formular-filter.php:157
+#: optionen/filter/bs-formular-filter.php:205
 msgid "auswählen"
 msgstr ""
+
+#: optionen/filter/bs-formular-filter.php:1754
+msgid "Subscriber"
+msgstr "Abonnent"
+
+#: optionen/filter/bs-formular-filter.php:1755
+msgid "Contributor"
+msgstr "Mitarbeiter"
+
+#: optionen/filter/bs-formular-filter.php:1756
+msgid "Author"
+msgstr "Autor"
+
+#: optionen/filter/bs-formular-filter.php:1757
+msgid "Editor"
+msgstr "Redakteur"
+
+#: optionen/filter/bs-formular-filter.php:1758
+msgid "Administrator"
+msgstr "Administrator"
 
 #: optionen/metabox/classic/bs-formular-widget.php:23
 #: optionen/metabox/classic/bs-formular-widget.php:81
@@ -217,13 +253,16 @@ msgstr "Ungültiger Dateityp"
 msgid "Expects {allButLastType} or {lastType}"
 msgstr "Erwartet {allButLastType} oder {lastType}"
 
-#: register-bs-formular.php:404
+#: register-bs-formular.php:424
 #, php-format
 msgid ""
 "This plugin has been disabled because it requires a PHP version greater than "
 "%s and a WordPress version greater than %s. Your PHP version can be updated "
 "by your hosting provider."
 msgstr ""
+"Dieses Plugin wurde deaktiviert, weil es eine PHP-Version größer als %s und "
+"eine WordPress-Version größer als %s benötigt. Ihre PHP-Version kann von "
+"Ihrem Hosting-Anbieter aktualisiert werden."
 
 #: update-checker/yahnis-elsts/plugin-update-checker/Puc/v4p11/Plugin/Ui.php:54
 msgid "View details"
