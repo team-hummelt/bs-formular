@@ -6,16 +6,15 @@ defined('ABSPATH') or die();
  * @package Hummelt & Partner WordPress Theme
  * Copyright 2021, Jens Wiecker
  * License: Commercial - goto https://www.hummelt-werbeagentur.de/
- * https://www.hummelt-werbeagentur.de/
  */
 
 require 'vendor/autoload.php';
 
-use JetBrains\PhpStorm\ArrayShape;
+
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
 
-#[ArrayShape( [ "status" => "bool", "msg" => "string" ] )] function bs_formular_load_smtp_test():array
+function bs_formular_load_smtp_test():array
 {
     $status = false;
     $msg = '';

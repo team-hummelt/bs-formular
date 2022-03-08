@@ -10,11 +10,11 @@ hummelt und partner | Werbeagentur GmbH
 ### BS-Formular - Boostrap Formular Plugin
 * Contributors: jwiecker
 * Tags: bootstrap, formular
-* Requires at least: 5.9
-* Tested up to: 5.8
-* Stable tag: 1.1.2
-* Version: 1.1.2
-* Requires PHP: 8.0
+* Requires at least: 5.6
+* Tested up to: 5.9.1
+* Stable tag: 1.1.3
+* Version: 1.1.3
+* Requires PHP: 7.4
 * License: MIT License
 
 ***
@@ -31,6 +31,9 @@ Formular ganz einfach mit BS-Formulare erstellen.
 
 ***
 ### Changelog
+### 1.1.3
+* Plugin mit PHP 7.4 kompatibel
+
 ### 1.1.2
 * Option WordPress Benutzer Rolle hinzugefügt
 
