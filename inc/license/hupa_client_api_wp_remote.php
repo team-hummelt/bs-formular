@@ -58,10 +58,15 @@ if (!class_exists('HupaApiPluginBSServerHandle')) {
         public function BsFormularGetApiUrl($scope): string
         {
             $client_id = get_option('bs_formular_client_id');
-            return match ($scope) {
-                'authorize_url' => get_option('hupa_server_url') . 'authorize?response_type=code&client_id=' . $client_id,
-                default => '',
-            };
+            switch ($scope){
+                case'authorize_url':
+                $return = get_option('hupa_server_url') . 'authorize?response_type=code&client_id=' . $client_id;
+                break;
+                default:
+                    $return = '';
+            }
+
+            return  $return;
         }
 
         public function BsFormularInstallByAuthorizationCode($authorization_code): object

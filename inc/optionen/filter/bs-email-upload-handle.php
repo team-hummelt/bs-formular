@@ -38,11 +38,18 @@ final class BsFormularUploadHandle
     public function initial(): object
     {
         $method = filter_input(INPUT_POST, 'method', FILTER_SANITIZE_STRING);
-        return match ($method) {
-            'add_file' => $this->upload_formular_file(),
-            'delete_file' => $this->delete_formular_file(),
-            default => (object)[],
-        };
+        switch($method){
+            case'add_file':
+                $return = $this->upload_formular_file();
+                break;
+            case 'delete_file':
+                $return = $this->delete_formular_file();
+                break;
+            default:
+                $return = (object)[];
+        }
+
+        return $return;
     }
 
     /**
