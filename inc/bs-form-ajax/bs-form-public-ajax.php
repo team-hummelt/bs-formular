@@ -41,8 +41,9 @@ global $wpdb;
 
 $table = $wpdb->prefix . 'bs_formulare';
 $args = sprintf('WHERE %s.shortcode="%s"', $table, $record->id);
-
 $formular = apply_filters('get_formulare_by_args', $args, false, 'id');
+
+
 
 if (!$formular->status) {
     $msg = $bs_formular_filter->bs_formular_message($record->id,'error_message', true);
@@ -55,7 +56,6 @@ if (!$formular->status) {
 }
 
 $args = sprintf('WHERE %s.shortcode="%s"', $table, $record->id);
-
 $form = apply_filters('bs_form_formular_data_by_join', $args, false);
 
 if (!$form->status) {
@@ -111,7 +111,6 @@ foreach ($inputs as $tmp) {
             $responseJson->msg = $valCR->msg;
             $responseJson->show_error = true;
             $responseJson->formId = $record->formId;
-
             return $responseJson;
         }
         $send_arr[] = $valCR;
@@ -122,13 +121,26 @@ $message = htmlspecialchars_decode($form->message);
 $message = stripslashes_deep($message);
 $message = str_replace(['<span class="remove">&nbsp;</span>'], ' ', $message);
 
+if($form->response_aktiv) {
+    $autoResponder = htmlspecialchars_decode($form->auto_msg);
+    $autoResponder = stripslashes_deep($autoResponder);
+    $autoResponder = str_replace(['<span class="remove">&nbsp;</span>'], ' ', $autoResponder);
+} else {
+    $autoResponder = false;
+}
+
 $sendSelectMail = false;
 $eingabe = '';
 $reDataArr = [];
+
+$emailResponder = '';
 foreach ($send_arr as $tmp) {
     if ($tmp->type == 'email-send-select') {
         $sendSelectMail = $tmp->eingabe;
         continue;
+    }
+    if($tmp->type == 'email') {
+       $emailResponder = strip_tags($tmp->eingabe);
     }
     if($tmp->type == 'file'){
         $attachments = $tmp->eingabe;
@@ -153,11 +165,13 @@ foreach ($send_arr as $tmp) {
              break;
          case '2':
               $message = str_replace($tmp->user_value, $eingabe , $message);
+              if($autoResponder){
+                  $autoResponder = str_replace($tmp->user_value, $eingabe , $autoResponder);
+              }
              break;
          default:
      }
 }
-
 
 if($reDataArr){
     $saveRedirectData = [
@@ -190,6 +204,22 @@ $htmlBody = str_replace('###EMAILMESSAGE###', $sendMsg, $htmlBody);
 $htmlBody = str_replace('###EMAILTITLE###', $form->betreff, $htmlBody);
 
 $regExp = '@\[.*?]@m';
+
+if($autoResponder){
+    $responderBody = file_get_contents($tempDir, true);
+    $responderBody = str_replace('###EMAILMESSAGE###', $sendMsg, $responderBody);
+    $responderBody = str_replace('###EMAILTITLE###', $form->auto_betreff, $responderBody);
+
+    preg_match_all($regExp, $responderBody, $matches, PREG_SET_ORDER, 0);
+    if ($matches) {
+        foreach ($matches as $tmp) {
+            if (isset($tmp[0])) {
+                $responderBody = str_replace($tmp[0], '', $responderBody);
+            }
+        }
+    }
+}
+
 preg_match_all($regExp, $htmlBody, $matches, PREG_SET_ORDER, 0);
 if ($matches) {
     foreach ($matches as $tmp) {
@@ -230,6 +260,10 @@ if ($cc) {
 
 $send = wp_mail( $to, $subject ?: get_bloginfo( 'title' ), $htmlBody, array_unique( $headers ), $attachments );
 
+$emailResponder = filter_var($emailResponder, FILTER_VALIDATE_EMAIL);
+
+
+
 if ( ! $send ) {
     $msg = $bs_formular_filter->bs_formular_message($record->id,'error_message', true);
     $responseJson->status     = false;
@@ -250,6 +284,12 @@ if (get_option('email_empfang_aktiv')) {
     $safeDb->message = esc_html($htmlBody);
     apply_filters('set_email_empfang_table', $safeDb);
 }
+
+if($autoResponder && $emailResponder){
+   $headersResponder[] = 'From: ' . $absenderName . '  <' . $dbAbsenderEmail . '>';
+   $senden = wp_mail( $emailResponder, $form->auto_betreff, $responderBody, $headersResponder);
+}
+
 
 $msg = $bs_formular_filter->bs_formular_message($record->id,'success_message', true);
 
