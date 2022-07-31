@@ -127,6 +127,13 @@ jQuery(document).ready(function ($) {
         tinymce.get("sendMsgContent").selection.setContent(value);
     });
 
+    $(document).on('click', ".placeholder-responder", function () {
+        //let value = '<span class="remove">&nbsp;</span>' + $(this).attr('data-value');
+        let value = $(this).attr('data-value');
+        $(this).removeClass('placeholder').addClass('placeholder-disabled');
+        tinymce.get("sendMsgAutoContent").selection.setContent(value);
+    });
+
     /**===================================================
      ================ BTN FORM LOAD INPUT ================
      =====================================================
@@ -715,7 +722,6 @@ jQuery(document).ready(function ($) {
         </button>
     </form>
     <hr>
-   
     <h6 style="font-size: 1.1rem" class="mb-0"><i class="font-blue fa fa-caret-down"></i>&nbsp;
         Automatische Antwort</h6>
     <hr>
@@ -742,6 +748,15 @@ jQuery(document).ready(function ($) {
                        class="form-control" id="InputAutoBetreff"
                        aria-describedby="InputAutoBetreff">
             </div>
+            <hr>
+
+            <h6 style="font-size: 1.1rem" class="mb-0">Verfügbare Formular Platzhalter</h6>
+            <span class="d-inline-block pb-2" id="placeholderInputsResponder">`;
+            $.each(data.values, function (key, val) {
+            html += `<span data-value="${val.values}" data-type="message" class="placeholder-responder">${val.values}  </span> | `;
+            });
+            html += `</span>
+        <hr class="my-1 mx-0">
             <label class="form-label" for="sendMsgAutoContent">Nachricht: *</label>
             <textarea id="sendMsgAutoContent" name="auto_msg"
                       class="response-formulare-tinymce"> ${msg.auto_msg ? msg.auto_msg : ''}</textarea>

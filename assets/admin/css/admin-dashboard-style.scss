@@ -123,7 +123,7 @@ background-color: #fdfdfd!important;
 }
 
 
-.placeholder {
+.placeholder , span.placeholder-responder {
   display: inline-block;
   padding: .2rem .1rem;
   font-weight: 700;
@@ -135,10 +135,9 @@ background-color: #fdfdfd!important;
     transform: scale(1.06);
     color:rgb(64, 64, 64)!important;
   }
-
-
 }
-.placeholder-disabled {
+
+.placeholder-disabled, span.placeholder-responder.placeholder-disabled {
   color: #adadad;
   cursor: not-allowed;
   font-weight: 500;

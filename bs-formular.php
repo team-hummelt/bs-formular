@@ -10,13 +10,13 @@
  * Plugin Name:       BS-Formular - Boostrap Formular Plugin
  * Plugin URI:        https://www.hummelt-werbeagentur.de/leistungen/
  * Description:       Bootstrap Formulare mit verschiedenen Ausgabeoptionen.
- * Version:           1.1.3
+ * Version:           1.1.4
  * Author:            Jens Wiecker
  * License:           MIT License
  * Requires PHP:      7.4
  * Requires at least: 5.6
- * Tested up to:      5.9.1
- * Stable tag:        1.1.3
+ * Tested up to:      6.0.1
+ * Stable tag:        1.1.4
  */
 
 defined('ABSPATH') or die();
