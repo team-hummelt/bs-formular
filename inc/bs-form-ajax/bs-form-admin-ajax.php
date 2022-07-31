@@ -720,6 +720,9 @@ switch ($method) {
 		$smtp_secure = filter_var($data['smtp_secure'], FILTER_SANITIZE_STRING);
 		$email_benutzer = filter_var($data['email_benutzer'], FILTER_SANITIZE_STRING);
 		$email_passwort = filter_var($data['email_passwort'], FILTER_SANITIZE_STRING);
+
+        $email_reply_to = filter_var($data['email_reply_to'], FILTER_VALIDATE_EMAIL);
+
 		filter_var($data['smtp_auth_check'], FILTER_SANITIZE_STRING) ? $smtp_auth_check = 1 : $smtp_auth_check = 0;
 		filter_var($data['email_aktiv'], FILTER_SANITIZE_STRING) ? $email_aktiv = 1 : $email_aktiv = 0;
 
@@ -771,7 +774,7 @@ switch ($method) {
         $file_max_size ? update_option('file_max_size', $file_max_size) : update_option('file_max_size', 3);
         $mime_type ? update_option('upload_mime_types', $mime_type) : update_option('upload_mime_types', 'pdf');
         $file_max_all_size ? update_option('file_max_all_size', $file_max_all_size) : update_option('file_max_all_size', 6);
-
+        $email_reply_to ? update_option('email_reply_to', $email_reply_to) : update_option('email_reply_to', $email_adresse);
 
         update_option('multi_upload', $multi_upload);
         update_option('upload_max_files', $upload_max_files);

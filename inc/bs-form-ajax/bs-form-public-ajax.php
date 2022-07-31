@@ -12,13 +12,13 @@ $record = new stdClass();
 global $bs_formular_filter;
 $record->id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
 $record->formId = filter_input(INPUT_POST, 'formId', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
-isset( $_POST['terms'] ) && is_string( $_POST['terms'] ) ? $record->terms = 1 : $record->terms = 0;
+isset($_POST['terms']) && is_string($_POST['terms']) ? $record->terms = 1 : $record->terms = 0;
 
 isset($_POST['dscheck']) && is_string($_POST['dscheck']) ? $record->dscheck = 1 : $record->dscheck = 0;
 $_POST['repeat_email'] ? $record->repeat_email = $_POST['repeat_email'] : $record->repeat_email = false;
 
 if (!$record->id) {
-    $msg = $bs_formular_filter->bs_formular_message($record->id,'error_message', true);
+    $msg = $bs_formular_filter->bs_formular_message($record->id, 'error_message', true);
     $responseJson->status = false;
     $responseJson->show_error = true;
     $responseJson->formId = $record->formId;
@@ -28,7 +28,7 @@ if (!$record->id) {
 }
 
 if ($record->terms || $record->repeat_email) {
-    $msg = $bs_formular_filter->bs_formular_message($record->id,'spam', true);
+    $msg = $bs_formular_filter->bs_formular_message($record->id, 'spam', true);
     $responseJson->status = false;
     $responseJson->show_error = true;
     $responseJson->formId = $record->formId;
@@ -41,11 +41,11 @@ global $wpdb;
 
 $table = $wpdb->prefix . 'bs_formulare';
 $args = sprintf('WHERE %s.shortcode="%s"', $table, $record->id);
-
 $formular = apply_filters('get_formulare_by_args', $args, false, 'id');
 
+
 if (!$formular->status) {
-    $msg = $bs_formular_filter->bs_formular_message($record->id,'error_message', true);
+    $msg = $bs_formular_filter->bs_formular_message($record->id, 'error_message', true);
     $responseJson->status = false;
     $responseJson->show_error = true;
     $responseJson->formId = $record->formId;
@@ -55,11 +55,10 @@ if (!$formular->status) {
 }
 
 $args = sprintf('WHERE %s.shortcode="%s"', $table, $record->id);
-
 $form = apply_filters('bs_form_formular_data_by_join', $args, false);
 
 if (!$form->status) {
-    $msg = $bs_formular_filter->bs_formular_message($record->id,'error_message', true);
+    $msg = $bs_formular_filter->bs_formular_message($record->id, 'error_message', true);
     $responseJson->status = false;
     $responseJson->show_error = true;
     $responseJson->formId = $record->formId;
@@ -111,7 +110,6 @@ foreach ($inputs as $tmp) {
             $responseJson->msg = $valCR->msg;
             $responseJson->show_error = true;
             $responseJson->formId = $record->formId;
-
             return $responseJson;
         }
         $send_arr[] = $valCR;
@@ -122,44 +120,59 @@ $message = htmlspecialchars_decode($form->message);
 $message = stripslashes_deep($message);
 $message = str_replace(['<span class="remove">&nbsp;</span>'], ' ', $message);
 
+if ($form->response_aktiv) {
+    $autoResponder = htmlspecialchars_decode($form->auto_msg);
+    $autoResponder = stripslashes_deep($autoResponder);
+    $autoResponder = str_replace(['<span class="remove">&nbsp;</span>'], ' ', $autoResponder);
+} else {
+    $autoResponder = false;
+}
+
 $sendSelectMail = false;
 $eingabe = '';
 $reDataArr = [];
+
+$emailResponder = '';
 foreach ($send_arr as $tmp) {
     if ($tmp->type == 'email-send-select') {
         $sendSelectMail = $tmp->eingabe;
         continue;
     }
-    if($tmp->type == 'file'){
+    if ($tmp->type == 'email') {
+        $emailResponder = strip_tags($tmp->eingabe);
+    }
+    if ($tmp->type == 'file') {
         $attachments = $tmp->eingabe;
         continue;
     }
-    $msg = $bs_formular_filter->bs_formular_message($record->id,'error_message', true);
+    $msg = $bs_formular_filter->bs_formular_message($record->id, 'error_message', true);
     $tmp->eingabe ? $eingabe = $tmp->eingabe : $eingabe = '';
 
-    if($redirect){
-        if($tmp->type != 'password'):
-            $lbl =  str_replace(['[',']'],'', $tmp->user_value);
-              $re_data_item = [
-                  $eingabe
+    if ($redirect) {
+        if ($tmp->type != 'password'):
+            $lbl = str_replace(['[', ']'], '', $tmp->user_value);
+            $re_data_item = [
+                $eingabe
             ];
             $reDataArr[] = $eingabe;
         endif;
     }
-     switch ($form->email_template) {
-         case '1':
-             $ausgabe = '<b>' . $tmp->label . ':</b> ' . $eingabe . '<br /><br /><hr />';
-             $message = apply_filters('string_replace_limit', $tmp->user_value, $ausgabe, $message, $limit = 1);
-             break;
-         case '2':
-              $message = str_replace($tmp->user_value, $eingabe , $message);
-             break;
-         default:
-     }
+    switch ($form->email_template) {
+        case '1':
+            $ausgabe = '<b>' . $tmp->label . ':</b> ' . $eingabe . '<br /><br /><hr />';
+            $message = apply_filters('string_replace_limit', $tmp->user_value, $ausgabe, $message, $limit = 1);
+            break;
+        case '2':
+            $message = str_replace($tmp->user_value, $eingabe, $message);
+            if ($autoResponder) {
+                $autoResponder = str_replace($tmp->user_value, $eingabe, $autoResponder);
+            }
+            break;
+        default:
+    }
 }
 
-
-if($reDataArr){
+if ($reDataArr) {
     $saveRedirectData = [
         $record->id => $reDataArr
     ];
@@ -168,7 +181,7 @@ if($reDataArr){
         'shortcode' => $record->id,
         'redirect_data' => $saveRedirectData
     ];
-    apply_filters('bs_form_update_redirect_data', (object) $updData);
+    apply_filters('bs_form_update_redirect_data', (object)$updData);
 }
 
 switch ($form->email_template) {
@@ -184,12 +197,28 @@ switch ($form->email_template) {
         $sendMsg = '';
 }
 
-$tempDir =  EMAIL_TEMPLATES_DIR . 'email-default-template.html';
+$tempDir = EMAIL_TEMPLATES_DIR . 'email-default-template.html';
 $htmlBody = file_get_contents($tempDir, true);
 $htmlBody = str_replace('###EMAILMESSAGE###', $sendMsg, $htmlBody);
 $htmlBody = str_replace('###EMAILTITLE###', $form->betreff, $htmlBody);
 
 $regExp = '@\[.*?]@m';
+
+if ($autoResponder) {
+    $responderBody = file_get_contents($tempDir, true);
+    $responderBody = str_replace('###EMAILMESSAGE###', $sendMsg, $responderBody);
+    $responderBody = str_replace('###EMAILTITLE###', $form->auto_betreff, $responderBody);
+
+    preg_match_all($regExp, $responderBody, $matches, PREG_SET_ORDER, 0);
+    if ($matches) {
+        foreach ($matches as $tmp) {
+            if (isset($tmp[0])) {
+                $responderBody = str_replace($tmp[0], '', $responderBody);
+            }
+        }
+    }
+}
+
 preg_match_all($regExp, $htmlBody, $matches, PREG_SET_ORDER, 0);
 if ($matches) {
     foreach ($matches as $tmp) {
@@ -210,6 +239,7 @@ $sendSelectMail ? $to = $sendSelectMail : $to = $form->email_at;
 //$to      = $form->email_at;
 
 $headers[] = 'From: ' . $absenderName . '  <' . $dbAbsenderEmail . '>';
+$headers[] = 'Reply-To: '.$absenderName.' <'.get_option('email_reply_to').'>';
 
 $email_cc = $form->email_cc;
 $cc = '';
@@ -228,14 +258,17 @@ if ($cc) {
     }
 }
 
-$send = wp_mail( $to, $subject ?: get_bloginfo( 'title' ), $htmlBody, array_unique( $headers ), $attachments );
+$send = wp_mail($to, $subject ?: get_bloginfo('title'), $htmlBody, array_unique($headers), $attachments);
 
-if ( ! $send ) {
-    $msg = $bs_formular_filter->bs_formular_message($record->id,'error_message', true);
-    $responseJson->status     = false;
-    $responseJson->msg        = $msg->error_message;
+$emailResponder = filter_var($emailResponder, FILTER_VALIDATE_EMAIL);
+
+
+if (!$send) {
+    $msg = $bs_formular_filter->bs_formular_message($record->id, 'error_message', true);
+    $responseJson->status = false;
+    $responseJson->msg = $msg->error_message;
     $responseJson->show_error = true;
-    $responseJson->formId     = $record->formId;
+    $responseJson->formId = $record->formId;
 
     return $responseJson;
 }
@@ -251,14 +284,21 @@ if (get_option('email_empfang_aktiv')) {
     apply_filters('set_email_empfang_table', $safeDb);
 }
 
-$msg = $bs_formular_filter->bs_formular_message($record->id,'success_message', true);
+if ($autoResponder && $emailResponder) {
+    $headersResponder[] = 'Reply-To: '.$absenderName.' <'.get_option('email_reply_to').'>';
+    $headersResponder[] = 'From: ' . $absenderName . '  <' . $dbAbsenderEmail . '>';
+    $senden = wp_mail($emailResponder, $form->auto_betreff, $responderBody, $headersResponder);
+}
+
+
+$msg = $bs_formular_filter->bs_formular_message($record->id, 'success_message', true);
 
 $responseJson->redirect = false;
-if($form->redirect_aktiv && $form->redirect_page) {
+if ($form->redirect_aktiv && $form->redirect_page) {
     $responseJson->redirect = true;
     global $post;
     $post = get_post($form->redirect_page);
-    if(isset($post)){
+    if (isset($post)) {
         $responseJson->redirect_uri = get_the_permalink();
     }
 }

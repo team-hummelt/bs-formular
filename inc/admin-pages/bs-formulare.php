@@ -5,7 +5,6 @@ defined( 'ABSPATH' ) or die();
  * @package Hummelt & Partner WordPress Plugin
  * Copyright 2021, Jens Wiecker
  * License: Commercial - goto https://www.hummelt-werbeagentur.de/
- * https://www.hummelt-werbeagentur.de/
  */
 ?>
 
@@ -203,7 +202,14 @@ defined( 'ABSPATH' ) or die();
                                                 wird der Seitentitel verwendet.
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 col-12"></div>
+                                        <div class="col-lg-6 col-12 mb-3">
+                                            <label for="emailReplyToInput" class="form-label">
+                                                <?= __( 'Reply-To:', 'bs-formular' ) ?> </label>
+                                            <input type="text" class="form-control"
+                                                   value="<?= get_option( 'email_reply_to' ) ?>"
+                                                   name="email_reply_to"
+                                                   id="emailReplyToInput">
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-6 col-12 mb-3">
@@ -626,7 +632,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
             <div class="modal-content">
                 <div class="modal-header bg-hupa">
                     <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     ...
@@ -653,7 +659,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 <div class="modal-header bg-hupa">
                     <h5 class="modal-title"
                         id="exampleModalLabel"><?= __( 'BS-Formular', 'bs-formular' ); ?></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div id="icon-grid"></div>
@@ -667,7 +673,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
             </div>
         </div>
     </div>
-
 </div>
 
 <div id="snackbar-success"></div>
