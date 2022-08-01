@@ -206,7 +206,7 @@ $regExp = '@\[.*?]@m';
 
 if ($autoResponder) {
     $responderBody = file_get_contents($tempDir, true);
-    $responderBody = str_replace('###EMAILMESSAGE###', $sendMsg, $responderBody);
+    $responderBody = str_replace('###EMAILMESSAGE###', $autoResponder, $responderBody);
     $responderBody = str_replace('###EMAILTITLE###', $form->auto_betreff, $responderBody);
 
     preg_match_all($regExp, $responderBody, $matches, PREG_SET_ORDER, 0);

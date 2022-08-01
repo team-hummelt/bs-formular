@@ -1486,7 +1486,7 @@ if (!class_exists('BootstrapFormularFilter')) {
                     $return->inputId = $record->inputId;
                     $return->type = $record->type;
                     $return->label = sanitize_text_field($record->label);
-                    $return->eingabe = $date;
+                    $return->eingabe = date('d.m.Y', strtotime($date));
 
                     return $return;
                 case'select':
