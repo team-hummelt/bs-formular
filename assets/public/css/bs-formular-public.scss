@@ -11,6 +11,10 @@ body .bs-formular-wrapper {
     color: $blue;
   }
 
+  .terms {
+    display: none;
+  }
+
   .btn:focus, .btn:active, .active.btn:active, .active.btn:focus {
     outline: none !important;
     box-shadow: none;
