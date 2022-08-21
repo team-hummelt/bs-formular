@@ -1382,19 +1382,20 @@ if (!class_exists('BootstrapFormularFilter')) {
         {
 
             $return = new stdClass();
+            $return->status= true;
+            $return->msg = $input;
             $type = $record->type;
             $form_id = $form->record->id;
             switch ($record->type) {
-                case'text':
-                case'password':
-                case'textarea':
+                case"text":
+                case"password":
+                case"textarea":
                     isset($input) && is_string($input) ? $postValue = sanitize_text_field($input) : $postValue = '';
                     if ($record->required && !$postValue) {
                         $return->status = false;
                         //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
                         $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
-
                         return $return;
                     }
                     $return->status = true;
@@ -1432,7 +1433,7 @@ if (!class_exists('BootstrapFormularFilter')) {
                     $return->eingabe = $input;
 
                     return $return;
-                case'email':
+                case"email":
                     $email = sanitize_text_field($input);
                     if ($record->required && !$email) {
                         $return->status = false;
@@ -1458,7 +1459,7 @@ if (!class_exists('BootstrapFormularFilter')) {
                     $input ? $return->eingabe = '<a href=mailto:' . $input . '>' . $input . '</a>' : $return->eingabe = false;
 
                     return $return;
-                case'date':
+                case"date":
                     if ($record->required && !$input) {
                         $return->status = false;
                         //$msg = apply_filters('bs_form_default_settings', 'by_field', $type);
@@ -1666,7 +1667,7 @@ if (!class_exists('BootstrapFormularFilter')) {
                     return $return;
             }
 
-            return (object)[];
+            return $return;
         }
 
 
@@ -1685,7 +1686,7 @@ if (!class_exists('BootstrapFormularFilter')) {
                     if ($inputArr->required == 'required') {
                         $return->status = false;
                         $msg = apply_filters('bs_form_default_settings', 'by_field', $type);
-                       // $msg = $this->bs_formular_message($form_id, $type);
+                        // $msg = $this->bs_formular_message($form_id, $type);
                         $return->msg = $msg->$type;
 
                         return $return;
