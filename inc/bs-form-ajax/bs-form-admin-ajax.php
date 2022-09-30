@@ -713,7 +713,7 @@ switch ($method) {
         $responseJson->msg = 'Formular gelöscht!';
         break;
 	case'smtp_settings':
-		$email_abs_name = filter_var($data['email_abs_name'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+		$email_abs_name = filter_var($data['email_abs_name'], FILTER_SANITIZE_STRING);
 		$email_adresse = filter_var($data['email_adresse'], FILTER_VALIDATE_EMAIL);
 		$smtp_host = filter_var($data['smtp_host'], FILTER_SANITIZE_STRING);
 		$smtp_port = filter_var($data['smtp_port'], FILTER_SANITIZE_NUMBER_INT);
