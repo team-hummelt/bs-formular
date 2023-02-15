@@ -176,7 +176,8 @@ final class RegisterBsFormularPlugin
 
         $redirectData = [];
         global $post;
-        $formData = apply_filters('get_formulare_by_args','WHERE redirect_page='.$post->ID.'', false);
+        isset($post->ID) && $post->ID ? $id = $post->ID : $id = 0;
+        $formData = apply_filters('get_formulare_by_args','WHERE redirect_page='.$id, false);
         if($formData->status) {
             $data = $formData->record;
             if(isset($data->redirect_data) && $data->redirect_data) {
@@ -192,7 +193,7 @@ final class RegisterBsFormularPlugin
             'nonce' => $title_nonce,
             'bs_form_redirect_data' => $redirectData,
             'file_size' => get_option('file_max_size') * 1024 * 1024,
-            'post_id' => $post->ID,
+            'post_id' => $id,
             'file_size_mb' => get_option('file_max_size'),
             'file_size_all_mb' => get_option('file_max_all_size'),
             'max_files' => get_option('upload_max_files'),
